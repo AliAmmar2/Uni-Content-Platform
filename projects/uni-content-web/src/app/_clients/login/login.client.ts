@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 
 export class LoginClient {
-  private readonly API_URL = 'http://localhost:5000/api/login'; // full URL
+  private readonly API_URL = 'http://localhost:5000/api/auth/login'; // full URL
 
   constructor(private http: HttpClient) {
   }
