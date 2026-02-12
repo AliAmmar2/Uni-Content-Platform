@@ -1,0 +1,88 @@
+	<div class="login-container">
+	<div class="login-card">
+		<div class="brand-section">
+			<div class="logo">
+        <img src="../assets/imgs/logo.png" alt="Lebanese University Logo" class="logo-img" />
+			<h1 class="brand-title">Welcome To Lebanese University </h1>
+			<p class="brand-subtitle">Sign in to your account</p>
+		</div>
+
+		<form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+			<div class="form-group">
+				<label for="email" class="form-label">Email</label>
+				<div class="input-container">
+					<input
+						id="email"
+						type="email"
+						class="form-input"
+						placeholder="Enter your email"
+						autocomplete="email"
+						formControlName="email"
+					/>
+				</div>
+				<div class="error-message" *ngIf="loginForm.get('email')?.errors && loginForm.get('email')?.touched">
+					<span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+					<span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+				</div>
+			</div>
+
+      <div class="form-group">
+				<label for="universityId" class="form-label">Id</label>
+				<div class="input-container">
+					<input
+						id="universityId"
+						class="form-input"
+						placeholder="Enter your id"
+						formControlName="universityId"
+					/>
+				</div>
+				<div class="error-message" *ngIf="loginForm.get('email')?.errors && loginForm.get('email')?.touched">
+					<span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+					<span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="password" class="form-label">Password</label>
+				<div class="input-container">
+					<input
+						id="password"
+						[type]="hideInputPassword ? 'password' : 'text'"
+						class="form-input"
+						placeholder="Enter your password"
+						autocomplete="current-password"
+						formControlName="password"
+					/>
+					<button
+						type="button"
+						class="password-toggle"
+						(click)="hideInputPassword = !hideInputPassword"
+						tabindex="-1"
+					>
+					</button>
+				</div>
+				<div class="error-message" *ngIf="loginForm.get('password')?.errors && loginForm.get('password')?.touched">
+					<span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+				</div>
+			</div>
+
+			<div class="form-options">
+				<a href="#" class="forgot-password">
+					Forgot password?
+				</a>
+			</div>
+
+			<button type="submit" class="login-button" [disabled]="loginForm.invalid">
+				Sign In
+			</button>
+		</form>
+
+		<!-- Footer -->
+		<div class="login-footer">
+			<p>
+				Don't have an account?
+				<a routerLink="/register" class="register-link">Sign up</a>
+			</p>
+		</div>
+	</div>
+</div>
