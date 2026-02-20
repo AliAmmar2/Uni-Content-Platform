@@ -1,0 +1,32 @@
+<div class="student-dashboard-container">
+  <div class="top-bar">
+    <button
+      class="nav-btn"
+      [routerLink]="['/students', studentId]"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Dashboard
+    </button>
+
+    <button
+      class="nav-btn"
+      [routerLink]="['/students', studentId, 'announcements']"
+      routerLinkActive="active"
+    >
+      Announcements
+    </button>
+  </div>
+
+  <ng-container *ngrxLet="studentDetailsSelected$ | async as studentDetailsState">
+    @if (studentDetailsState?.status === StudentDetailsStatusEnum.loadDetailsSuccess) {
+      <div class="student-info">
+        <h3>
+          Faculty of {{ studentDetailsState[STUDENT_DETAILS_KEY]?.faculty }}
+          ➡️
+          Major: {{ studentDetailsState[STUDENT_DETAILS_KEY]?.major }}
+        </h3>
+      </div>
+    }
+  </ng-container>
+</div>
