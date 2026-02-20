@@ -1,0 +1,102 @@
+[
+  {
+    "universityId": "210001",
+    "universityEmail": "rana.haddad@ul.edu.lb",
+    "name": "Rana Haddad",
+    "faculty": "Engineering",
+    "major": "Computer Engineering",
+    "academicYear": 3,
+    "roles": ["STUDENT"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210002",
+    "universityEmail": "karim.nasser@ul.edu.lb",
+    "name": "Karim Nasser",
+    "faculty": "Engineering",
+    "major": "Computer Science",
+    "academicYear": 4,
+    "roles": ["STUDENT", "MODERATOR"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210003",
+    "universityEmail": "maya.khoury@ul.edu.lb",
+    "name": "Maya Khoury",
+    "faculty": "Science",
+    "major": "Mathematics",
+    "academicYear": 2,
+    "roles": ["ADMIN"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210004",
+    "universityEmail": "jad.mansour@ul.edu.lb",
+    "name": "Jad Mansour",
+    "faculty": "Science",
+    "major": "Physics",
+    "academicYear": 1,
+    "roles": ["STUDENT"],
+    "status": "SUSPENDED"
+  },
+  {
+    "universityId": "210005",
+    "universityEmail": "lina.abbas@ul.edu.lb",
+    "name": "Lina Abbas",
+    "faculty": "Business",
+    "major": "Finance",
+    "academicYear": 3,
+    "roles": ["STUDENT"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210006",
+    "universityEmail": "hassan.darwish@ul.edu.lb",
+    "name": "Hassan Darwish",
+    "faculty": "Business",
+    "major": "Marketing",
+    "academicYear": 2,
+    "roles": ["STUDENT"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210007",
+    "universityEmail": "nour.saleh@ul.edu.lb",
+    "name": "Nour Saleh",
+    "faculty": "Arts",
+    "major": "Graphic Design",
+    "academicYear": 4,
+    "roles": ["STUDENT", "MODERATOR"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210008",
+    "universityEmail": "omar.hassan@ul.edu.lb",
+    "name": "Omar Hassan",
+    "faculty": "Engineering",
+    "major": "Electrical Engineering",
+    "academicYear": 5,
+    "roles": ["STUDENT"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210009",
+    "universityEmail": "sara.touma@ul.edu.lb",
+    "name": "Sara Touma",
+    "faculty": "Science",
+    "major": "Chemistry",
+    "academicYear": 1,
+    "roles": ["STUDENT"],
+    "status": "ACTIVE"
+  },
+  {
+    "universityId": "210010",
+    "universityEmail": "ali.farhat@ul.edu.lb",
+    "name": "Ali Farhat",
+    "faculty": "Engineering",
+    "major": "Mechanical Engineering",
+    "academicYear": 2,
+    "roles": ["STUDENT"],
+    "status": "SUSPENDED"
+  }
+]

@@ -1,32 +1,766 @@
-### Register a new user
-POST http://localhost:5000/api/auth/register
+# =============================================================================
+# AUTH TEST FILE — University of Lebanon Platform
+# Based on seeded DB users
+# Use REST Client extension in VS Code
+# Routes mounted at: /auth (e.g. POST http://localhost:3000/auth/login)
+# All users share password: Test123456
+# =============================================================================
+
+@baseUrl = http://localhost:3000/auth
+@healthUrl = http://localhost:3000/health
+
+# Paste tokens here after running login requests
+@accessToken  = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkYyIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMSIsInJvbGVzIjpbIlNUVURFTlQiXSwiaWF0IjoxNzcxMzE5NDAzLCJleHAiOjE3NzEzMjMwMDN9.JF1ptUEgOkuxbMF4QQG46guRPsaorkDZUOEk87Zbm7U
+@refreshToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkYyIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzcxMzE5NDAzLCJleHAiOjE3NzE5MjQyMDN9.a8pKQRWfdZR4b9UK6iuB4Oaf-7etCSkfP06JDr0J-YM
+@magicToken   = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkYyIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMSIsInR5cGUiOiJtYWdpYy1saW5rIiwicm9sZXMiOlsiU1RVREVOVCJdLCJpYXQiOjE3NzEzMTkzMTcsImV4cCI6MTc3MTMyMDIxN30.lds9jZysIoPS3eLCObzVN0bSCqHfh4tZXy2j15IQs24
+
+
+# =============================================================================
+# HEALTH CHECK
+# =============================================================================
+
+### Health Check
+# Expected: 200 — { status: 'OK' }
+GET {{healthUrl}}
+
+
+# =============================================================================
+# SUCCESSFUL LOGINS — ACTIVE USERS
+# =============================================================================
+
+### [1] Student — Rana Haddad (Engineering / Computer Engineering / Y3)
+# Expected: 200 — accessToken, refreshToken, user object with roles: [STUDENT]
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-  "name": "Alice Smith",
-  "universityEmail": "alice.smith@university.edu",
-  "universityId": "U123456",
-  "password": "password123"
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001",
+  "password": "Test123456"
 }
 
-### Attempt duplicate registration
-POST http://localhost:5000/api/auth/register
+###
+
+### [2] Student + Moderator — Karim Nasser (Engineering / Computer Science / Y4)
+# Expected: 200 — roles: [STUDENT, MODERATOR]
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-  "name": "Test Student",
-  "universityEmail": "carol.williams@university.edu",
-  "universityId": "U345678",
-  "password": "password123"
+  "universityEmail": "karim.nasser@ul.edu.lb",
+  "universityId": "210002",
+  "password": "Test123456"
 }
 
-### Login
-POST http://localhost:5000/api/auth/login
+###
+
+### [3] Admin — Maya Khoury (Science / Mathematics / Y2)
+# Expected: 200 — roles: [ADMIN]
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-  "universityEmail": "carol.williams@university.edu",
-  "universityId": "U345678",
-  "password": "password123"
+  "universityEmail": "maya.khoury@ul.edu.lb",
+  "universityId": "210003",
+  "password": "Test123456"
 }
+
+###
+
+### [4] Student — Lina Abbas (Business / Finance / Y3)
+# Expected: 200 — roles: [STUDENT]
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "lina.abbas@ul.edu.lb",
+  "universityId": "210005",
+  "password": "Test123456"
+}
+
+###
+
+### [5] Student — Hassan Darwish (Business / Marketing / Y2)
+# Expected: 200 — roles: [STUDENT]
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "hassan.darwish@ul.edu.lb",
+  "universityId": "210006",
+  "password": "Test123456"
+}
+
+###
+
+### [6] Student + Moderator — Nour Saleh (Arts / Graphic Design / Y4)
+# Expected: 200 — roles: [STUDENT, MODERATOR]
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "nour.saleh@ul.edu.lb",
+  "universityId": "210007",
+  "password": "Test123456"
+}
+
+###
+
+### [7] Student — Omar Hassan (Engineering / Electrical Engineering / Y5)
+# Expected: 200 — roles: [STUDENT]
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "omar.hassan@ul.edu.lb",
+  "universityId": "210008",
+  "password": "Test123456"
+}
+
+###
+
+### [8] Student — Sara Touma (Science / Chemistry / Y1)
+# Expected: 200 — roles: [STUDENT]
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "sara.touma@ul.edu.lb",
+  "universityId": "210009",
+  "password": "Test123456"
+}
+
+
+# =============================================================================
+# SUSPENDED ACCOUNTS — Should be rejected with 403
+# =============================================================================
+
+### [9] Suspended — Jad Mansour (Science / Physics / Y1)
+# Expected: 403 — Account is suspended
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "jad.mansour@ul.edu.lb",
+  "universityId": "210004",
+  "password": "Test123456"
+}
+
+###
+
+### [10] Suspended — Ali Farhat (Engineering / Mechanical Engineering / Y2)
+# Expected: 403 — Account is suspended
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "ali.farhat@ul.edu.lb",
+  "universityId": "210010",
+  "password": "Test123456"
+}
+
+
+# =============================================================================
+# WRONG PASSWORD — Should be rejected with 401
+# =============================================================================
+
+### [11] Wrong password — Rana Haddad
+# Expected: 401 — Invalid credentials
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001",
+  "password": "WrongPassword1"
+}
+
+###
+
+### [12] Wrong password — Maya Khoury (Admin)
+# Expected: 401 — Invalid credentials
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "maya.khoury@ul.edu.lb",
+  "universityId": "210003",
+  "password": "wrongpass"
+}
+
+
+# =============================================================================
+# MISMATCHED CREDENTIALS — Right ID wrong email and vice versa
+# =============================================================================
+
+### [13] Right ID, wrong email — Karim Nasser
+# Expected: 401 — Invalid credentials
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "wrong.email@ul.edu.lb",
+  "universityId": "210002",
+  "password": "Test123456"
+}
+
+###
+
+### [14] Right email, wrong ID — Nour Saleh
+# Expected: 401 — Invalid credentials
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "nour.saleh@ul.edu.lb",
+  "universityId": "000000",
+  "password": "Test123456"
+}
+
+###
+
+### [15] Swap credentials — Rana's email with Karim's ID
+# Expected: 401 — Invalid credentials
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210002",
+  "password": "Test123456"
+}
+
+
+# =============================================================================
+# NON-EXISTENT USERS
+# =============================================================================
+
+### [16] Completely made-up user
+# Expected: 401 — Invalid credentials
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "ghost.user@ul.edu.lb",
+  "universityId": "999999",
+  "password": "Test123456"
+}
+
+
+# =============================================================================
+# MISSING FIELDS
+# =============================================================================
+
+### [17] Missing password
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001"
+}
+
+###
+
+### [18] Missing universityId
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "karim.nasser@ul.edu.lb",
+  "password": "Test123456"
+}
+
+###
+
+### [19] Missing universityEmail
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityId": "210003",
+  "password": "Test123456"
+}
+
+###
+
+### [20] Empty body
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{}
+
+
+# =============================================================================
+# INVALID EMAIL FORMAT
+# =============================================================================
+
+### [21] Wrong domain (gmail)
+# Expected: 400 — Invalid university email format
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@gmail.com",
+  "universityId": "210001",
+  "password": "Test123456"
+}
+
+###
+
+### [22] No domain at all
+# Expected: 400 — Invalid university email format
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "lina.abbas",
+  "universityId": "210005",
+  "password": "Test123456"
+}
+
+###
+
+### [23] Empty email string
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "",
+  "universityId": "210006",
+  "password": "Test123456"
+}
+
+
+# =============================================================================
+# INVALID UNIVERSITY ID FORMAT
+# =============================================================================
+
+### [24] ID too short
+# Expected: 400 — Invalid university ID format
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "omar.hassan@ul.edu.lb",
+  "universityId": "21",
+  "password": "Test123456"
+}
+
+###
+
+### [25] ID with letters
+# Expected: 400 — Invalid university ID format
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "sara.touma@ul.edu.lb",
+  "universityId": "CS210009",
+  "password": "Test123456"
+}
+
+###
+
+### [26] Empty ID string
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "sara.touma@ul.edu.lb",
+  "universityId": "",
+  "password": "Test123456"
+}
+
+
+# =============================================================================
+# MAGIC LINK — REQUEST
+# =============================================================================
+
+### [27] Magic link — Rana Haddad (Student)
+# Expected: 200 — Check console for devToken
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001"
+}
+
+###
+
+### [28] Magic link — Karim Nasser (Student + Moderator)
+# Expected: 200
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "karim.nasser@ul.edu.lb",
+  "universityId": "210002"
+}
+
+###
+
+### [29] Magic link — Maya Khoury (Admin)
+# Expected: 200
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "maya.khoury@ul.edu.lb",
+  "universityId": "210003"
+}
+
+###
+
+### [30] Magic link — Jad Mansour (Suspended — still returns 200 for security)
+# Expected: 200 — Generic message, no link actually sent
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "jad.mansour@ul.edu.lb",
+  "universityId": "210004"
+}
+
+###
+
+### [31] Magic link — Non-existent user (still returns 200 for security)
+# Expected: 200 — Generic message
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "ghost@ul.edu.lb",
+  "universityId": "000000"
+}
+
+###
+
+### [32] Magic link — Missing ID
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "lina.abbas@ul.edu.lb"
+}
+
+###
+
+### [33] Magic link — Wrong domain
+# Expected: 400 — Invalid university email format
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "hassan.darwish@hotmail.com",
+  "universityId": "210006"
+}
+
+
+# =============================================================================
+# MAGIC LINK — VERIFY
+# =============================================================================
+
+### [34] Verify valid magic token
+# Step 1: Run request [27] first, copy devToken from response/console
+# Step 2: Paste it in @magicToken at top of file, then run this
+# Expected: 200 — accessToken, refreshToken, user object
+POST {{baseUrl}}/magic-link/verify
+Content-Type: application/json
+
+{
+  "token": "{{magicToken}}"
+}
+
+###
+
+### [35] Verify — missing token
+# Expected: 400 — Token is required
+POST {{baseUrl}}/magic-link/verify
+Content-Type: application/json
+
+{}
+
+###
+
+### [36] Verify — invalid token string
+# Expected: 403 — Invalid magic link
+POST {{baseUrl}}/magic-link/verify
+Content-Type: application/json
+
+{
+  "token": "this.is.not.a.valid.jwt"
+}
+
+
+# =============================================================================
+# REFRESH TOKEN
+# =============================================================================
+
+### [37] Refresh — valid refresh token
+# Step 1: Run any login request above
+# Step 2: Copy refreshToken into @refreshToken at top, then run this
+# Expected: 200 — new accessToken
+POST {{baseUrl}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+
+### [38] Refresh — missing token
+# Expected: 400 — Refresh token is required
+POST {{baseUrl}}/refresh
+Content-Type: application/json
+
+{}
+
+###
+
+### [39] Refresh — using access token instead of refresh token
+# Expected: 403 — Invalid token type
+POST {{baseUrl}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{accessToken}}"
+}
+
+###
+
+### [40] Refresh — completely invalid token
+# Expected: 403 — Invalid refresh token
+POST {{baseUrl}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "invalid.token.value"
+}
+
+
+# =============================================================================
+# PROTECTED ROUTE — GET /auth/me
+# =============================================================================
+
+### [41] Get profile — valid token
+# Step 1: Run any login above, copy accessToken to @accessToken at top
+# Expected: 200 — full user profile (no passwordHash)
+GET {{baseUrl}}/me
+Authorization: Bearer {{accessToken}}
+
+###
+
+### [42] Get profile — no Authorization header
+# Expected: 401 — Authentication required
+GET {{baseUrl}}/me
+
+###
+
+### [43] Get profile — malformed header (no Bearer prefix)
+# Expected: 401 — Authentication required
+GET {{baseUrl}}/me
+Authorization: {{accessToken}}
+
+###
+
+### [44] Get profile — invalid token
+# Expected: 403 — Invalid token
+GET {{baseUrl}}/me
+Authorization: Bearer this.is.not.valid
+
+
+# =============================================================================
+# EDGE CASES
+# =============================================================================
+
+### [45] Email in uppercase — Rana Haddad
+# Expected: 200 — should succeed (emails are case-insensitive)
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "RANA.HADDAD@UL.EDU.LB",
+  "universityId": "210001",
+  "password": "Test123456"
+}
+
+###
+
+### [46] Email with surrounding whitespace — Karim Nasser
+# Expected: 200 — should succeed (whitespace trimmed)
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "  karim.nasser@ul.edu.lb  ",
+  "universityId": "210002",
+  "password": "Test123456"
+}
+
+###
+
+### [47] Extra unknown fields in body (should be ignored)
+# Expected: 200 — logs in successfully
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "maya.khoury@ul.edu.lb",
+  "universityId": "210003",
+  "password": "Test123456",
+  "role": "superadmin",
+  "inject": "DROP TABLE users;"
+}
+
+###
+
+### [48] XSS attempt in email field
+# Expected: 400 — Invalid university email format
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "<script>alert(1)</script>@ul.edu.lb",
+  "universityId": "210001",
+  "password": "Test123456"
+}
+
+###
+
+### [49] NoSQL injection attempt in universityId
+# Expected: 400 — Invalid university ID format
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": { "$gt": "" },
+  "password": "Test123456"
+}
+
+###
+
+### [50] Empty password string
+# Expected: 400 — Missing required fields
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "lina.abbas@ul.edu.lb",
+  "universityId": "210005",
+  "password": ""
+}
+
+
+# =============================================================================
+# RATE LIMITING
+# =============================================================================
+
+### [51] Trigger login rate limit — run this 6 times rapidly
+# After 5 failed attempts: Expected 429 — Too many login attempts
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001",
+  "password": "BadPassword1"
+}
+
+###
+
+### [52] Trigger magic link rate limit — run this 4 times rapidly
+# After 3 requests: Expected 429 — Too many magic link requests
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001"
+}
+
+
+# =============================================================================
+# COMPLETE WORKFLOW — Login → Profile → Refresh → Profile
+# =============================================================================
+
+### [53] Step 1: Login as Karim Nasser (Moderator)
+# @name loginKarim
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "karim.nasser@ul.edu.lb",
+  "universityId": "210002",
+  "password": "Test123456"
+}
+
+###
+
+### [54] Step 2: Get Karim's profile
+# Copy accessToken from [53] into @accessToken above
+GET {{baseUrl}}/me
+Authorization: Bearer {{accessToken}}
+
+###
+
+### [55] Step 3: Refresh Karim's token
+# Copy refreshToken from [53] into @refreshToken above
+POST {{baseUrl}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+###
+
+### [56] Step 4: Get profile with new access token
+# Copy new accessToken from [55] into @accessToken above
+GET {{baseUrl}}/me
+Authorization: Bearer {{accessToken}}
+
+
+# =============================================================================
+# COMPLETE WORKFLOW — Magic Link Flow
+# =============================================================================
+
+### [57] Step 1: Request magic link for Nour Saleh (Moderator)
+# Check console for devToken, copy it into @magicToken above
+POST {{baseUrl}}/magic-link
+Content-Type: application/json
+
+{
+  "universityEmail": "nour.saleh@ul.edu.lb",
+  "universityId": "210007"
+}
+
+###
+
+### [58] Step 2: Verify magic link
+# Paste devToken from [57] into @magicToken above first
+POST {{baseUrl}}/magic-link/verify
+Content-Type: application/json
+
+{
+  "token": "{{magicToken}}"
+}
+
+###
+
+### [59] Step 3: Use returned token to get profile
+# Copy accessToken from [58] into @accessToken above
+GET {{baseUrl}}/me
+Authorization: Bearer {{accessToken}}
+
 
