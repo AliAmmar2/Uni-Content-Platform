@@ -1,6 +1,10 @@
 require("dotenv").config();
 const express = require("express");
+<<<<<<< HEAD
 const cors = require("cors");
+=======
+const cors = require('cors');
+>>>>>>> c8ecfb7d101dbbeaf959ad4fd08ea16854b2087e
 const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/auth.routes");
@@ -9,6 +13,7 @@ const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
+<<<<<<< HEAD
 // Middleware
 app.use(cors({
   origin: "*",
@@ -17,6 +22,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+=======
+app.use(cors());
+>>>>>>> c8ecfb7d101dbbeaf959ad4fd08ea16854b2087e
 
 // Connect DB
 connectDB();
