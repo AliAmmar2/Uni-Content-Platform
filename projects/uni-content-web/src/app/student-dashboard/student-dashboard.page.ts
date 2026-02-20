@@ -9,6 +9,7 @@ import { StudentDetailsStatusEnum } from '../student/+state/enums/student-detail
 import { STUDENT_DETAILS_KEY } from '../student/+state/student.reducer';
 import { LetDirective } from '@ngrx/component';
 import { StudentActions } from '../student/+state/student.action';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 @Component({
   standalone: true,
@@ -17,7 +18,8 @@ import { StudentActions } from '../student/+state/student.action';
     ReactiveFormsModule,
     LetDirective,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    FaIconComponent
   ],
   templateUrl: './student-dashboard.page.html',
   styleUrl: './student-dashboard.page.scss'

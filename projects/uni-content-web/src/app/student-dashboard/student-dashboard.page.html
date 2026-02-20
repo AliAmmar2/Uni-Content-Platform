@@ -21,11 +21,15 @@
   <ng-container *ngrxLet="studentDetailsSelected$ | async as studentDetailsState">
     @if (studentDetailsState?.status === StudentDetailsStatusEnum.loadDetailsSuccess) {
       <div class="student-info">
-        <h3>
-          Faculty of {{ studentDetailsState[STUDENT_DETAILS_KEY]?.faculty }}
-          ➡️
-          Major: {{ studentDetailsState[STUDENT_DETAILS_KEY]?.major }}
-        </h3>
+        <div>
+            Faculty of {{ studentDetailsState[STUDENT_DETAILS_KEY]?.faculty }}
+          </div>
+          <div class="icon">
+            <fa-icon [icon]="['fas','angles-right']"></fa-icon>
+          </div>
+          <div>
+            Major: {{ studentDetailsState[STUDENT_DETAILS_KEY]?.major }}
+          </div>
       </div>
     }
   </ng-container>
