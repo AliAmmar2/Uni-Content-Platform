@@ -3,6 +3,7 @@
     "universityId": "1001",
     "universityEmail": "rawan@university.edu",
     "name": "Rawan Cheaito",
+    "password": "123456",
     "faculty": "Engineering",
     "major": "Computer Science",
     "academicYear": 3,
@@ -16,6 +17,7 @@
     "faculty": "Business",
     "major": "Marketing",
     "academicYear": 2,
+    "password": "123456",
     "roles": ["Student"],
     "status": "Active"
   }

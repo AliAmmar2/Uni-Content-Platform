@@ -8,6 +8,8 @@ import { STUDENT_DETAILS_KEY, studentDetailsReducers } from './student/+state/st
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { COURSES_KEY, coursesReducers } from './courses/+state/courses.reducer';
+import { CoursesEffect } from './courses/+state/courses.effect';
 
 export function initializeFaIconLibrary(library: FaIconLibrary) {
   return () => {
@@ -16,11 +18,13 @@ export function initializeFaIconLibrary(library: FaIconLibrary) {
 }
 
 export const bootstrapEffectList = [
-  StudentEffect
+  StudentEffect,
+  CoursesEffect
 ]
 
 export const reducers = {
-  [STUDENT_DETAILS_KEY]: studentDetailsReducers
+  [STUDENT_DETAILS_KEY]: studentDetailsReducers,
+  [COURSES_KEY]: coursesReducers,
 }
 export const appConfig: ApplicationConfig = {
   providers: [
