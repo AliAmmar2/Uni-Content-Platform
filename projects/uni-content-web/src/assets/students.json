@@ -1,0 +1,22 @@
+[
+  {
+    "universityId": "1001",
+    "universityEmail": "rawan@university.edu",
+    "name": "Rawan Cheaito",
+    "faculty": "Engineering",
+    "major": "Computer Science",
+    "academicYear": 3,
+    "roles": ["Student"],
+    "status": "Active"
+  },
+  {
+    "universityId": "1002",
+    "universityEmail": "ahmad@university.edu",
+    "name": "Ahmad Ali",
+    "faculty": "Business",
+    "major": "Marketing",
+    "academicYear": 2,
+    "roles": ["Student"],
+    "status": "Active"
+  }
+]
