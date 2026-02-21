@@ -10,6 +10,10 @@ import { STUDENT_DETAILS_KEY } from '../student/+state/student.reducer';
 import { LetDirective } from '@ngrx/component';
 import { StudentActions } from '../student/+state/student.action';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { selectCourses } from '../courses/+state/courses.selector';
+import { CoursesActions } from '../courses/+state/courses.action';
+import { CoursesStatusEnum } from '../courses/+state/enums/courses-status.enum';
+import { COURSES_KEY } from '../courses/+state/courses.reducer';
 
 @Component({
   standalone: true,
@@ -32,6 +36,7 @@ export class StudentDashboardPage implements OnInit {
   private store = inject(Store);
   private activatedRoute = inject(ActivatedRoute);
   public studentDetailsSelected$ = this.store.pipe(select(selectStudentDetails));
+  public coursesSelected$ = this.store.pipe(select(selectCourses));
 
   constructor() {
   }
@@ -39,7 +44,7 @@ export class StudentDashboardPage implements OnInit {
   ngOnInit(): void {
     this.studentId = this.activatedRoute.snapshot.paramMap.get('universityId');
     console.log(this.studentId);
-    if(this.studentId){
+    if (this.studentId) {
       this.store.dispatch(StudentActions.loadStudentDetails({ studentId: this.studentId }))
     }
     this.studentDetailsSubscription();
@@ -51,9 +56,19 @@ export class StudentDashboardPage implements OnInit {
         next: async (studentDetailsState) => {
           if (studentDetailsState?.status === StudentDetailsStatusEnum.loadDetailsSuccess) {
             console.log('load success');
+            const studentDetails = studentDetailsState[STUDENT_DETAILS_KEY];
+            this.CoursesSubscription(studentDetails.academicYear, studentDetails.calendarYear);
           }
         }
       })
     );
   }
+
+  CoursesSubscription(academicYear: number, calendarYear: number) {
+    console.log(academicYear, calendarYear);
+    this.store.dispatch(CoursesActions.loadCourses({ academicYear, calendarYear }))
+  }
+
+  protected readonly CoursesStatusEnum = CoursesStatusEnum;
+  protected readonly COURSES_KEY = COURSES_KEY;
 }

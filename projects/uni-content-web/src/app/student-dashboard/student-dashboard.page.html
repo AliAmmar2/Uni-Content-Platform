@@ -4,8 +4,7 @@
       class="nav-btn"
       [routerLink]="['/students', studentId]"
       routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
+      [routerLinkActiveOptions]="{ exact: true }">
       Dashboard
     </button>
 
@@ -21,7 +20,8 @@
   <ng-container *ngrxLet="studentDetailsSelected$ | async as studentDetailsState">
     @if (studentDetailsState?.status === StudentDetailsStatusEnum.loadDetailsSuccess) {
       <div class="student-info">
-        <div>
+        <div class="student-info-header">
+          <div>
             Faculty of {{ studentDetailsState[STUDENT_DETAILS_KEY]?.faculty }}
           </div>
           <div class="icon">
@@ -30,6 +30,23 @@
           <div>
             Major: {{ studentDetailsState[STUDENT_DETAILS_KEY]?.major }}
           </div>
+        </div>
+        <div class="student-courses">
+          <ng-container *ngrxLet="coursesSelected$ | async as coursesState">
+            @if (coursesState?.status === CoursesStatusEnum.loadSuccess) {
+              <div class="courses-grid">
+                @for (course of coursesState[COURSES_KEY]; track course.code) {
+                  <div class="course-card">
+                    <h4>{{ course.name }}</h4>
+                    <p>{{ course.description }}</p>
+                    <span>Credits: {{ course.credits }}</span>
+                    <span>Semester: {{ course.semester }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </ng-container>
+        </div>
       </div>
     }
   </ng-container>
