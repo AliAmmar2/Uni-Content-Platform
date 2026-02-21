@@ -30,7 +30,6 @@ export class StudentClient {
     );
   }
 
-
   // public getStudentById(universityId: string): Observable<StudentModel> {
   //   return this.http.get<StudentModel>(`${this.API_URL}/${universityId}`);
   // }
