@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject,OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -28,7 +28,7 @@ import { COURSES_KEY } from '../courses/+state/courses.reducer';
   templateUrl: './student-dashboard.page.html',
   styleUrl: './student-dashboard.page.scss'
 })
-export class StudentDashboardPage implements OnInit {
+export class StudentDashboardPage implements OnInit, OnDestroy {
   public studentId: string;
   private subscription$ = new Subscription();
   protected readonly StudentDetailsStatusEnum = StudentDetailsStatusEnum;
@@ -47,9 +47,7 @@ export class StudentDashboardPage implements OnInit {
     if (!accessToken) {
       this.router.navigate(['/login']);
     }
-    else{
-      console.log('token exists',accessToken);
-    }
+
     this.studentId = this.activatedRoute.snapshot.paramMap.get('universityId');
     console.log(this.studentId);
     if (this.studentId) {
@@ -58,12 +56,18 @@ export class StudentDashboardPage implements OnInit {
     this.studentDetailsSubscription();
   }
 
+
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
+  }
+
   public studentDetailsSubscription() {
     this.subscription$.add(
       this.studentDetailsSelected$.subscribe({
         next: async (studentDetailsState) => {
           if (studentDetailsState?.status === StudentDetailsStatusEnum.loadDetailsSuccess) {
             console.log('load success');
+            this.isLoading = false;
             const studentDetails = studentDetailsState[STUDENT_DETAILS_KEY];
             this.CoursesSubscription(studentDetails.academicYear, studentDetails.calendarYear);
           }
