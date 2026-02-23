@@ -67,7 +67,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
         next: async (studentDetailsState) => {
           if (studentDetailsState?.status === StudentDetailsStatusEnum.loadDetailsSuccess) {
             console.log('load success');
-            this.isLoading = false;
             const studentDetails = studentDetailsState[STUDENT_DETAILS_KEY];
             this.CoursesSubscription(studentDetails.academicYear, studentDetails.calendarYear);
           }
