@@ -36,7 +36,9 @@ export class LoginPage implements OnInit {
     this.loginForm.disable();
     try {
       const response = await firstValueFrom(this.loginService.login(this.loginForm.value));
-      if(response && response.user){
+      if (response && response.user) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
         this.router.navigate(['/students', response.user.universityId]);
       }
     } catch (err: unknown) {
