@@ -39,7 +39,7 @@ exports.login = async (req, res) => {
 
     if (!user || user.universityEmail.toLowerCase() !== universityEmail.toLowerCase()) {
       return res.status(401).json({ 
-        message: "Invalid credentials" 
+        message: "user Invalid credentials"
       });
     }
 
@@ -58,7 +58,7 @@ exports.login = async (req, res) => {
 
     if (!user.passwordHash) {
       return res.status(401).json({ 
-        message: "Invalid credentials" 
+        message: "Invalid credentials (passwordHash)"
       });
     }
 
@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
     if (!validPassword) {
       await user.incLoginAttempts();
       return res.status(401).json({ 
-        message: "Invalid credentials" 
+        message: "Invalid credentials (password)"
       });
     }
 

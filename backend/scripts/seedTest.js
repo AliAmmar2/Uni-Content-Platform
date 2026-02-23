@@ -1,5 +1,4 @@
-// scripts/seed.js
-require("dotenv").config();
+require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") });
 const mongoose = require("mongoose");
 const bcrypt   = require("bcrypt");
 
@@ -8,8 +7,10 @@ const UniStudent = require("../src/models/UniStudents");
 const Faculty    = require("../src/models/Faculty");
 const Major      = require("../src/models/Major");
 
+console.log("Mongo URI:", process.env.MONGO_URI);
+
 async function seed() {
-  await mongoose.connect(process.env.MONGODB_URI);
+  await mongoose.connect(process.env.MONGO_URI);
   console.log("Connected to DB:", mongoose.connection.name);
 
   await UniStudent.deleteMany({});

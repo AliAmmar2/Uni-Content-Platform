@@ -1,6 +1,5 @@
 export interface LoginFormInterface {
-	email: string;
+  universityEmail: string;
   universityId: string;
 	password: string;
 }
-

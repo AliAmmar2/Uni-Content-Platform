@@ -1,6 +1,6 @@
 export interface RegisterFormInterface {
   fullName: string;
-	email: string;
+  universityEmail: string;
   universityId: string;
 	password: string;
 	confirmPassword: string;

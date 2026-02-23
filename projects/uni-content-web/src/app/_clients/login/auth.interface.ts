@@ -1,5 +1,5 @@
 export interface AuthInterface {
   universityId: string;
-  email: string;
+  universityEmail: string;
   password: string;
 }
