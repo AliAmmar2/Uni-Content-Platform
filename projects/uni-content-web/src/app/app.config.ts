@@ -1,11 +1,42 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { far } from '@fortawesome/free-regular-svg-icons';
 import { routes } from './app.routes';
+import { StudentEffect } from './student/+state/student.effect';
+import { STUDENT_DETAILS_KEY, studentDetailsReducers } from './student/+state/student.reducer';
+import { provideEffects } from '@ngrx/effects';
+import { provideStore } from '@ngrx/store';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { COURSES_KEY, coursesReducers } from './courses/+state/courses.reducer';
+import { CoursesEffect } from './courses/+state/courses.effect';
 
+export function initializeFaIconLibrary(library: FaIconLibrary) {
+  return () => {
+    library.addIconPacks(fas, far);
+  };
+}
+
+export const bootstrapEffectList = [
+  StudentEffect,
+  CoursesEffect
+]
+
+export const reducers = {
+  [STUDENT_DETAILS_KEY]: studentDetailsReducers,
+  [COURSES_KEY]: coursesReducers,
+}
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes)
+    provideEffects(bootstrapEffectList),
+    provideStore(reducers),
+    provideRouter(routes),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeFaIconLibrary,
+      deps: [FaIconLibrary],
+      multi: true
+    }
   ]
 };
