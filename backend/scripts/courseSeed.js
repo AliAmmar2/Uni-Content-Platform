@@ -2,7 +2,7 @@ require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") }
 const mongoose = require("mongoose");
 const Course   = require("../src/models/Course");
 const Major    = require("../src/models/Major");
-const courses  = require("../../../data/courses.json");
+const courses  = require("../data/courses.json");
 
 async function seedCourses() {
   try {
