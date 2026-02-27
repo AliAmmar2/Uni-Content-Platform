@@ -8,29 +8,30 @@ import { RegisterFormInterface } from '../../reigister-page/interface/register-f
 @Injectable({ providedIn: 'root' })
 
 export class LoginClient {
-  // private readonly API_URL = 'http://localhost:5000/api/auth/login'; // full URL
-  private readonly API_URL = 'assets/students.json';
+  private readonly API_URL = 'http://localhost:5000/auth';
+
+  public login(loginFormValue: LoginFormInterface): Observable<any> {
+    return this.http.post(`${this.API_URL}/login`, loginFormValue);
+  }
+  // private readonly API_URL = 'assets/students.json';
 
   constructor(private http: HttpClient) {
   }
 
-  public login(loginFormValue: LoginFormInterface): Observable<StudentModel | null> {
-    return this.http.get<StudentModel[]>(this.API_URL).pipe(
-      map((students) => {
-        const matchedStudent = students.find(
-          s =>
-            s.universityId === loginFormValue.universityId &&
-            s.universityEmail === loginFormValue.email &&
-            s.password === loginFormValue.password
-        );
-        return matchedStudent || null;
-      })
-    );
-  }
-
-  // public login(loginFormValue: LoginFormInterface): Observable<any> {
-  //   return this.http.post(`${this.API_URL}/login`, loginFormValue);
+  // public login(loginFormValue: LoginFormInterface): Observable<StudentModel | null> {
+  //   return this.http.get<StudentModel[]>(this.API_URL).pipe(
+  //     map((students) => {
+  //       const matchedStudent = students.find(
+  //         s =>
+  //           s.universityId === loginFormValue.universityId &&
+  //           s.universityEmail === loginFormValue.email &&
+  //           s.password === loginFormValue.password
+  //       );
+  //       return matchedStudent || null;
+  //     })
+  //   );
   // }
+
 
   public register(registerFormValue: RegisterFormInterface): Observable<any> {
     return this.http.post(`${this.API_URL}/register`, registerFormValue);

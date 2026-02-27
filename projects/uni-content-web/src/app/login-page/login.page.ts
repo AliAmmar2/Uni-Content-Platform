@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
 
   constructor() {
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
+      universityEmail: new FormControl('', [Validators.required, Validators.email]),
       universityId: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required])
     });
@@ -30,15 +30,16 @@ export class LoginPage implements OnInit {
 
 
   ngOnInit(): void {
-
   }
 
   public async login() {
     this.loginForm.disable();
     try {
-      const student = await firstValueFrom(this.loginService.login(this.loginForm.value));
-      if(student){
-        this.router.navigate(['/students', student.universityId]);
+      const response = await firstValueFrom(this.loginService.login(this.loginForm.value));
+      if (response && response.user) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
+        this.router.navigate(['/students', response.user.universityId]);
       }
     } catch (err: unknown) {
       console.error(err);

@@ -1,9 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject,OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { selectStudentDetails } from '../student/+state/student.selector';
-import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { StudentDetailsStatusEnum } from '../student/+state/enums/student-details-status.enum';
 import { STUDENT_DETAILS_KEY } from '../student/+state/student.reducer';
@@ -28,12 +28,13 @@ import { COURSES_KEY } from '../courses/+state/courses.reducer';
   templateUrl: './student-dashboard.page.html',
   styleUrl: './student-dashboard.page.scss'
 })
-export class StudentDashboardPage implements OnInit {
+export class StudentDashboardPage implements OnInit, OnDestroy {
   public studentId: string;
   private subscription$ = new Subscription();
   protected readonly StudentDetailsStatusEnum = StudentDetailsStatusEnum;
   protected readonly STUDENT_DETAILS_KEY = STUDENT_DETAILS_KEY;
   private store = inject(Store);
+  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   public studentDetailsSelected$ = this.store.pipe(select(selectStudentDetails));
   public coursesSelected$ = this.store.pipe(select(selectCourses));
@@ -42,12 +43,22 @@ export class StudentDashboardPage implements OnInit {
   }
 
   ngOnInit(): void {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      this.router.navigate(['/login']);
+    }
+
     this.studentId = this.activatedRoute.snapshot.paramMap.get('universityId');
     console.log(this.studentId);
     if (this.studentId) {
       this.store.dispatch(StudentActions.loadStudentDetails({ studentId: this.studentId }))
     }
     this.studentDetailsSubscription();
+  }
+
+
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
   }
 
   public studentDetailsSubscription() {

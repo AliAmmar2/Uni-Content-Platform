@@ -1,17 +1,17 @@
 import { AuthInterface } from '../../_clients/login/auth.interface';
 
 export class AuthDto implements AuthInterface {
-	email: string;
+  universityEmail: string;
   universityId: string;
-	password: string;
+  password: string;
 
-	constructor(loginFormValue: {  universityId: string,email: string, password: string }) {
-		this.email = loginFormValue.email;
+  constructor(loginFormValue: { universityId: string, universityEmail: string, password: string }) {
+    this.universityEmail = loginFormValue.universityEmail;
     this.universityId = loginFormValue.universityId;
-		this.password = loginFormValue.password;
-	}
+    this.password = loginFormValue.password;
+  }
 
-	toJSON(): AuthInterface {
-		return { password: this.password, email: this.email, universityId: this.universityId };
-	}
+  toJSON(): AuthInterface {
+    return { universityEmail: this.universityEmail, universityId: this.universityId, password: this.password };
+  }
 }

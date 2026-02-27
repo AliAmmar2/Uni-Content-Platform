@@ -3,13 +3,13 @@ import { RegisterFormInterface } from '../interface/register-form.interface';
 
 export class RegisterDto implements AuthInterface {
   fullName:string;
-	email: string;
+  universityEmail: string;
   universityId: string;
 	password: string;
 	confirmPassword: string;
 
 	constructor(registerFormInterface:RegisterFormInterface) {
-		this.email = registerFormInterface.email;
+		this.universityEmail = registerFormInterface.universityEmail;
 		this.fullName = registerFormInterface.fullName;
     this.universityId = registerFormInterface.universityId;
 		this.password = registerFormInterface.password;
