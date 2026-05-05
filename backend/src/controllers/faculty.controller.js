@@ -3,14 +3,20 @@ const Faculty = require("../models/Faculty");
 // Create a new faculty (Admin only)
 exports.createFaculty = async (req, res) => {
   try {
-    const { name } = req.body;
-    if (!name) return res.status(400).json({ message: "Faculty name is required" });
+    const { name, code } = req.body;
 
-    const existing = await Faculty.findOne({ name });
-    if (existing) return res.status(409).json({ message: "Faculty already exists" });
+    if (!name || !code) {
+      return res.status(400).json({ message: "Name and code are required" });
+    }
 
-    const faculty = await Faculty.create({ name });
+    const existing = await Faculty.findOne({ $or: [{ name }, { code }] });
+    if (existing) {
+      return res.status(409).json({ message: "Faculty already exists" });
+    }
+
+    const faculty = await Faculty.create({ name, code });
     res.status(201).json(faculty);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

@@ -12,7 +12,6 @@ const sendMagicLinkEmail = async (email, magicLink) => {
 
   // In production, integrate with actual email service
   // e.g., SendGrid, AWS SES, Nodemailer
-  // For now, we'll skip actual email sending
   return { success: true };
 };
 

@@ -1,4 +1,4 @@
-const UniStudent = require("../models/UniStudents");
+const UniStudent = require("../models/Users");
 const Course = require("../models/Course");
 
 exports.getDashboard = async (req, res) => {
@@ -16,12 +16,16 @@ exports.getDashboard = async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
 
+    if (!student.major) {
+  return res.status(400).json({ message: "Student has no major assigned" });
+}
+
     // 2. Determine which calendarYear to show
     //    Default: their current calendarYear
     //    Optional: frontend can pass ?calendarYear=2024 to filter
-    const requestedCalendarYear = req.query.calendarYear
-      ? parseInt(req.query.calendarYear)
-      : student.calendarYear;
+const requestedCalendarYear = Number.isInteger(parseInt(req.query.calendarYear))
+  ? parseInt(req.query.calendarYear)
+  : student.calendarYear;
 
     // 3. Fetch courses matching their major + academic year + requested calendar year
     const courses = await Course.find({
@@ -49,7 +53,7 @@ exports.getDashboard = async (req, res) => {
       },
       courses: {
         displayedCalendarYear: requestedCalendarYear,
-        availableCalendarYears: availableCalendarYears.sort(),
+        availableCalendarYears: availableCalendarYears.sort((a, b) => a - b),
         list: courses
       }
     });
