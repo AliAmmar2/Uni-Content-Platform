@@ -1,0 +1,239 @@
+# =============================================================================
+# UNIVERSITY MATERIAL MANAGEMENT SYSTEM — FULL TEST CASES
+# REST CLIENT (.http file)
+# =============================================================================
+
+@baseUrl = http://localhost:3000
+@auth = {{baseUrl}}/auth
+@dashboard = {{baseUrl}}/dashboard
+@materials = {{baseUrl}}/materials
+@courses = {{baseUrl}}/courses
+@majors = {{baseUrl}}/majors
+@faculties = {{baseUrl}}/faculties
+
+@accessToken =
+@courseId =
+@materialId =
+
+
+# =============================================================================
+# 1. HEALTH CHECK
+# =============================================================================
+
+GET {{baseUrl}}/health
+
+
+# =============================================================================
+# 2. AUTH TESTS
+# =============================================================================
+
+### Student Login
+POST {{auth}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001",
+  "password": "Test123456"
+}
+
+###
+
+### Moderator Login
+POST {{auth}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "karim.nasser@ul.edu.lb",
+  "universityId": "210002",
+  "password": "Test123456"
+}
+
+###
+
+### Admin Login
+POST {{auth}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "maya.khoury@ul.edu.lb",
+  "universityId": "210003",
+  "password": "Test123456"
+}
+
+###
+
+### Invalid Login (wrong password)
+POST {{auth}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001",
+  "password": "wrongpass"
+}
+###
+
+# =============================================================================
+# 3. AUTH - ME
+# =============================================================================
+
+GET {{auth}}/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkYyIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMSIsInJvbGVzIjpbIlNUVURFTlQiXSwiaWF0IjoxNzc3OTIyMzEzLCJleHAiOjE3Nzc5MjU5MTN9.gjMyivgYHAJJrPDeb4aEiRb5Ij-dkrrSiOKmSfX8uzg
+
+
+# =============================================================================
+# 4. DASHBOARD
+# =============================================================================
+###
+
+GET {{dashboard}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkYyIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMSIsInJvbGVzIjpbIlNUVURFTlQiXSwiaWF0IjoxNzc3OTIyMzEzLCJleHAiOjE3Nzc5MjU5MTN9.gjMyivgYHAJJrPDeb4aEiRb5Ij-dkrrSiOKmSfX8uzg
+
+
+# =============================================================================
+# 5. MAJORS
+# =============================================================================
+
+### Get All Majors
+GET {{majors}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkZSIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc3NzkxNDkyNSwiZXhwIjoxNzc3OTE4NTI1fQ.FFDL0EOWxnOamzhxTKcAGUA-kJMGe9AtE75l27OD2Sg
+
+###
+
+### Get Major By ID
+GET {{majors}}/69942e6f27c66513c7c090cd
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkZSIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc3NzkxNDkyNSwiZXhwIjoxNzc3OTE4NTI1fQ.FFDL0EOWxnOamzhxTKcAGUA-kJMGe9AtE75l27OD2Sg
+
+
+# =============================================================================
+# 6. FACULTIES
+# =============================================================================
+###
+GET {{faculties}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkZSIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc3NzkxNDkyNSwiZXhwIjoxNzc3OTE4NTI1fQ.FFDL0EOWxnOamzhxTKcAGUA-kJMGe9AtE75l27OD2Sg
+
+
+# =============================================================================
+# 7. COURSES
+# =============================================================================
+
+### Get all courses
+GET {{courses}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkZSIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc3NzkxNDkyNSwiZXhwIjoxNzc3OTE4NTI1fQ.FFDL0EOWxnOamzhxTKcAGUA-kJMGe9AtE75l27OD2Sg
+
+###
+
+### Get single course
+GET {{courses}}/69a1671b8938eab694554b86
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkZSIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc3NzkxNDkyNSwiZXhwIjoxNzc3OTE4NTI1fQ.FFDL0EOWxnOamzhxTKcAGUA-kJMGe9AtE75l27OD2Sg
+
+###
+
+### Get course materials (approved only)
+GET {{courses}}/69a1671b8938eab694554b86/materials
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5OTQyZTZmMjdjNjY1MTNjN2MwOTBkZSIsInVuaXZlcnNpdHlJZCI6IjIxMDAwMyIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc3NzkxNDkyNSwiZXhwIjoxNzc3OTE4NTI1fQ.FFDL0EOWxnOamzhxTKcAGUA-kJMGe9AtE75l27OD2Sg
+
+
+# =============================================================================
+# 8. MATERIAL FLOW (MAIN SYSTEM TEST)
+# =============================================================================
+
+### Upload material (STUDENT / MODERATOR)
+POST {{materials}}/upload
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Lecture 1 Notes",
+  "description": "Intro lecture",
+  "fileUrl": "https://example.com/file.pdf",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+### Get materials for course (STUDENT VIEW)
+GET {{materials}}/course/{{courseId}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Approve material (MODERATOR ONLY)
+PUT {{materials}}/{{materialId}}/approve
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "approvalStatus": "APPROVED"
+}
+
+###
+
+### Reject material
+PUT {{materials}}/{{materialId}}/approve
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "approvalStatus": "REJECTED",
+  "rejectionReason": "Not relevant to course"
+}
+
+###
+
+### Delete material
+DELETE {{materials}}/{{materialId}}
+Authorization: Bearer {{accessToken}}
+
+
+# =============================================================================
+# 9. FULL FLOW TEST (IMPORTANT DEMO PATH)
+# =============================================================================
+
+### Step 1: Login Student
+POST {{auth}}/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId": "210001",
+  "password": "Test123456"
+}
+
+###
+
+### Step 2: Get Dashboard (copy courseId)
+GET {{dashboard}}
+Authorization: Bearer {{accessToken}}
+
+###
+
+### Step 3: Upload Material
+POST {{materials}}/upload
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Midterm Summary",
+  "description": "Important notes",
+  "fileUrl": "https://example.com/midterm.pdf",
+  "courseId": "{{courseId}}"
+}
+
+###
+
+### Step 4: Moderator approves
+PUT {{materials}}/{{materialId}}/approve
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "approvalStatus": "APPROVED"
+}
+
+###
+
+### Step 5: Student sees approved materials
+GET {{materials}}/course/{{courseId}}
+Authorization: Bearer {{accessToken}}
