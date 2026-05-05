@@ -1,0 +1,38 @@
+### ─── DASHBOARD TESTS ───────────────────────────────────────────
+
+@baseUrl = http://localhost:3000
+
+### 1. Login to get token (use your seeded student)
+# @name loginStudent
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "universityEmail": "ali.hassan@ul.edu.lb",
+  "universityId": "12345",
+  "password": "yourpassword"
+}
+
+### Save token from login response (REST Client does this automatically with @name above)
+@accessToken = {{loginStudent.response.body.accessToken}}
+
+### 2. Dashboard — current calendar year (uses student's own calendarYear)
+GET {{baseUrl}}/dashboard
+Authorization: Bearer {{accessToken}}
+
+### 3. Dashboard — filter to 2024
+GET {{baseUrl}}/dashboard?calendarYear=2024
+Authorization: Bearer {{accessToken}}
+
+### 4. Dashboard — filter to a year with no courses (expect empty list)
+GET {{baseUrl}}/dashboard?calendarYear=2020
+Authorization: Bearer {{accessToken}}
+
+### 5. Dashboard — no token (expect 401)
+GET {{baseUrl}}/dashboard
+
+### 6. Dashboard — invalid token (expect 401)
+GET {{baseUrl}}/dashboard
+Authorization: Bearer invalidtoken123
+
+### 7. Dashboard — expired token (manually paste an
