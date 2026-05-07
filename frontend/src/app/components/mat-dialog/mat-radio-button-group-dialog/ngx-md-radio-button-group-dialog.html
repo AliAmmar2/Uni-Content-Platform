@@ -1,0 +1,40 @@
+<mat-toolbar class="with-bottom-border">
+  <mat-toolbar-row>
+    <span>{{ data.title }}</span>
+    <span class="flex-space-to-right"></span>
+    <mat-icon (click)="dialogRef.close()"
+              class="cursor-pointer"
+              mat-list-icon>
+      close
+    </mat-icon>
+  </mat-toolbar-row>
+</mat-toolbar>
+<form (ngSubmit)="submit()"
+      [formGroup]="formDialog">
+  <mat-radio-group class="radio-group"
+                   formControlName="value">
+    @for (item of data.list; track item.role; ) {
+      <mat-radio-button [checked]="item.role === data?.defaultValue?.role"
+                        [value]="item"
+                        class="radio-button">
+        {{ item.label }}
+      </mat-radio-button>
+    }
+  </mat-radio-group>
+</form>
+
+<mat-toolbar class="with-top-border">
+  <mat-toolbar-row>
+    <span class="flex-space-to-right"></span>
+    <button (click)="close()"
+            mat-flat-button>
+      {{ data.textCancelButton }}
+    </button>
+    <button (click)="submit()"
+            color="primary"
+            mat-flat-button
+            type="submit">
+      {{ data.textOkButton }}
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
