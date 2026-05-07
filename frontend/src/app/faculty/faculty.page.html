@@ -35,53 +35,53 @@
 
   <!-- GRID -->
   <div class="faculties-grid">
+    <ng-container *ngrxLet="facultiesListSelected$ | async as facultyState">
+      @for (faculty of facultyState[FACULTY_KEY]; track faculty.id) {
+        <div class="faculty-card">
 
-    <div class="faculty-card" *ngFor="let faculty of faculties">
+          <div class="faculty-image-container">
 
-      <!-- TOP IMAGE AREA -->
-      <div class="faculty-image-container">
+            <div class="card-top-bar">
 
-        <div class="card-top-bar">
+              <div class="faculty-code">
+                {{ faculty.code }}
+              </div>
 
-          <div class="faculty-code">
-            {{ faculty.code }}
+              <button class="card-menu-btn">
+                <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+              </button>
+
+            </div>
+
           </div>
 
-          <button class="card-menu-btn">
-            <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
-          </button>
+          <!-- CONTENT -->
+          <div class="faculty-content">
 
-        </div>
+            <h2>{{ faculty.name }}</h2>
 
-      </div>
+            <p class="description">
+              {{ faculty.description }}
+            </p>
 
-      <!-- CONTENT -->
-      <div class="faculty-content">
+            <div class="divider"></div>
 
-        <h2>{{ faculty.name }}</h2>
-
-        <p class="description">
-          {{ faculty.description }}
-        </p>
-
-        <div class="divider"></div>
-
-        <div class="faculty-footer">
+            <div class="faculty-footer">
 
           <span class="departments-count">
             12 Departments
           </span>
 
-          <button class="arrow-btn">
-            <fa-icon [icon]="['fas','arrow-right']"></fa-icon>
-          </button>
+              <button class="arrow-btn">
+                <fa-icon [icon]="['fas','arrow-right']"></fa-icon>
+              </button>
+
+            </div>
+
+          </div>
 
         </div>
-
-      </div>
-
-    </div>
-
+      }
+    </ng-container>
   </div>
-
 </div>

@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, of, switchMap } from 'rxjs';
 import { FacultyItemBo } from '../bo/faculty-item.bo';
 import { FacultyActions } from './faculty.action';
 import { FacultyService } from '../service/faculty.service';
+
 @Injectable()
 export class FacultyEffect {
-
+  private actions$ = inject(Actions);
+  private facultiesService = inject(FacultyService);
   public $loadFaculties = createEffect(() =>
     this.actions$
       .pipe(
@@ -97,10 +99,4 @@ export class FacultyEffect {
         })
       )
   );
-
-  constructor(
-    private actions$: Actions,
-    private facultiesService: FacultyService
-  ) {
-  }
 }
