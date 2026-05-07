@@ -2,9 +2,10 @@ import { Routes } from '@angular/router';
 import { LoginPage } from './login-page/login.page';
 import { RegisterPage } from './reigister-page/register.page';
 import { StudentDashboardPage } from './student-dashboard/student-dashboard.page';
+import { PortalAdminDashboardPage } from './portal-admin/dashboard/portal-admin-dashboard.page';
 
 export const routes: Routes = [
-   {
+  {
     path: 'login',
     component: LoginPage
   },
@@ -19,5 +20,9 @@ export const routes: Routes = [
   {
     path: 'students/:universityId/announcements',
     component: StudentDashboardPage
+  },
+  {
+    path: 'portal-admin/dashboard',
+    component: PortalAdminDashboardPage
   },
 ];
