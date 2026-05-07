@@ -1,6 +1,5 @@
 <div class="faculties-page">
 
-  <!-- HEADER -->
   <div class="page-header">
 
     <div class="header-text">
@@ -15,28 +14,30 @@
 
   </div>
 
-  <!-- FILTERS -->
   <div class="filters-container">
 
     <div class="search-box">
-      <fa-icon [icon]="['fas','magnifying-glass']"></fa-icon>
 
+      <fa-icon [icon]="['fas','magnifying-glass']"></fa-icon>
       <input
         type="text"
         placeholder="Search faculties by name or code..."
-      >
+        (input)="onSearch($event)">
+
     </div>
 
     <div class="total-box">
-      Total: <span>{{ faculties?.length || 0 }} Faculties</span>
+      Total:
+      <span>{{ (facultiesListSelected$ | async)?.length || 0 }} Faculties</span>
     </div>
 
   </div>
 
-  <!-- GRID -->
   <div class="faculties-grid">
-    <ng-container *ngrxLet="facultiesListSelected$ | async as facultyState">
-      @for (faculty of facultyState[FACULTY_KEY]; track faculty.id) {
+
+    <ng-container *ngrxLet="facultiesListSelected$ as faculties">
+      @for (faculty of faculties; track faculty.id) {
+
         <div class="faculty-card">
 
           <div class="faculty-image-container">
@@ -47,7 +48,8 @@
                 {{ faculty.code }}
               </div>
 
-              <button class="card-menu-btn">
+              <button class="card-menu-btn"
+                      (click)="presentPopoverActions($event,faculty)">
                 <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
               </button>
 
@@ -55,7 +57,6 @@
 
           </div>
 
-          <!-- CONTENT -->
           <div class="faculty-content">
 
             <h2>{{ faculty.name }}</h2>
@@ -64,24 +65,14 @@
               {{ faculty.description }}
             </p>
 
-            <div class="divider"></div>
-
-            <div class="faculty-footer">
-
-          <span class="departments-count">
-            12 Departments
-          </span>
-
-              <button class="arrow-btn">
-                <fa-icon [icon]="['fas','arrow-right']"></fa-icon>
-              </button>
-
-            </div>
-
           </div>
 
         </div>
+
       }
+
     </ng-container>
+
   </div>
+
 </div>
