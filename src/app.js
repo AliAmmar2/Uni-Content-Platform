@@ -14,26 +14,20 @@ const authMiddleware = require("./middleware/auth.middleware");
 
 const app = express();
 
-// =========================
 // Middleware
-// =========================
 app.use(cors({
   origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
 }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// =========================
-// Database Connection
-// =========================
+// DB
 connectDB();
 
-// =========================
 // Routes
-// =========================
 app.get("/health", (req, res) => {
   res.json({ status: "OK", timestamp: new Date().toISOString() });
 });
@@ -45,37 +39,24 @@ app.use("/majors", majorRoutes);
 app.use("/courses", courseRoutes);
 app.use("/materials", materialRoutes);
 
-// =========================
-// Protected Test Route
-// =========================
+// test route
 app.get("/protected/test", authMiddleware, (req, res) => {
   res.json({ message: "Protected route works" });
 });
 
-// =========================
-// 404 Handler
-// =========================
+// 404
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// =========================
-// Global Error Handler
-// =========================
+// Error handler
 app.use((err, req, res, next) => {
   console.error("ERROR:", err);
-
   res.status(500).json({
     message: "Internal server error",
     ...(process.env.NODE_ENV === "development" && { error: err.message })
   });
 });
 
-// =========================
-// Start Server
-// =========================
 const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

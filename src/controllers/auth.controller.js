@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UniStudent = require("../models/Users");
+const UniStudent = require("../models/UniStudents");
 const Faculty = require('../models/Faculty');
 const Major = require("../models/Major");
 const { validateUniversityEmail, validateUniversityId } = require("../utils/validation");
