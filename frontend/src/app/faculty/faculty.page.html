@@ -1,0 +1,87 @@
+<div class="faculties-page">
+
+  <!-- HEADER -->
+  <div class="page-header">
+
+    <div class="header-text">
+      <h1>Faculties Administration</h1>
+      <p>Manage and monitor academic departments across all campuses.</p>
+    </div>
+
+    <button class="add-faculty-btn">
+      <span>+</span>
+      Add Faculty
+    </button>
+
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-container">
+
+    <div class="search-box">
+      <fa-icon [icon]="['fas','magnifying-glass']"></fa-icon>
+
+      <input
+        type="text"
+        placeholder="Search faculties by name or code..."
+      >
+    </div>
+
+    <div class="total-box">
+      Total: <span>{{ faculties?.length || 0 }} Faculties</span>
+    </div>
+
+  </div>
+
+  <!-- GRID -->
+  <div class="faculties-grid">
+
+    <div class="faculty-card" *ngFor="let faculty of faculties">
+
+      <!-- TOP IMAGE AREA -->
+      <div class="faculty-image-container">
+
+        <div class="card-top-bar">
+
+          <div class="faculty-code">
+            {{ faculty.code }}
+          </div>
+
+          <button class="card-menu-btn">
+            <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- CONTENT -->
+      <div class="faculty-content">
+
+        <h2>{{ faculty.name }}</h2>
+
+        <p class="description">
+          {{ faculty.description }}
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="faculty-footer">
+
+          <span class="departments-count">
+            12 Departments
+          </span>
+
+          <button class="arrow-btn">
+            <fa-icon [icon]="['fas','arrow-right']"></fa-icon>
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

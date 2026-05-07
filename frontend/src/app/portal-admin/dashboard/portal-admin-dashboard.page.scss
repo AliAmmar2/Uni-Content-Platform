@@ -4,7 +4,6 @@
   background: #f1f5f9;
 }
 
-/* MOBILE HEADER */
 .mobile-header {
   display: none;
   align-items: center;
@@ -29,7 +28,6 @@
   color: #1e293b;
 }
 
-/* SIDEBAR */
 .left-menu {
   width: 250px;
   background: #ffffff;
@@ -47,7 +45,6 @@
   margin-bottom: 30px;
 }
 
-/* ITEMS */
 .items {
   display: flex;
   flex-direction: column;
@@ -78,7 +75,6 @@
   }
 }
 
-/* LOGOUT */
 .logout-button {
   margin-top: auto;
   display: flex;
@@ -95,13 +91,11 @@
   }
 }
 
-/* RIGHT CONTENT */
 .dashboard-container-right {
   flex: 1;
   padding: 24px;
 }
 
-/* FOOTER */
 .footer {
   text-align: center;
   padding: 14px;
@@ -111,19 +105,13 @@
   font-size: 13px;
 }
 
-/* MOBILE CLOSE BUTTON */
 .mobile-close {
   display: none;
 }
 
-/* BACKDROP */
 .mobile-backdrop {
   display: none;
 }
-
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
 
 @media (max-width: 768px) {
 
@@ -131,12 +119,10 @@
     flex-direction: column;
   }
 
-  /* SHOW MOBILE HEADER */
   .mobile-header {
     display: flex;
   }
 
-  /* SIDEBAR MOBILE */
   .left-menu {
     position: fixed;
     top: 0;
@@ -147,12 +133,10 @@
     padding-top: 70px;
   }
 
-  /* OPEN SIDEBAR */
   .left-menu.mobile-open {
     left: 0;
   }
 
-  /* CLOSE BUTTON */
   .mobile-close {
     display: flex;
     position: absolute;
@@ -163,7 +147,6 @@
     color: #334155;
   }
 
-  /* BACKDROP */
   .mobile-backdrop {
     display: block;
     position: fixed;
@@ -172,12 +155,10 @@
     z-index: 1500;
   }
 
-  /* CONTENT */
   .dashboard-container-right {
     padding: 14px;
   }
 
-  /* FOOTER */
   .footer {
     font-size: 12px;
     padding: 12px;

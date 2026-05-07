@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 import { LoginPage } from './login-page/login.page';
 import { RegisterPage } from './reigister-page/register.page';
-import { StudentDashboardPage } from './student-dashboard/student-dashboard.page';
+import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
 import { PortalAdminDashboardPage } from './portal-admin/dashboard/portal-admin-dashboard.page';
+import { FacultyPage } from './faculty/faculty.page';
 
 export const routes: Routes = [
   {
@@ -22,7 +23,13 @@ export const routes: Routes = [
     component: StudentDashboardPage
   },
   {
-    path: 'portal-admin/dashboard',
-    component: PortalAdminDashboardPage
-  },
+    path: 'admin/dashboard/:id',
+    component: PortalAdminDashboardPage,
+    children: [
+      {
+        path: 'faculties',
+        component: FacultyPage
+      }
+    ]
+  }
 ];

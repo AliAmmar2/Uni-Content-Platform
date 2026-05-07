@@ -16,48 +16,43 @@
   <!-- SIDEBAR -->
   <div
     class="dashboard-container-left-menu left-menu"
-    [ngClass]="{ 'mobile-open': isSidebarOpen }">
+    [ngClass]="{ 'mobile-open': isSidebarOpen }"
+  >
 
-    <!-- CLOSE BUTTON MOBILE -->
     <div class="mobile-close" (click)="toggleSidebar()">
       <fa-icon [icon]="['fas','times']"></fa-icon>
     </div>
 
-    <!-- TITLE -->
     <div class="left-menu-title">
       <h1>Lebanese University</h1>
     </div>
 
-    <!-- ITEMS -->
     <div class="items">
 
-      <!-- DASHBOARD -->
       <div class="item"
-           [routerLink]="['/dashboard']"
-           [ngClass]="{ 'active': activeMenu === 'dashboard' }"
-           (click)="setActiveMenu('dashboard'); toggleSidebar()">
+           routerLink="/dashboard"
+           (click)="setActiveMenu('dashboard'); toggleSidebar()"
+           [ngClass]="{ 'active': (activeMenu$ | async) === 'dashboard' }">
 
         <fa-icon [icon]="['fas','chart-line']"></fa-icon>
         <span>Dashboard</span>
 
       </div>
 
-      <!-- STUDENTS -->
       <div class="item"
-           [routerLink]="['/students']"
-           [ngClass]="{ 'active': activeMenu === 'students' }"
-           (click)="setActiveMenu('students'); toggleSidebar()">
+           routerLink="/students"
+           (click)="setActiveMenu('students'); toggleSidebar()"
+           [ngClass]="{ 'active': (activeMenu$ | async) === 'students' }">
 
         <fa-icon [icon]="['fas','user-graduate']"></fa-icon>
         <span>Students</span>
 
       </div>
 
-      <!-- FACULTIES -->
       <div class="item"
-           [routerLink]="['/faculties']"
-           [ngClass]="{ 'active': activeMenu === 'faculties' }"
-           (click)="setActiveMenu('faculties'); toggleSidebar()">
+           routerLink="/faculties"
+           (click)="setActiveMenu('faculties'); toggleSidebar()"
+           [ngClass]="{ 'active': (activeMenu$ | async) === 'faculties' }">
 
         <fa-icon [icon]="['fas','university']"></fa-icon>
         <span>Faculties</span>
@@ -66,34 +61,25 @@
 
     </div>
 
-    <!-- LOGOUT -->
     <div class="logout-button" (click)="logout()">
-
       <fa-icon [icon]="['fas','sign-out-alt']"></fa-icon>
       <span>Logout</span>
-
     </div>
 
   </div>
 
   <!-- BACKDROP -->
   @if (isSidebarOpen) {
-    <div
-      class="mobile-backdrop"
-      (click)="toggleSidebar()">
-    </div>
+    <div class="mobile-backdrop" (click)="toggleSidebar()"></div>
   }
 
-  <!-- RIGHT CONTENT -->
+  <!-- CONTENT -->
   <div class="dashboard-container-right">
-
     <router-outlet></router-outlet>
-
   </div>
 
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
   © 2026 Lebanese University - Administration Portal
 </footer>

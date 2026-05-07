@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class DashboardUiService {
-  private activeMenuSubject = new BehaviorSubject<string>('gyms');
+  private activeMenuSubject = new BehaviorSubject<string>('university');
 
   public activeMenu$ = this.activeMenuSubject.asObservable();
 
