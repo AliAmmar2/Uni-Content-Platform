@@ -30,7 +30,6 @@ export class FacultyPage implements OnInit {
   private router = inject(Router);
 
   accessToken: string | null = null;
-  activeMenu: string = '';
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
   // SAFE observable (no binding issues)
@@ -73,20 +72,6 @@ export class FacultyPage implements OnInit {
       }
 
       this.store.dispatch(FacultyActions.loadFaculties());
-
-      this.router.events
-        .pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe(() => {
-          const url = this.router.url;
-
-          if (url.includes('faculties')) {
-            this.activeMenu = 'faculties';
-          } else if (url.includes('students')) {
-            this.activeMenu = 'students';
-          } else {
-            this.activeMenu = 'dashboard';
-          }
-        });
     }
   }
 
