@@ -1,67 +1,67 @@
-
 <div class="login-container">
   <div class="login-card">
 
-  
-  <div class="logo-section">
-          <img src="../assets/imgs/logo.png" class="logo-img" />
+    <div class="logo-section">
+      <img src="../assets/imgs/logo.png" class="logo-img" />
       <h2 class="university-name">Lebanese University</h2>
     </div>
-    <h1 class="login-title">University Login</h1>
-        <p class="login-subtitle">
-      Access your account with your institutional credentials
+
+    <h1 class="login-title">Welcome Back</h1>
+
+    <p class="login-subtitle">
+      Please select your portal to continue
     </p>
-    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
-            <div class="form-group">
-              <label class="form-label">University Email</label>
 
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button
+        type="button"
+        (click)="switchTab('student')"
+        [class.active]="activeTab === 'student'"
+      >
+        Student
+      </button>
+
+      <button
+        type="button"
+        (click)="switchTab('admin')"
+        [class.active]="activeTab === 'admin'"
+      >
+        Admin
+      </button>
+    </div>
+
+    <!-- STUDENT FORM -->
+    <form
+      *ngIf="activeTab === 'student'"
+      [formGroup]="loginStudentForm"
+      (ngSubmit)="loginStudent()"
+      class="login-form"
+    >
+
+      <div class="form-group">
+        <label class="form-label">University Email</label>
         <div class="input-container">
-	<fa-icon [icon]="['fas','envelope']" class="input-icon"></fa-icon>
-          <input
-            type="email"
-            class="form-input"
-            placeholder="name@ul.edu.lb"
-            formControlName="universityEmail"
-          />
-        </div>
-
-        <div
-          class="error-message"
-          *ngIf="loginForm.get('universityEmail')?.touched && loginForm.get('universityEmail')?.errors"
-        >
-          <span *ngIf="loginForm.get('universityEmail')?.errors?.['required']">
-            Email is required
-          </span>
-          <span *ngIf="loginForm.get('universityEmail')?.errors?.['email']">
-            Invalid email
-          </span>
+          <fa-icon [icon]="['fas','envelope']" class="input-icon"></fa-icon>
+          <input class="form-input" placeholder="name@ul.edu.lb"
+                 formControlName="universityEmail"/>
         </div>
       </div>
 
-           <div class="form-group">
-          <label for="universityId" class="form-label">Id</label>
-          <div class="input-container">
-             <fa-icon  [icon]="['fas','user']"  class="input-icon"></fa-icon>
-            <input
-              id="universityId"
-              class="form-input"
-              placeholder="Enter your id"
-              formControlName="universityId"
-            />
-          </div>
-          <div class="error-message" *ngIf="loginForm.get('universityId')?.errors && loginForm.get('universityEmail')?.touched">
-            <span *ngIf="loginForm.get('universityId')?.errors?.['required']">User Id required</span>
-          </div>
+      <div class="form-group">
+        <label class="form-label">ID</label>
+        <div class="input-container">
+          <fa-icon [icon]="['fas','user']" class="input-icon"></fa-icon>
+          <input class="form-input" placeholder="Enter your ID"
+                 formControlName="universityId"/>
         </div>
+      </div>
 
       <div class="form-group">
-        <div class="password-label">
-          <label class="form-label">Password</label>
-          <a href="#" class="forgot-password">Forgot Password?</a>
-        </div>
+        <label class="form-label">Password</label>
 
         <div class="input-container">
-          <fa-icon  [icon]="['fas','lock']"  class="input-icon"></fa-icon>
+          <fa-icon [icon]="['fas','lock']" class="input-icon"></fa-icon>
 
           <input
             [type]="hideInputPassword ? 'password' : 'text'"
@@ -70,48 +70,68 @@
             formControlName="password"
           />
 
-          <button
-            type="button"
-            class="toggle-password"
-            (click)="hideInputPassword = !hideInputPassword"
-          >
+          <button type="button"
+                  class="toggle-password"
+                  (click)="hideInputPassword = !hideInputPassword">
             👁
           </button>
         </div>
+      </div>
 
-        <div
-          class="error-message"
-          *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors"
-        >
-          <span *ngIf="loginForm.get('password')?.errors?.['required']">
-            Password is required
-          </span>
+      <button class="login-button" type="submit">
+        Sign in as Student →
+      </button>
+    </form>
+
+    <!-- ADMIN FORM -->
+    <form
+      *ngIf="activeTab === 'admin'"
+      [formGroup]="loginAdminForm"
+      (ngSubmit)="loginAdmin()"
+      class="login-form"
+    >
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+
+        <div class="input-container">
+          <fa-icon [icon]="['fas','user-shield']" class="input-icon"></fa-icon>
+
+          <input class="form-input"
+                 placeholder="Enter username"
+                 formControlName="username"/>
         </div>
       </div>
 
-      <div class="form-options">
-        <label class="remember-me">
-          <input type="checkbox" />
-          Keep me signed in
-        </label>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+
+        <div class="input-container">
+          <fa-icon [icon]="['fas','lock']" class="input-icon"></fa-icon>
+
+          <input
+            [type]="hideInputPassword ? 'password' : 'text'"
+            class="form-input"
+            placeholder="••••••••"
+            formControlName="password"
+          />
+
+          <button type="button"
+                  class="toggle-password"
+                  (click)="hideInputPassword = !hideInputPassword">
+            👁
+          </button>
+        </div>
       </div>
 
-    
-      <button
-        type="submit"
-        class="login-button"
-        [disabled]="loginForm.invalid"
-      >
-        Sign In →
+      <button class="login-button admin" type="submit">
+        Sign in as Admin →
       </button>
-
     </form>
 
+    <!-- FOOTER -->
     <div class="footer">
-      <p>
-        Technical difficulties?
-        <span class="support">Contact Support</span>
-      </p>
+      <p>Technical difficulties? <span class="support">Contact Support</span></p>
 
       <div class="links">
         <a href="#">Privacy Policy</a>

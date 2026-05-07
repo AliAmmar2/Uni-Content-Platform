@@ -7,6 +7,6 @@ export interface StudentModel {
   major: string;
   academicYear: number;
   calendarYear: number;
-  roles: string[];
+  role: string;
   status: string;
 }

@@ -8,7 +8,7 @@ export class StudentDetailsBo {
   major: string;
   calendarYear: number;
   academicYear: number;
-  roles: string[];
+  role: string;
   status: string;
 
   constructor(studentModel: StudentModel) {
@@ -19,7 +19,7 @@ export class StudentDetailsBo {
     this.name = studentModel.name;
     this.calendarYear = studentModel.calendarYear ?? 2025;
     this.academicYear = studentModel.academicYear;
-    this.roles = studentModel.roles;
+    this.role = studentModel.role;
     this.status = studentModel.status;
   }
 }
