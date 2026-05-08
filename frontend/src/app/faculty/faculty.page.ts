@@ -2,11 +2,11 @@ import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Store, select } from '@ngrx/store';
-import { NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LetDirective } from '@ngrx/component';
 
-import { BehaviorSubject, combineLatest, filter, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 import { selectAllFaculties } from './+state/courses.selector';
 import { FacultyActions } from './+state/faculty.action';
@@ -28,10 +28,11 @@ export class FacultyPage implements OnInit {
 
   private store = inject(Store);
   private router = inject(Router);
-
+  public adminId: string;
   accessToken: string | null = null;
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
+  private activatedRoute = inject(ActivatedRoute);
   // SAFE observable (no binding issues)
   private faculties$ = this.store.pipe(
     select((state: any) => selectAllFaculties(state))
@@ -58,7 +59,8 @@ export class FacultyPage implements OnInit {
     })
   );
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  }
 
   ngOnInit(): void {
 
@@ -67,10 +69,10 @@ export class FacultyPage implements OnInit {
       this.accessToken = localStorage.getItem('accessToken');
 
       if (!this.accessToken) {
-       void this.router.navigate(['/login']);
+        void this.router.navigate(['/login']);
         return;
       }
-
+      this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
       this.store.dispatch(FacultyActions.loadFaculties());
     }
   }
@@ -102,7 +104,7 @@ export class FacultyPage implements OnInit {
     ]);
   }
 
-  public presentDeleteAlert(faculty:FacultyItemBo) {
+  public presentDeleteAlert(faculty: FacultyItemBo) {
     const matYesNoDialogData: MatMultiActionsInterface = {
       faIcon: ['fas', 'trash'],
       title: 'Delete Faculty?',
@@ -110,7 +112,7 @@ export class FacultyPage implements OnInit {
       action: [
         {
           label: 'yes delete',
-          color: 'red',
+          color: ' #d40000',
           handler: () => {
             this.deleteFaculty(faculty.id);
           }
@@ -127,7 +129,13 @@ export class FacultyPage implements OnInit {
   }
 
   public deleteFaculty(facultyId: string) {
+    this.store.dispatch(FacultyActions.deleteFaculty({
+      id: facultyId
+    }))
+  }
 
+  public navigateToAddFaculty() {
+    void this.router.navigate(['/admin', this.adminId, 'add-new-faculty']);
   }
 
 }

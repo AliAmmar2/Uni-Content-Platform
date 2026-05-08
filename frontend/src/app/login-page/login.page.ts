@@ -91,7 +91,7 @@ export class LoginPage implements OnInit {
       if (response?.token) {
         localStorage.setItem('accessToken', response.token);
         console.log(response.token);
-        this.router.navigate(['/admin/dashboard', response.admin.id]);
+        this.router.navigate(['/admin', response.admin.id]);
       }
 
     } catch (err) {

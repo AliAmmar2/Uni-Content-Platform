@@ -4,7 +4,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { routes } from './app.routes';
 import { StudentEffect } from './student/+state/student.effect';
-import { STUDENT_DETAILS_KEY, studentDetailsReducers } from './student/+state/student.reducer';
+import { STUDENT_DETAILS_KEY, studentDetailsReducers } from './student/+state/student-details.reducer';
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';

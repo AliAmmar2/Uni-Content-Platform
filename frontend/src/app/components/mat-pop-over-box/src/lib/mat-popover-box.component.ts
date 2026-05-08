@@ -3,7 +3,6 @@ import { Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { PopoverBoxService } from './service/popover-box.service';
 import { MatActionList, MatListItem } from '@angular/material/list';
-import { NgForOf } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { PopoverBoxInterface } from '../../../interface/popover-box.interface';
 
@@ -15,7 +14,6 @@ export const POPOVER_BOX_CONTAINER_DATA_CONTEXT = new InjectionToken<any>('POPOV
   styleUrls: ['mat-popover-box.component.scss'],
   imports: [
     MatActionList,
-    NgForOf,
     MatListItem,
     FaIconComponent
   ],

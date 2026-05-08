@@ -27,7 +27,7 @@
     <div class="items">
 
       <div class="item"
-           routerLink="/dashboard"
+           [routerLink]="['/admin', adminId, 'dashboard']"
            (click)="setActiveMenu('dashboard'); toggleSidebar()"
            [ngClass]="{ 'active': (activeMenu$ | async) === 'dashboard' }">
 
@@ -37,7 +37,7 @@
       </div>
 
       <div class="item"
-           routerLink="/students"
+           [routerLink]="['/admin', adminId, 'students']"
            (click)="setActiveMenu('students'); toggleSidebar()"
            [ngClass]="{ 'active': (activeMenu$ | async) === 'students' }">
 
@@ -47,7 +47,7 @@
       </div>
 
       <div class="item"
-           [routerLink]="['/admin/dashboard', adminId, 'faculties']"
+           [routerLink]="['/admin', adminId, 'faculties']"
            (click)="setActiveMenu('faculties'); toggleSidebar()"
            [ngClass]="{ 'active': (activeMenu$ | async) === 'faculties' }">
 

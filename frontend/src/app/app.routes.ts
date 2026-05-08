@@ -2,10 +2,12 @@ import { Routes } from '@angular/router';
 import { LoginPage } from './login-page/login.page';
 import { RegisterPage } from './reigister-page/register.page';
 import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
-import { PortalAdminDashboardPage } from './portal-admin/dashboard/portal-admin-dashboard.page';
+import { PortalAdminPage } from './portal-admin/dashboard/portal-admin-page.component';
 import { FacultyPage } from './faculty/faculty.page';
+import { AddNewFacultyPage } from './faculty/add-new-faculty/add-new-faculty.page';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
     component: LoginPage
@@ -23,12 +25,17 @@ export const routes: Routes = [
     component: StudentDashboardPage
   },
   {
-    path: 'admin/dashboard/:id',
-    component: PortalAdminDashboardPage,
+    path: 'admin/:id',
+    component: PortalAdminPage,
     children: [
+      // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'faculties',
         component: FacultyPage
+      }
+      , {
+        path: 'add-new-faculty',
+        component: AddNewFacultyPage
       }
     ]
   }

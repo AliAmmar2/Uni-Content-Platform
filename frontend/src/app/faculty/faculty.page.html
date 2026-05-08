@@ -4,10 +4,12 @@
 
     <div class="header-text">
       <h1>Faculties Administration</h1>
-      <p>Manage and monitor academic departments across all campuses.</p>
+      <p>Manage and monitor academic departments across all faculties.</p>
     </div>
 
-    <button class="add-faculty-btn">
+    <button
+      (click)="navigateToAddFaculty()"
+      class="add-faculty-btn">
       <span>+</span>
       Add Faculty
     </button>
