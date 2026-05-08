@@ -1,5 +1,5 @@
 const Material = require("../models/Material");
-const UniStudent = require("../models/Users");
+const UniStudent = require("../models/Student");
 const Course = require("../models/Course");
 
 // Upload material
@@ -18,7 +18,7 @@ exports.uploadMaterial = async (req, res) => {
     if (!course) return res.status(404).json({ message: "Course not found" });
 
     if (
-      req.user.roles.includes("STUDENT") &&
+      req.user.role.includes("STUDENT") &&
       (
         course.major.toString() !== student.major.toString() ||
         course.academicYear !== student.academicYear ||
@@ -28,7 +28,7 @@ exports.uploadMaterial = async (req, res) => {
       return res.status(403).json({ message: "Cannot upload material for this course" });
     }
 
-    const approvalStatus = req.user.roles.includes("MODERATOR") ? "APPROVED" : "PENDING";
+    const approvalStatus = req.user.role.includes("MODERATOR") ? "APPROVED" : "PENDING";
 
     const material = await Material.create({
       title,

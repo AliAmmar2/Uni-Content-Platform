@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UniStudent = require("../models/Users");
+const UniStudent = require("../models/Student");
 const Faculty = require('../models/Faculty');
 const Major = require("../models/Major");
 const { validateUniversityEmail, validateUniversityId } = require("../utils/validation");
@@ -85,7 +85,7 @@ exports.login = async (req, res) => {
       { 
         id: user._id.toString(),
         universityId: user.universityId,
-        roles: user.roles 
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -113,7 +113,7 @@ exports.login = async (req, res) => {
         major: user.major,
         academicYear: user.academicYear,
         calendarYear: user.calendarYear,
-        roles: user.roles
+        role: user.role
       }
     });
 
@@ -169,7 +169,7 @@ exports.requestMagicLink = async (req, res) => {
         id: user._id.toString(),
         universityId: user.universityId,
         type: 'magic-link',
-        roles: user.roles
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
@@ -238,7 +238,7 @@ exports.verifyMagicLink = async (req, res) => {
       { 
         id: user._id.toString(),
         universityId: user.universityId,
-        roles: user.roles 
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -265,7 +265,7 @@ exports.verifyMagicLink = async (req, res) => {
         major: user.major,
         academicYear: user.academicYear,
         calendarYear: user.calendarYear,
-        roles: user.roles
+        role: user.role
       }
     });
 
@@ -325,7 +325,7 @@ exports.refreshToken = async (req, res) => {
       { 
         id: user._id.toString(),
         universityId: user.universityId,
-        roles: user.roles 
+        role: user.role
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }

@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
-const UniStudent = require("../models/student.model");
-const Admin = require("../models/admin.model");
+const UniStudent = require("../models/Student");
+const Admin = require("../models/Admin");
 
 const anyAuth = async (req, res, next) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-        return res.status(401).json({ message: "No token provided" });
+        return res.status(401).json({message: "No token provided"});
     }
 
     try {
@@ -39,10 +39,10 @@ const anyAuth = async (req, res, next) => {
             return next();
         }
 
-        return res.status(401).json({ message: "User not found in any system" });
+        return res.status(401).json({message: "User not found in any system"});
 
     } catch (err) {
-        return res.status(401).json({ message: "Invalid token" });
+        return res.status(401).json({message: "Invalid token"});
     }
 };
 
