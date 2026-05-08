@@ -1,26 +1,26 @@
-const Student = require("../models/Student");
+const UniStudent = require("../models/Users");
 const Course = require("../models/Course");
 
 exports.getDashboard = async (req, res) => {
   try {
-    const student = await Student.findById(req.user.id)
-        .populate("faculty", "name code")
-        .populate("major", "name code")
-        .select("-passwordHash -loginAttempts -lockUntil");
+    const student = await UniStudent.findById(req.user.id)
+      .populate("faculty", "name code")
+      .populate("major", "name code")
+      .select("-passwordHash -loginAttempts -lockUntil");
 
     // After fetching student
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    if (!student.major) {
-      return res.status(400).json({ message: "Student has no major assigned" });
-    }
+if (!student.major) {
+  return res.status(400).json({ message: "Student has no major assigned" });
+}
 
     // Safe calendar year parsing
     const requestedCalendarYear = Number.isInteger(parseInt(req.query.calendarYear))
-        ? parseInt(req.query.calendarYear)
-        : student.calendarYear;
+      ? parseInt(req.query.calendarYear)
+      : student.calendarYear;
 
     // Fetch courses
     const courses = await Course.find({
@@ -43,7 +43,7 @@ exports.getDashboard = async (req, res) => {
         calendarYear: student.calendarYear,
         faculty: student.faculty,
         major: student.major,
-        role: student.role
+        roles: student.roles
       },
       courses: {
         displayedCalendarYear: requestedCalendarYear,
