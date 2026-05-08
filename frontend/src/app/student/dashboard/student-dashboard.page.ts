@@ -2,18 +2,18 @@ import { Component, inject,OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import { selectStudentDetails } from '../student/+state/student.selector';
+import { selectStudentDetails } from '../+state/student.selector';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { StudentDetailsStatusEnum } from '../student/+state/enums/student-details-status.enum';
-import { STUDENT_DETAILS_KEY } from '../student/+state/student.reducer';
+import { StudentDetailsStatusEnum } from '../+state/enums/student-details-status.enum';
+import { STUDENT_DETAILS_KEY } from '../+state/student-details.reducer';
 import { LetDirective } from '@ngrx/component';
-import { StudentActions } from '../student/+state/student.action';
+import { StudentActions } from '../+state/student.action';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { selectCourses } from '../courses/+state/courses.selector';
-import { CoursesActions } from '../courses/+state/courses.action';
-import { CoursesStatusEnum } from '../courses/+state/enums/courses-status.enum';
-import { COURSES_KEY } from '../courses/+state/courses.reducer';
+import { selectCourses } from '../../courses/+state/courses.selector';
+import { CoursesActions } from '../../courses/+state/courses.action';
+import { CoursesStatusEnum } from '../../courses/+state/enums/courses-status.enum';
+import { COURSES_KEY } from '../../courses/+state/courses.reducer';
 
 @Component({
   standalone: true,

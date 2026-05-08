@@ -47,16 +47,16 @@ async function seed() {
   const passwordHash = await bcrypt.hash("Test123456", 10);
 
   const students = [
-    { universityId: "210001", universityEmail: "rana.haddad@ul.edu.lb",    name: "Rana Haddad",   faculty: facMap.Engineering._id, major: majorMap.CE._id,  academicYear: 3, calendarYear: 2024, roles: ["STUDENT"],              status: "ACTIVE" },
-    { universityId: "210002", universityEmail: "karim.nasser@ul.edu.lb",   name: "Karim Nasser",  faculty: facMap.Engineering._id, major: majorMap.CS._id,  academicYear: 4, calendarYear: 2024, roles: ["STUDENT", "MODERATOR"], status: "ACTIVE" },
-    { universityId: "210003", universityEmail: "maya.khoury@ul.edu.lb",    name: "Maya Khoury",   faculty: facMap.Science._id,     major: majorMap.MTH._id, academicYear: 2, calendarYear: 2024, roles: ["ADMIN"],                status: "ACTIVE" },
-    { universityId: "210004", universityEmail: "jad.mansour@ul.edu.lb",    name: "Jad Mansour",   faculty: facMap.Science._id,     major: majorMap.PHY._id, academicYear: 1, calendarYear: 2024, roles: ["STUDENT"],              status: "SUSPENDED" },
-    { universityId: "210005", universityEmail: "lina.abbas@ul.edu.lb",     name: "Lina Abbas",    faculty: facMap.Business._id,    major: majorMap.FIN._id, academicYear: 3, calendarYear: 2024, roles: ["STUDENT"],              status: "ACTIVE" },
-    { universityId: "210006", universityEmail: "hassan.darwish@ul.edu.lb", name: "Hassan Darwish",faculty: facMap.Business._id,    major: majorMap.MKT._id, academicYear: 2, calendarYear: 2024, roles: ["STUDENT"],              status: "ACTIVE" },
-    { universityId: "210007", universityEmail: "nour.saleh@ul.edu.lb",     name: "Nour Saleh",    faculty: facMap.Arts._id,        major: majorMap.GD._id,  academicYear: 4, calendarYear: 2024, roles: ["STUDENT", "MODERATOR"], status: "ACTIVE" },
-    { universityId: "210008", universityEmail: "omar.hassan@ul.edu.lb",    name: "Omar Hassan",   faculty: facMap.Engineering._id, major: majorMap.EE._id,  academicYear: 5, calendarYear: 2024, roles: ["STUDENT"],              status: "ACTIVE" },
-    { universityId: "210009", universityEmail: "sara.touma@ul.edu.lb",     name: "Sara Touma",    faculty: facMap.Science._id,     major: majorMap.CHM._id, academicYear: 1, calendarYear: 2024, roles: ["STUDENT"],              status: "ACTIVE" },
-    { universityId: "210010", universityEmail: "ali.farhat@ul.edu.lb",     name: "Ali Farhat",    faculty: facMap.Engineering._id, major: majorMap.ME._id,  academicYear: 2, calendarYear: 2024, roles: ["STUDENT"],              status: "SUSPENDED" },
+    { universityId: "210001", universityEmail: "rana.haddad@ul.edu.lb",    name: "Rana Haddad",   faculty: facMap.Engineering._id, major: majorMap.CE._id,  academicYear: 3, calendarYear: 2024, role: ["STUDENT"],              status: "ACTIVE" },
+    { universityId: "210002", universityEmail: "karim.nasser@ul.edu.lb",   name: "Karim Nasser",  faculty: facMap.Engineering._id, major: majorMap.CS._id,  academicYear: 4, calendarYear: 2024, role: ["STUDENT", "MODERATOR"], status: "ACTIVE" },
+    { universityId: "210003", universityEmail: "maya.khoury@ul.edu.lb",    name: "Maya Khoury",   faculty: facMap.Science._id,     major: majorMap.MTH._id, academicYear: 2, calendarYear: 2024, role: ["ADMIN"],                status: "ACTIVE" },
+    { universityId: "210004", universityEmail: "jad.mansour@ul.edu.lb",    name: "Jad Mansour",   faculty: facMap.Science._id,     major: majorMap.PHY._id, academicYear: 1, calendarYear: 2024, role: ["STUDENT"],              status: "SUSPENDED" },
+    { universityId: "210005", universityEmail: "lina.abbas@ul.edu.lb",     name: "Lina Abbas",    faculty: facMap.Business._id,    major: majorMap.FIN._id, academicYear: 3, calendarYear: 2024, role: ["STUDENT"],              status: "ACTIVE" },
+    { universityId: "210006", universityEmail: "hassan.darwish@ul.edu.lb", name: "Hassan Darwish",faculty: facMap.Business._id,    major: majorMap.MKT._id, academicYear: 2, calendarYear: 2024, role: ["STUDENT"],              status: "ACTIVE" },
+    { universityId: "210007", universityEmail: "nour.saleh@ul.edu.lb",     name: "Nour Saleh",    faculty: facMap.Arts._id,        major: majorMap.GD._id,  academicYear: 4, calendarYear: 2024, role: ["STUDENT", "MODERATOR"], status: "ACTIVE" },
+    { universityId: "210008", universityEmail: "omar.hassan@ul.edu.lb",    name: "Omar Hassan",   faculty: facMap.Engineering._id, major: majorMap.EE._id,  academicYear: 5, calendarYear: 2024, role: ["STUDENT"],              status: "ACTIVE" },
+    { universityId: "210009", universityEmail: "sara.touma@ul.edu.lb",     name: "Sara Touma",    faculty: facMap.Science._id,     major: majorMap.CHM._id, academicYear: 1, calendarYear: 2024, role: ["STUDENT"],              status: "ACTIVE" },
+    { universityId: "210010", universityEmail: "ali.farhat@ul.edu.lb",     name: "Ali Farhat",    faculty: facMap.Engineering._id, major: majorMap.ME._id,  academicYear: 2, calendarYear: 2024, role: ["STUDENT"],              status: "SUSPENDED" },
   ];
 
   await UniStudent.create(students.map(s => ({ ...s, passwordHash })));

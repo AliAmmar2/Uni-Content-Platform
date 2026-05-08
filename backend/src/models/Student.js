@@ -46,10 +46,10 @@ const UniStudentSchema = new mongoose.Schema({
     min: 2020,
     max: 2100
   },
-  roles: {
-    type: [String],
-    enum: ["STUDENT", "MODERATOR", "ADMIN"],
-    default: ["STUDENT"]
+  role: {
+    type: String,
+    enum: ["STUDENT", "MODERATOR"],
+    default: "STUDENT"
   },
   status: { 
     type: String, 

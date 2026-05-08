@@ -13,9 +13,9 @@ exports.getDashboard = async (req, res) => {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    if (!student.major) {
-      return res.status(400).json({ message: "Student has no major assigned" });
-    }
+if (!student.major) {
+  return res.status(400).json({ message: "Student has no major assigned" });
+}
 
     // Safe calendar year parsing
     const requestedCalendarYear = Number.isInteger(parseInt(req.query.calendarYear))

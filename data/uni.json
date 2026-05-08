@@ -6,7 +6,7 @@
     "faculty": "Engineering",
     "major": "Computer Engineering",
     "academicYear": 3,
-    "roles": ["STUDENT"],
+    "role": "STUDENT",
     "status": "ACTIVE"
   },
   {
@@ -16,7 +16,7 @@
     "faculty": "Engineering",
     "major": "Computer Science",
     "academicYear": 4,
-    "roles": ["STUDENT", "MODERATOR"],
+    "role": "STUDENT",
     "status": "ACTIVE"
   },
   {
@@ -26,7 +26,7 @@
     "faculty": "Science",
     "major": "Mathematics",
     "academicYear": 2,
-    "roles": ["ADMIN"],
+    "role": "MODERATOR",
     "status": "ACTIVE"
   },
   {
@@ -36,7 +36,7 @@
     "faculty": "Science",
     "major": "Physics",
     "academicYear": 1,
-    "roles": ["STUDENT"],
+    "role": "STUDENT",
     "status": "SUSPENDED"
   },
   {
@@ -46,7 +46,7 @@
     "faculty": "Business",
     "major": "Finance",
     "academicYear": 3,
-    "roles": ["STUDENT"],
+    "role": "MODERATOR",
     "status": "ACTIVE"
   },
   {
@@ -56,7 +56,7 @@
     "faculty": "Business",
     "major": "Marketing",
     "academicYear": 2,
-    "roles": ["STUDENT"],
+    "role": "STUDENT",
     "status": "ACTIVE"
   },
   {
@@ -66,7 +66,7 @@
     "faculty": "Arts",
     "major": "Graphic Design",
     "academicYear": 4,
-    "roles": ["STUDENT", "MODERATOR"],
+    "role": "STUDENT",
     "status": "ACTIVE"
   },
   {
@@ -76,7 +76,7 @@
     "faculty": "Engineering",
     "major": "Electrical Engineering",
     "academicYear": 5,
-    "roles": ["STUDENT"],
+    "role": "STUDENT",
     "status": "ACTIVE"
   },
   {
@@ -86,7 +86,7 @@
     "faculty": "Science",
     "major": "Chemistry",
     "academicYear": 1,
-    "roles": ["STUDENT"],
+    "role": "STUDENT",
     "status": "ACTIVE"
   },
   {
@@ -96,7 +96,7 @@
     "faculty": "Engineering",
     "major": "Mechanical Engineering",
     "academicYear": 2,
-    "roles": ["STUDENT"],
+    "role": "STUDENT",
     "status": "SUSPENDED"
   }
 ]

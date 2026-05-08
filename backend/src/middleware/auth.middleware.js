@@ -28,7 +28,7 @@ module.exports = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Validate decoded token structure
-    if (!decoded.id || !decoded.roles || !Array.isArray(decoded.roles)) {
+    if (!decoded.id || !decoded.role) {
       return res.status(403).json({ 
         message: "Invalid token payload" 
       });
@@ -37,7 +37,7 @@ module.exports = (req, res, next) => {
     req.user = {
       id: decoded.id,
       universityId: decoded.universityId,
-      roles: decoded.roles
+      role: decoded.role
     };
 
     next();
