@@ -1,4 +1,4 @@
-export interface CreateStudentFormGroupInterface {
+export interface UpdateStudentFormGroupInterface {
   universityId: string;
   universityEmail: string;
   name: string;

@@ -1,54 +1,45 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { StudentActions } from './student.action';
+import { StudentItemBo } from '../bo/student-item.bo';
 import { StudentDetailsStatusEnum } from './enums/student-details-status.enum';
-import { StudentDetailsBo } from '../bo/student-details.bo';
+import { StudentActions } from './student.action';
 
-export const STUDENT_DETAILS_KEY = 'studentDetailsKey';
+export const STUDENT_KEY = 'studentKey';
 
-export interface StudentDetailsState {
-  readonly [STUDENT_DETAILS_KEY]: StudentDetailsBo;
+export interface StudentState {
+  readonly [STUDENT_KEY]: Array<StudentItemBo>;
   readonly status: StudentDetailsStatusEnum;
   readonly error: Error;
 }
 
-const initialStudentDetailsState: StudentDetailsState = {
-  [STUDENT_DETAILS_KEY]: null,
+const initialStudentState: StudentState = {
   status: StudentDetailsStatusEnum.pending,
+  [STUDENT_KEY]: [],
   error: null
 };
 
-export const studentDetailsReducers = createReducer<StudentDetailsState, Action>(initialStudentDetailsState,
-  on(StudentActions.restStudentDetailsStatus, (state) => {
+export const studentReducers = createReducer<StudentState, Action>(
+  initialStudentState,
+
+  on(StudentActions.loadStudents, (state: StudentState) => {
     return {
       ...state,
-      status: StudentDetailsStatusEnum.pending,
-      error: null
+      status: StudentDetailsStatusEnum.loading
     };
   }),
 
-  on(StudentActions.loadStudentDetails, (state: StudentDetailsState) => {
+  on(StudentActions.loadStudentsSuccess, (state: StudentState, { students }) => {
     return {
       ...state,
-      status: StudentDetailsStatusEnum.loading,
-      error: null
+      [STUDENT_KEY]: students,
+      status: StudentDetailsStatusEnum.loadSuccess
     };
   }),
 
-  on(StudentActions.loadStudentDetailsSuccess, (state: StudentDetailsState, { student }) => {
+  on(StudentActions.loadStudentsFailure, (state: StudentState, { error }) => {
     return {
       ...state,
-      [STUDENT_DETAILS_KEY]: student,
-      status: StudentDetailsStatusEnum.loadDetailsSuccess,
-      error: null
-    };
-  }),
-
-  on(StudentActions.loadStudentDetailsFailure, (state: StudentDetailsState, { error }) => {
-    return {
-      ...state,
-      status: StudentDetailsStatusEnum.loadDetailsFailure,
+      status: StudentDetailsStatusEnum.loadFailure,
       error: error
     };
-  }),
+  })
 );
-

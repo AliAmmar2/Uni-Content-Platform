@@ -6,7 +6,7 @@ import { selectStudentDetails } from '../+state/student.selector';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { StudentDetailsStatusEnum } from '../+state/enums/student-details-status.enum';
-import { STUDENT_DETAILS_KEY } from '../+state/student.reducer';
+import { STUDENT_DETAILS_KEY } from '../+state/student-details.reducer';
 import { LetDirective } from '@ngrx/component';
 import { StudentActions } from '../+state/student.action';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
