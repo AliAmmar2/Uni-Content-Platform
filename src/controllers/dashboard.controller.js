@@ -1,41 +1,35 @@
-const UniStudent = require("../models/Users");
+const UniStudent = require("../models/student");
 const Course = require("../models/Course");
 
 exports.getDashboard = async (req, res) => {
   try {
-    // req.user comes from your auth middleware (the JWT payload)
-    const studentId = req.user.id;
-
-    // 1. Fetch the student with faculty and major populated
-    const student = await UniStudent.findById(studentId)
+    const student = await UniStudent.findById(req.user.id)
       .populate("faculty", "name code")
       .populate("major", "name code")
       .select("-passwordHash -loginAttempts -lockUntil");
 
+    // After fetching student
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    if (!student.major) {
+if (!student.major) {
   return res.status(400).json({ message: "Student has no major assigned" });
 }
 
-    // 2. Determine which calendarYear to show
-    //    Default: their current calendarYear
-    //    Optional: frontend can pass ?calendarYear=2024 to filter
-const requestedCalendarYear = Number.isInteger(parseInt(req.query.calendarYear))
-  ? parseInt(req.query.calendarYear)
-  : student.calendarYear;
+    // Safe calendar year parsing
+    const requestedCalendarYear = Number.isInteger(parseInt(req.query.calendarYear))
+      ? parseInt(req.query.calendarYear)
+      : student.calendarYear;
 
-    // 3. Fetch courses matching their major + academic year + requested calendar year
+    // Fetch courses
     const courses = await Course.find({
       major: student.major._id,
       academicYear: student.academicYear,
       calendarYear: requestedCalendarYear
     }).select("name code credits semester description");
 
-    // 4. Fetch all available calendar years for their major + academic year
-    //    So the frontend knows what years to show in the filter dropdown
+    // Fetch distinct years
     const availableCalendarYears = await Course.distinct("calendarYear", {
       major: student.major._id,
       academicYear: student.academicYear
@@ -59,7 +53,10 @@ const requestedCalendarYear = Number.isInteger(parseInt(req.query.calendarYear))
     });
 
   } catch (err) {
-    console.error("Dashboard error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("DASHBOARD ERROR:", err);
+
+    res.status(500).json({
+      message: "Internal server error"
+    });
   }
 };

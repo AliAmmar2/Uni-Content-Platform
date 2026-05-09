@@ -2,13 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/app.js",
     "start": "node src/app.js",
-    "start": "node src/app.js",
-    "seed": "node scripts/seedTestData.js"
+    "seedUsers": "node scripts/usersSeed.js",
+    "seedAdmins": "node scripts/adminsSeed.js"
   },
   "keywords": [],
   "author": "",
@@ -17,14 +17,11 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
-    "cors": "^2.8.6",
     "dotenv": "^17.2.4",
     "express": "^5.2.1",
     "express-rate-limit": "^7.1.5",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.6",
-    "mongoose": "^9.1.5",
     "axios": "^1.6.2"
   },
   "devDependencies": {
