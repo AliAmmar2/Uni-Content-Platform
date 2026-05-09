@@ -1,0 +1,341 @@
+/* add-new-faculty.page.scss */
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.faculty-page {
+  padding: 2rem 3rem;
+  background: #f8f8f8;
+  min-height: 100%;
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    margin-bottom: 1rem;
+
+    font-size: 0.9rem;
+    color: #9a9a9a;
+  }
+
+  &__breadcrumb-current {
+    color: #3d3d3d;
+    font-weight: 600;
+  }
+
+  .faculty-page {
+
+    &__breadcrumb-link {
+      border: none;
+      background: transparent;
+
+      padding: 0;
+
+      font-size: 0.9rem;
+      color: #9a9a9a;
+
+      cursor: pointer;
+
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: #b00020;
+      }
+    }
+  }
+
+  &__section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    margin-bottom: 1.5rem;
+
+    color: #b00020;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.12rem;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  &__form-card {
+    background: #ffffff;
+    border: 1px solid #ebc9c9;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  &__form-header {
+    padding: 3rem;
+    border-bottom: 1px solid #ebc9c9;
+
+    h1 {
+      margin: 0 0 1rem;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #1f1f1f;
+    }
+
+    p {
+      margin: 0;
+      max-width: 620px;
+      line-height: 1.7;
+      font-size: 1.15rem;
+      color: #5c6470;
+    }
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+.faculty-form {
+  padding: 3rem;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+  }
+
+  &__label {
+    margin-bottom: 0.75rem;
+
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f1f1f;
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+
+    padding: 1rem 1.1rem;
+
+    border: 1px solid #e6caca;
+    border-radius: 0.75rem;
+
+    background: #ffffff;
+
+    font-size: 1rem;
+    color: #1f1f1f;
+
+    transition: border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #b00020;
+      box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.1);
+    }
+
+    &::placeholder {
+      color: #b0a7a7;
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 180px;
+    font-family: inherit;
+  }
+
+  &__divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 2rem 0;
+
+    background: #ececec;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__submit-button,
+  &__cancel-button {
+    height: 56px;
+    min-width: 220px;
+
+    border-radius: 0.75rem;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  &__submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+
+    border: none;
+
+    background: #b00020;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background: #98001b;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__cancel-button {
+    border: 1px solid #d9d9d9;
+
+    background: #ffffff;
+    color: #4f5561;
+
+    &:hover {
+      background: #f6f6f6;
+    }
+  }
+}
+
+.sidebar-card {
+  padding: 1.75rem;
+
+  background: #ffffff;
+
+  border: 1px solid #ebc9c9;
+  border-radius: 1rem;
+
+  &__title {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+
+    margin-bottom: 1.5rem;
+
+    color: #b00020;
+
+    font-size: 1.8rem;
+    font-weight: 600;
+
+    span {
+      font-size: 1.8rem;
+      line-height: 1.5;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  &__section {
+    h4 {
+      margin: 0 0 0.75rem;
+
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #202020;
+    }
+
+    p {
+      margin: 0;
+
+      line-height: 1.8;
+      font-size: 1rem;
+      color: #5e6673;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.sidebar-action {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+
+  width: 100%;
+
+  padding: 0.9rem 0;
+
+  border: none;
+  background: transparent;
+
+  text-align: left;
+
+  font-size: 1rem;
+  color: #4d4d4d;
+
+  cursor: pointer;
+
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #b00020;
+  }
+}
+
+@media (max-width: 1200px) {
+  .faculty-page {
+
+    &__content {
+      grid-template-columns: 1fr;
+    }
+
+    &__sidebar {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+
+  .faculty-page {
+    padding: 1.5rem;
+
+    &__form-header {
+      padding: 2rem;
+
+      h1 {
+        font-size: 2.2rem;
+      }
+    }
+  }
+
+  .faculty-form {
+    padding: 2rem;
+
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__submit-button,
+    &__cancel-button {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Introduction to Programming",
+    "code": "CS101-SEM1-2025",
+    "description": "Fundamentals of programming using Python",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 1,
+    "calendarYear": 2025,
+    "semester": "SEM1"
+  },
+  {
+    "name": "Mathematics for Computing",
+    "code": "CS102-SEM2-2025",
+    "description": "Discrete mathematics and logic",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 1,
+    "calendarYear": 2025,
+    "semester": "SEM2"
+  },
+  {
+    "name": "Data Structures",
+    "code": "CS201-SEM1-2025",
+    "description": "Arrays, linked lists, trees, graphs",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 2,
+    "calendarYear": 2025,
+    "semester": "SEM1"
+  },
+  {
+    "name": "Algorithms",
+    "code": "CS202-SEM2-2025",
+    "description": "Algorithm design and complexity analysis",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 3,
+    "calendarYear": 2025,
+    "semester": "SEM2"
+  },
+  {
+    "name": "Web Development",
+    "code": "CS203-SEM1-2025",
+    "description": "HTML, CSS, JavaScript and Node.js basics",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 2,
+    "calendarYear": 2025,
+    "semester": "SEM1"
+  },
+  {
+    "name": "Operating Systems",
+    "code": "CS301-SEM1-2025",
+    "description": "Process management, memory, file systems",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 3,
+    "calendarYear": 2025,
+    "semester": "SEM1"
+  },
+  {
+    "name": "Database Systems",
+    "code": "CS302-SEM2-2025",
+    "description": "Relational and non-relational databases",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 3,
+    "calendarYear": 2025,
+    "semester": "SEM2"
+  },
+  {
+    "name": "Data Structures",
+    "code": "CS201-SEM1-2024",
+    "description": "Arrays, linked lists, trees, graphs",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 2,
+    "calendarYear": 2024,
+    "semester": "SEM1"
+  },
+  {
+    "name": "Algorithms",
+    "code": "CS202-SEM2-2024",
+    "description": "Algorithm design and complexity analysis",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 2,
+    "calendarYear": 2024,
+    "semester": "SEM2"
+  }
+]

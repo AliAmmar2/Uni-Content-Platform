@@ -1,0 +1,135 @@
+.input-page-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 5px 0;
+	background-color: #f3f3f3;
+	color: #000;
+
+	.title {
+		font-size: 18px;
+		padding: 10px 0 5px 0;
+	}
+
+	.mat-toolbar-row {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		height: 70px;
+
+		.icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 50px;
+			height: 50px;
+			background-color: #FFF;
+			border-radius: 50%;
+
+			fa-icon {
+				font-size: 28px;
+				margin-top: 2px;
+			}
+		}
+	}
+}
+
+form {
+	.message {
+		text-align: center;
+		margin-bottom: 15px;
+	}
+
+	mat-dialog-content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		padding: 15px 15px 0 15px !important;
+
+		mat-form-field, .form-field {
+			width: 100%;
+			margin-bottom: 20px;
+
+			input {
+				width: 100%;
+				height: 45px;
+				border-radius: 5px;
+				padding-left: 15px;
+				font-size: 18px;
+				box-sizing: border-box;
+				background: #e9e9e9;
+				border: 2px solid #e7eaec;
+				color: #000;
+
+				::placeholder {
+					color: #8c8b8b !important;
+					font-size: 18px;
+				}
+			}
+
+			textarea {
+				max-width: 95%;
+				min-width: 95%;
+				min-height: 150px;
+				background: #FFF;
+				border: 2px solid #e7eaec !important;
+				border-bottom: 2px solid #e7eaec !important;
+				padding-left: 10px;
+				color: #000;
+				font-size: 18px;
+
+			}
+
+			::placeholder {
+				color: #8c8b8b !important;
+				font-size: 18px;
+				font-family: Roboto, sans-serif;
+			}
+
+		}
+	}
+}
+
+mat-dialog-actions {
+	position: absolute;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	bottom: 0;
+	right: 0;
+
+	button {
+		width: 100px;
+		height: 30px;
+		margin-bottom: 10px;
+		margin-right: 10px;
+		font-size: 14px;
+		cursor: pointer;
+		color: #FFF;
+		background-color: #88a5db;
+		border: none;
+		border-radius: 20px;
+
+		&.cancel {
+			color: #454b50 !important;
+			background-color: #ced4da !important;
+		}
+	}
+}
+
+::ng-deep mat-form-field textarea {
+	border-bottom: none !important;
+}
+
+::ng-deep textarea.mat-input-element {
+	background-color: transparent !important;
+	border-bottom: none !important;
+}
+
+mat-error {
+	font-size: 14px;
+	color: #ff0000;
+}

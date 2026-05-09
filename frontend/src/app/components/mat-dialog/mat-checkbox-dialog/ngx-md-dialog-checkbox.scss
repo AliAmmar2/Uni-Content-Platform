@@ -1,0 +1,30 @@
+mat-dialog-content {
+	padding: 18px;
+}
+
+.dialog-checkbox-definition {
+	font-size: 12px;
+	color: #9ab0bc;
+
+	div {
+		margin-left: 10px;
+		margin-bottom: 5px;
+
+		img {
+			padding-right: 10px;
+		}
+
+		display: flex;
+		align-items: center;
+	}
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+
+	.cell {
+		height: 50px;
+		margin: 10px;
+	}
+}

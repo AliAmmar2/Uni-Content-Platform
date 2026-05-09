@@ -1,0 +1,80 @@
+<div class="faculties-page">
+
+  <div class="page-header">
+
+    <div class="header-text">
+      <h1>Faculties Administration</h1>
+      <p>Manage and monitor academic departments across all faculties.</p>
+    </div>
+
+    <button
+      (click)="navigateToAddFaculty()"
+      class="add-faculty-btn">
+      <span>+</span>
+      Add Faculty
+    </button>
+
+  </div>
+
+  <div class="filters-container">
+
+    <div class="search-box">
+
+      <fa-icon [icon]="['fas','magnifying-glass']"></fa-icon>
+      <input
+        type="text"
+        placeholder="Search faculties by name or code..."
+        (input)="onSearch($event)">
+
+    </div>
+
+    <div class="total-box">
+      Total:
+      <span>{{ (facultiesListSelected$ | async)?.length || 0 }} Faculties</span>
+    </div>
+
+  </div>
+
+  <div class="faculties-grid">
+
+    <ng-container *ngrxLet="facultiesListSelected$ as faculties">
+      @for (faculty of faculties; track faculty.id) {
+
+        <div class="faculty-card">
+
+          <div class="faculty-image-container">
+
+            <div class="card-top-bar">
+
+              <div class="faculty-code">
+                {{ faculty.code }}
+              </div>
+
+              <button class="card-menu-btn"
+                      (click)="presentPopoverActions($event,faculty)">
+                <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="faculty-content">
+
+            <h2>{{ faculty.name }}</h2>
+
+            <p class="description">
+              {{ faculty.description }}
+            </p>
+
+          </div>
+
+        </div>
+
+      }
+
+    </ng-container>
+
+  </div>
+
+</div>

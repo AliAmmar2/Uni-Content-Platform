@@ -1,0 +1,59 @@
+.template-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	cursor: pointer;
+
+	fa-icon {
+		font-size: 80px;
+		color: #ababab;
+	}
+
+	.title {
+		margin: 40px 0 40px 0;
+		font-size: 22px;
+		color: #ababab;
+	}
+
+	.description {
+		width: 300px;
+		font-size: 16px;
+		text-align: center;
+		color: #ababab;
+	}
+
+	&.info {
+		fa-icon {
+			color: #829AD3 !important;
+			opacity: 0.7 !important;
+		}
+
+		.title {
+			color: #829AD3 !important;
+			opacity: 0.7 !important;
+		}
+
+		.description {
+			color: #829AD3 !important;
+			opacity: 0.7 !important;
+		}
+	}
+
+	&.error {
+		fa-icon {
+			color: red !important;
+			opacity: 0.7 !important;
+		}
+
+		.title {
+			color: red !important;
+			opacity: 0.7 !important;
+		}
+
+		.description {
+			color: red !important;
+			opacity: 0.7 !important;
+		}
+	}
+}

@@ -1,0 +1,78 @@
+<div class="image-picker">
+	<div class="image-picker__header">
+		<h2 class="image-picker__title">{{ 'imagePicker.title' | translate }}</h2>
+		<p class="image-picker__subtitle">{{ 'imagePicker.subtitle' | translate }}</p>
+	</div>
+
+	<div class="image-picker__upload-area"
+		 [class.image-picker__upload-area--has-image]="!!profilePicture()"
+		 [class.image-picker__upload-area--drag-over]="isDragOver()"
+		 (click)="onUploadAreaClick()"
+		 (dragenter)="onDragEnter($event)"
+		 (dragover)="onDragOver($event)"
+		 (dragleave)="onDragLeave($event)"
+		 (drop)="onDrop($event)">
+
+		@if (!profilePicture()) {
+			<div class="image-picker__placeholder">
+				<fa-icon class="image-picker__placeholder-icon" [icon]="faIcon"></fa-icon>
+				<div class="image-picker__placeholder-text">
+					<span class="image-picker__placeholder-primary">{{ 'imagePicker.dragDrop' | translate }}</span>
+					<span class="image-picker__placeholder-secondary">{{ 'imagePicker.orClickToSelect' | translate }}</span>
+				</div>
+				<div class="image-picker__file-requirements">
+					<small>{{ 'imagePicker.supportedFormats' | translate }}: PNG, JPG, JPEG</small>
+					<small>{{ 'imagePicker.maxSize' | translate }}: 5MB</small>
+				</div>
+			</div>
+		} @else {
+			<div class="image-picker__preview">
+				<img class="image-picker__preview-image"
+					 [src]="profilePicture()"
+					 [alt]="'imagePicker.previewAlt' | translate">
+				<div class="image-picker__preview-overlay">
+					<button type="button"
+							class="image-picker__change-button"
+							(click)="triggerFileInput(); $event.stopPropagation()">
+						<fa-icon [icon]="['fal', 'camera']"></fa-icon>
+						{{ 'imagePicker.changeImage' | translate }}
+					</button>
+					<button type="button"
+							class="image-picker__remove-button"
+							(click)="removeImage(); $event.stopPropagation()">
+						<fa-icon [icon]="['fal', 'trash-can']"></fa-icon>
+						{{ 'imagePicker.removeImage' | translate }}
+					</button>
+				</div>
+			</div>
+		}
+
+		<input #fileInput
+			   type="file"
+			   class="image-picker__file-input"
+			   accept="image/png,image/jpeg,image/jpg"
+			   (change)="onFileSelected($event)">
+	</div>
+
+	@if (errorMessage()) {
+		<div class="image-picker__error" role="alert">
+			<fa-icon class="image-picker__error-icon" [icon]="['fas', 'exclamation-triangle']"></fa-icon>
+			<span>{{ errorMessage() }}</span>
+		</div>
+	}
+
+	<div class="image-picker__actions">
+		<button type="button"
+				class="image-picker__action image-picker__action--cancel"
+				(click)="dismiss()">
+			{{ 'app.enums.general.cancel' | translate }}
+		</button>
+		<button type="button"
+				class="image-picker__action image-picker__action--save"
+				[class.image-picker__action--disabled]="!profilePicture() || !!errorMessage()"
+				[disabled]="!profilePicture() || !!errorMessage()"
+				(click)="save()">
+			{{ 'app.enums.general.save' | translate }}
+		</button>
+	</div>
+</div>

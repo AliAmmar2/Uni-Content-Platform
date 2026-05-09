@@ -1,0 +1,147 @@
+<div class="login-container">
+  <div class="login-card">
+
+    <div class="logo-section">
+      <img src="../assets/imgs/logo.png" class="logo-img" />
+      <h2 class="university-name">Lebanese University</h2>
+    </div>
+
+    <h1 class="login-title">Welcome Back</h1>
+
+    <p class="login-subtitle">
+      Please select your portal to continue
+    </p>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button
+        type="button"
+        (click)="switchTab('student')"
+        [class.active]="activeTab === 'student'"
+      >
+        Student
+      </button>
+
+      <button
+        type="button"
+        (click)="switchTab('admin')"
+        [class.active]="activeTab === 'admin'"
+      >
+        Admin
+      </button>
+    </div>
+
+    <!-- STUDENT FORM -->
+    <form
+      *ngIf="activeTab === 'student'"
+      [formGroup]="loginStudentForm"
+      (ngSubmit)="loginStudent()"
+      class="login-form"
+    >
+
+      <div class="form-group">
+        <label class="form-label">University Email</label>
+        <div class="input-container">
+          <fa-icon [icon]="['fas','envelope']" class="input-icon"></fa-icon>
+          <input class="form-input" placeholder="name@ul.edu.lb"
+                 formControlName="universityEmail"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">ID</label>
+        <div class="input-container">
+          <fa-icon [icon]="['fas','user']" class="input-icon"></fa-icon>
+          <input class="form-input" placeholder="Enter your ID"
+                 formControlName="universityId"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+
+        <div class="input-container">
+          <fa-icon [icon]="['fas','lock']" class="input-icon"></fa-icon>
+
+          <input
+            [type]="hideInputPassword ? 'password' : 'text'"
+            class="form-input"
+            placeholder="••••••••"
+            formControlName="password"
+          />
+
+          <button type="button"
+                  class="toggle-password"
+                  (click)="hideInputPassword = !hideInputPassword">
+            👁
+          </button>
+        </div>
+      </div>
+
+      <button class="login-button" type="submit">
+        Sign in as Student →
+      </button>
+    </form>
+
+    <!-- ADMIN FORM -->
+    <form
+      *ngIf="activeTab === 'admin'"
+      [formGroup]="loginAdminForm"
+      (ngSubmit)="loginAdmin()"
+      class="login-form"
+    >
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+
+        <div class="input-container">
+          <fa-icon [icon]="['fas','user-shield']" class="input-icon"></fa-icon>
+
+          <input class="form-input"
+                 placeholder="Enter username"
+                 formControlName="username"/>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+
+        <div class="input-container">
+          <fa-icon [icon]="['fas','lock']" class="input-icon"></fa-icon>
+
+          <input
+            [type]="hideInputPassword ? 'password' : 'text'"
+            class="form-input"
+            placeholder="••••••••"
+            formControlName="password"
+          />
+
+          <button type="button"
+                  class="toggle-password"
+                  (click)="hideInputPassword = !hideInputPassword">
+            👁
+          </button>
+        </div>
+      </div>
+
+      <button class="login-button admin" type="submit">
+        Sign in as Admin →
+      </button>
+    </form>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>Technical difficulties? <span class="support">Contact Support</span></p>
+
+      <div class="links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+
+      <p class="copyright">
+        © 2026 Lebanese University. All Rights Reserved.
+      </p>
+    </div>
+
+  </div>
+</div>

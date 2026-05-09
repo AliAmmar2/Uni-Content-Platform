@@ -1,0 +1,33 @@
+<div class="alert">
+	<div class="alert__header">
+		<div class="alert__header-title">
+			{{ data.title }}
+		</div>
+		<mat-toolbar-row>
+			@if (data?.faIcon) {
+				<div class="alert__header-icon">
+					<fa-icon [icon]="data.faIcon"></fa-icon>
+				</div>
+			}
+		</mat-toolbar-row>
+	</div>
+	<div class="alert__message">
+		{{ data.message }}
+	</div>
+	<div class="alert__action-buttons">
+		<div class="alert__action-buttons-button-content">
+			<button (click)="data.confirmButton.handler()"
+					[style.background-color]="data.confirmButton.color"
+					mat-raised-button>
+				<span> {{ data.confirmButton.label }} </span>
+			</button>
+		</div>
+		<div class="alert__action-buttons-button-content">
+			<button (click)="data.dismissButton.handler()"
+					[style.background-color]="data.dismissButton.color"
+					mat-raised-button>
+				<span> {{ data.dismissButton.label }} </span>
+			</button>
+		</div>
+	</div>
+</div>
