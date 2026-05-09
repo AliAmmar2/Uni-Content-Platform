@@ -1,0 +1,68 @@
+.header {
+	z-index: 9999;
+	background-color: var(--dark-blue);
+	padding-top: var(--ion-safe-area-top, 0);
+
+	.toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-right: 10px;
+		--background: transparent;
+
+		.header-content {
+			.header-title {
+				height: 50px;
+				line-height: 50px;
+				padding: 0 20px;
+				font-size: 20px;
+				color: #FFF;
+			}
+		}
+
+		.close-component {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: #FFF;
+			font-size: 25px;
+			font-weight: 800;
+
+			fa-icon {
+				cursor: pointer;
+			}
+		}
+	}
+}
+
+mat-dialog-content {
+	display: flex;
+	align-items: center;
+	padding: 30px;
+	overflow-y: scroll;
+
+	.alert-icon {
+		margin-right: 20px;
+	}
+
+	.message-container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 100%;
+
+		.subtitle-message {
+			padding-bottom: 15px;
+			text-align: center;
+			font-size: 18px;
+			font-weight: 600;
+		}
+
+		.alert-message {
+			padding-bottom: 15px;
+			text-align: center;
+			font-size: 14px;
+		}
+	}
+}

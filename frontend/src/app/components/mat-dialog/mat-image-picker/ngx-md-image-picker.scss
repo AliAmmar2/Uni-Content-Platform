@@ -1,0 +1,482 @@
+// Variables
+$color-primary: #007bff;
+$color-primary-hover: #0056b3;
+$color-success: #28a745;
+$color-danger: #dc3545;
+$color-warning: #ffc107;
+$color-light: #f8f9fa;
+$color-dark: #343a40;
+$color-gray-100: #f8f9fa;
+$color-gray-200: #e9ecef;
+$color-gray-300: #dee2e6;
+$color-gray-400: #ced4da;
+$color-gray-500: #adb5bd;
+$color-gray-600: #6c757d;
+$color-gray-700: #495057;
+$color-gray-800: #343a40;
+$color-gray-900: #212529;
+
+$border-radius: 0.375rem;
+$border-radius-lg: 0.5rem;
+$box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$box-shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+$transition: all 0.15s ease-in-out;
+
+// Mixins
+@mixin button-variant($bg, $border: $bg, $hover-bg: darken($bg, 7.5%), $hover-border: darken($border, 10%)) {
+	background-color: $bg;
+	border-color: $border;
+	color: #fff;
+
+	&:hover:not(:disabled) {
+		background-color: $hover-bg;
+		border-color: $hover-border;
+		transform: translateY(-1px);
+	}
+
+	&:active:not(:disabled) {
+		background-color: darken($bg, 10%);
+		border-color: darken($border, 12.5%);
+		transform: translateY(0);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+}
+
+@mixin focus-ring($color: $color-primary) {
+	&:focus-visible {
+		outline: 2px solid $color;
+		outline-offset: 2px;
+	}
+}
+
+// Component styles
+.image-picker {
+	padding: 20px;
+	width: 100%;
+	height: 100%;
+	background-color: #d8dae4; // Using actual users modal background
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+
+	// Header
+	&__header {
+		text-align: center;
+		margin-bottom: 20px;
+		flex-shrink: 0;
+		font-weight: 500;
+		font-family: Roboto-Medium, sans-serif; // Matching users modal font
+	}
+
+	&__title {
+		font-size: 20px; // Matching users modal dialog header
+		font-weight: 500;
+		font-family: Roboto-Medium, sans-serif; // Matching users modal
+		color: #000000; // Dark text for good contrast
+		margin: 0 0 8px 0;
+	}
+
+	&__subtitle {
+		font-size: 14px;
+		color: #666666;
+		margin: 0;
+		line-height: 1.4;
+		font-weight: 400; // Matching users modal content weight
+	}
+
+	// Upload Area
+	&__upload-area {
+		border: 3px #c4c9cf solid; // Matching users modal content border style
+		border-radius: 8px;
+		padding: 40px 20px;
+		text-align: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		background-color: #fff; // White background like users modal content
+		position: relative;
+		flex: 1; // Allow upload area to expand/contract
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 200px; // Minimum height for usability
+
+		&:hover {
+			border-color: #a8adb5; // Slightly darker border on hover
+			background-color: #f8f9fa; // Very light gray on hover
+		}
+
+		&--drag-over {
+			border-color: #8e949c; // Even darker border when dragging
+			background-color: #f0f1f3; // Light gray when dragging
+			transform: scale(1.01); // Subtle scale effect
+		}
+
+		&--has-image {
+			padding: 12px; // Reduced padding when showing image
+			border: 3px #c4c9cf solid; // Keep border when showing image
+			background: #fff;
+
+			&:hover {
+				background: #fff;
+				border-color: #a8adb5;
+			}
+		}
+	}
+
+	// Placeholder (when no image)
+	&__placeholder {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 16px;
+
+		&-icon {
+			font-size: 48px;
+			color: #888888; // Medium gray for good visibility on white
+			margin-bottom: 8px;
+		}
+
+		&-text {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		&-primary {
+			font-size: 16px;
+			font-weight: 500;
+			color: #000000; // Black text for maximum contrast
+		}
+
+		&-secondary {
+			font-size: 14px;
+			color: #666666; // Medium gray for secondary text
+			font-weight: 400;
+		}
+	}
+
+	&__file-requirements {
+		margin-top: 16px;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+
+		small {
+			font-size: 12px;
+			color: #000000;
+			background-color: #cbcbcb; // Using users modal avatar button background
+			padding: 4px 8px;
+			border-radius: 4px;
+			display: inline-block;
+			border: 1px solid #c4c9cf; // Using users modal border color
+		}
+	}
+
+	// Preview (when image selected)
+	&__preview {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Subtle shadow
+
+		&:hover .image-picker__preview-overlay {
+			opacity: 1;
+		}
+
+		&-image {
+			max-width: 100%;
+			max-height: 100%;
+			width: auto;
+			height: auto;
+			object-fit: contain; // Ensure image fits properly
+			border-radius: 8px;
+		}
+
+		&-overlay {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.6); // Semi-transparent dark overlay
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 12px;
+			opacity: 0;
+			transition: opacity 0.3s ease;
+			border-radius: 8px;
+		}
+	}
+
+	&__change-button,
+	&__remove-button {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 16px;
+		border: 1px solid transparent;
+		border-radius: 4px;
+		font-size: 14px;
+		font-weight: 400; // Matching users modal content weight
+		cursor: pointer;
+		transition: all 0.2s ease;
+		min-width: 120px;
+		justify-content: center;
+
+		fa-icon {
+			font-size: 14px;
+		}
+
+		&:focus {
+			outline: 2px solid #ffffff;
+			outline-offset: 2px;
+		}
+	}
+
+	&__change-button {
+		background-color: #cbcbcb; // Using users modal avatar button background
+		color: #000000; // Dark text for contrast
+		border: 1px #c4c9cf solid; // Using users modal border
+
+		&:hover {
+			background-color: #b8b8b8; // Slightly darker on hover
+			border-color: #a8adb5;
+			transform: translateY(-1px);
+		}
+
+		&:active {
+			transform: translateY(0);
+		}
+	}
+
+	&__remove-button {
+		background-color: #dc3545; // Standard red for remove
+		color: #ffffff;
+		border: 1px #dc3545 solid;
+
+		&:hover {
+			background-color: #c82333; // Darker red on hover
+			border-color: #c82333;
+			transform: translateY(-1px);
+		}
+
+		&:active {
+			transform: translateY(0);
+		}
+	}
+
+	// Error message
+	&__error {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1rem;
+		background-color: #ffe6e6; // Light red background
+		border: 1px solid #e61b1b; // Using user modal error color
+		border-radius: 4px;
+		color: #e61b1b; // Using user modal error color
+		font-size: 0.875rem;
+		animation: slideDown 0.3s ease-out;
+		margin-top: 16px;
+	}
+
+	&__error-icon {
+		font-size: 1rem;
+		flex-shrink: 0;
+	}
+
+	// Actions (if any modal actions are added later)
+	&__actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 1rem;
+		padding-top: 1rem;
+		border-top: 2px solid #e7e7e9; // Using user modal border color
+	}
+
+	// File input (hidden)
+	&__file-input {
+		position: absolute !important;
+		width: 1px !important;
+		height: 1px !important;
+		padding: 0 !important;
+		margin: -1px !important;
+		overflow: hidden !important;
+		clip: rect(0, 0, 0, 0) !important;
+		white-space: nowrap !important;
+		border: 0 !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		z-index: -1 !important;
+	}
+}
+
+// Animations
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+// Responsive design
+@media (max-width: 768px) {
+	.image-picker {
+		padding: 1rem;
+		gap: 1rem;
+
+		&__upload-area {
+			min-height: 200px;
+			padding: 1rem;
+		}
+
+		&__preview-overlay {
+			flex-direction: column;
+		}
+
+		&__actions {
+			flex-direction: column;
+
+			.image-picker__action {
+				width: 100%;
+				justify-content: center;
+			}
+		}
+	}
+}
+
+// Dark mode support (keeping the existing dark mode but updating colors)
+@media (prefers-color-scheme: dark) {
+	.image-picker {
+		background-color: #1f2129; // Using user modal accent color as dark background
+
+		&__header {
+			border-bottom: 1px solid #7e6b6b;
+		}
+
+		&__title {
+			color: #ffffff;
+		}
+
+		&__subtitle {
+			color: #e0e0e0;
+		}
+
+		&__upload-area {
+			border-color: #7e6b6b;
+			background-color: #2d2d2d;
+
+			&:hover {
+				border-color: #c4c9cf;
+				background-color: #3a3a3a;
+			}
+
+			&--drag-over {
+				border-color: #c4c9cf;
+				background-color: #4a4a4a;
+			}
+		}
+
+		&__placeholder {
+			&-icon {
+				color: #c4c9cf;
+			}
+
+			&-primary {
+				color: #ffffff;
+			}
+
+			&-secondary {
+				color: #e0e0e0;
+			}
+		}
+
+		&__file-requirements small {
+			color: #ffffff;
+			background-color: #444444;
+			border-color: #7e6b6b;
+		}
+	}
+}
+
+// High contrast mode support
+@media (prefers-contrast: more) {
+	.image-picker {
+		background-color: #ffffff;
+		border: 3px solid #1f2129; // Using user modal accent color
+
+		&__title {
+			color: #1f2129; // Using user modal text color
+			font-weight: 700;
+		}
+
+		&__subtitle {
+			color: #1f2129; // Using user modal text color
+			font-weight: 500;
+		}
+
+		&__upload-area {
+			border-color: #1f2129; // Using user modal text color
+			border-width: 4px;
+			background-color: #fefefe; // Using user modal background
+
+			&:hover,
+			&--drag-over {
+				border-color: #000000;
+				background-color: #ececec; // Using user modal light background
+			}
+		}
+
+		&__placeholder {
+			&-icon {
+				color: #1f2129; // Using user modal text color
+			}
+
+			&-primary {
+				color: #1f2129; // Using user modal text color
+				font-weight: 700;
+			}
+
+			&-secondary {
+				color: #1f2129; // Using user modal text color
+				font-weight: 600;
+			}
+		}
+
+		&__file-requirements small {
+			color: #1f2129; // Using user modal text color
+			background-color: #ffffff;
+			border: 2px solid #1f2129; // Using user modal text color
+			font-weight: 600;
+		}
+
+		&__change-button {
+			background-color: #1f2129; // Using user modal accent color
+			color: #ffffff;
+			border: 3px solid #1f2129; // Using user modal accent color
+			font-weight: 700;
+		}
+
+		&__remove-button {
+			background-color: #e61b1b; // Using user modal error color
+			color: #ffffff;
+			border: 3px solid #e61b1b; // Using user modal error color
+			font-weight: 700;
+		}
+	}
+}

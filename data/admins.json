@@ -1,0 +1,19 @@
+[{
+    "username": "superadmin",
+    "email": "superadmin@university.com",
+    "fullName": "System Super Admin",
+    "role": "super_admin"
+  },
+  {
+    "username": "admin1",
+    "email": "admin1@university.com",
+    "fullName": "First Admin",
+    "role": "admin"
+  },
+  {
+    "username": "admin2",
+    "email": "admin2@university.com",
+    "fullName": "Second Admin",
+    "role": "admin"
+  }
+]
