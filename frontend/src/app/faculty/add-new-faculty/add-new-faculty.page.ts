@@ -5,7 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { selectFacultyDetails } from '../+state/courses.selector';
+import { selectFacultyDetails } from '../+state/faculty.selector';
 import { FacultyStatusEnum } from '../+state/enums/faculty-status.enum';
 import { FacultyActions } from '../+state/faculty.action';
 

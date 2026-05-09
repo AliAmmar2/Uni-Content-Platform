@@ -55,6 +55,15 @@
         <span>Faculties</span>
 
       </div>
+      <div class="item"
+           [routerLink]="['/admin', adminId, 'majors']"
+           (click)="setActiveMenu('majors'); toggleSidebar()"
+           [ngClass]="{ 'active': (activeMenu$ | async) === 'majors' }">
+
+        <fa-icon [icon]="['fas','diagram-project']"></fa-icon>
+        <span>Majors</span>
+
+      </div>
 
     </div>
 

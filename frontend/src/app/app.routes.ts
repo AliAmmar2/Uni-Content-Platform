@@ -2,10 +2,13 @@ import { Routes } from '@angular/router';
 import { LoginPage } from './login-page/login.page';
 import { RegisterPage } from './reigister-page/register.page';
 import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
-import { PortalAdminPage } from './portal-admin/dashboard/portal-admin-page.component';
+import { PortalAdminPage } from './portal-admin/portal-admin-page.component';
 import { FacultyPage } from './faculty/faculty.page';
 import { AddNewFacultyPage } from './faculty/add-new-faculty/add-new-faculty.page';
 import { StudentsPage } from './student/students.page';
+import { MajorPage } from './major/major.page';
+import { EditMajorPage } from './major/add-new-major/edit-major.page';
+import { MajorDetailsPage } from './major/major-details/major-details.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -35,12 +38,30 @@ export const routes: Routes = [
         component: FacultyPage
       },
       {
+        path: 'majors',
+        component: MajorPage
+      },
+      {
         path: 'students',
         component: StudentsPage
       }
-      , {
+      ,
+      {
         path: 'add-new-faculty',
         component: AddNewFacultyPage
+      }
+      ,
+      {
+        path: 'add-new-major',
+        component: EditMajorPage
+      },
+      {
+        path: ':majorId/edit',
+        component: EditMajorPage
+      },
+      {
+        path: ':majorId/details',
+        component: MajorDetailsPage
       }
     ]
   }

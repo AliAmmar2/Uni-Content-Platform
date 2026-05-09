@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { DashboardUiService } from '../services/dashboard-ui.service';
+import { DashboardUiService } from './services/dashboard-ui.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -43,6 +43,8 @@ export class PortalAdminPage implements OnInit {
       this.dashboardUiService.setActiveMenu('students');
     } else if (currentUrl.includes('/dashboard')) {
       this.dashboardUiService.setActiveMenu('dashboard');
+    }else if (currentUrl.includes('/majors')) {
+      this.dashboardUiService.setActiveMenu('majors');
     }
   }
 

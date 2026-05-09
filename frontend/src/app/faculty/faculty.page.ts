@@ -8,7 +8,7 @@ import { LetDirective } from '@ngrx/component';
 
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
-import { selectAllFaculties } from './+state/courses.selector';
+import { selectAllFaculties } from './+state/faculty.selector';
 import { FacultyActions } from './+state/faculty.action';
 import { FACULTY_KEY } from './+state/faculty.reducer';
 import { PopoverBoxService } from '../components/mat-pop-over-box/src';

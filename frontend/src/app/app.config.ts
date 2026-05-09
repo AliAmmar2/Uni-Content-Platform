@@ -15,6 +15,9 @@ import { FACULTY_KEY, facultyReducers } from './faculty/+state/faculty.reducer';
 import { FACULTY_DETAILS_KEY, facultyDetailsReducers } from './faculty/+state/faculty-details.reducer';
 import { STUDENT_KEY, studentReducers } from './student/+state/student.reducer';
 import { StudentEffect } from './student/+state/student.effect';
+import { MAJOR_DETAILS_KEY, majorDetailsReducers } from './major/+state/major-details.reducer';
+import { MAJOR_KEY, majorReducers } from './major/+state/major.reducer';
+import { MajorEffects } from './major/+state/major.effect';
 
 export function initializeFaIconLibrary(library: FaIconLibrary) {
   return () => {
@@ -25,13 +28,16 @@ export function initializeFaIconLibrary(library: FaIconLibrary) {
 export const bootstrapEffectList = [
   StudentEffect,
   CoursesEffect,
-  FacultyEffect
+  FacultyEffect,
+  MajorEffects
 ]
 
 export const reducers = {
-  [STUDENT_DETAILS_KEY]: studentDetailsReducers,
   [FACULTY_KEY]: facultyReducers,
   [STUDENT_KEY]: studentReducers,
+  [MAJOR_DETAILS_KEY]: majorDetailsReducers,
+  [MAJOR_KEY]: majorReducers,
+  [STUDENT_DETAILS_KEY]: studentDetailsReducers,
   [FACULTY_DETAILS_KEY]: facultyDetailsReducers,
   [COURSES_KEY]: coursesReducers,
 }
