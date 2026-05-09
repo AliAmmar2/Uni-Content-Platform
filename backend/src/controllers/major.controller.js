@@ -1,7 +1,6 @@
   const Major = require("../models/Major");
   const UniStudent = require("../models/Student");
   const Course = require("../models/Course");
-
   exports.getMajorById = async (req, res) => {
     try {
       const major = await Major.findById(req.params.id)
@@ -13,8 +12,8 @@
 
       const courses = await Course.find({ major: major._id });
 
-      // 👑 ADMIN OR SUPER ADMIN
-      if (req.admin) {
+      // 👑 ADMIN
+      if (req.user?.userType === "ADMIN") {
         return res.json({
           ...major.toObject(),
           courses
@@ -22,7 +21,7 @@
       }
 
       // 🎓 STUDENT
-      if (req.user) {
+      if (req.user?.userType === "STUDENT") {
         const student = await UniStudent.findById(req.user.id);
 
         if (!student) {
@@ -55,7 +54,19 @@
           .populate("faculty", "name code")
           .sort({ name: 1 });
 
-      return res.json(majors);
+      // attach course count
+      const majorsWithCounts = await Promise.all(
+          majors.map(async (major) => {
+            const courseCount = await Course.countDocuments({ major: major._id });
+
+            return {
+              ...major.toObject(),
+              courseCount
+            };
+          })
+      );
+
+      return res.json(majorsWithCounts);
 
     } catch (error) {
       console.error("GET MAJORS ERROR:", error);
