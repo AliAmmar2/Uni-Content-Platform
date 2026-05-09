@@ -1,13 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
-const auth = require("../middleware/auth.middleware");
-const controller = require("../controllers/major.controller");
+const majorController = require("../controllers/major.controller");
+const anyAuth = require("../middleware/any-auth.middleware");
+const adminAuth = require("../middleware/admin-auth.middleware");
 
-// Get all majors
-router.get("/", auth, controller.getAllMajors);
+//any auth can access this
+router.get("/:id", anyAuth, majorController.getMajorById);
 
-// Get single major
-router.get("/:id", auth, controller.getMajorById);
+
+//only admin can access this
+router.post("/", adminAuth, majorController.createMajor);
+router.get("/", adminAuth, majorController.getAllMajors);
+router.put("/:id", adminAuth, majorController.updateMajor);
+router.delete("/:id", adminAuth, majorController.deleteMajor);
 
 module.exports = router;

@@ -3,26 +3,43 @@ const Faculty = require("../models/Faculty");
 // Create a new faculty (Admin only)
 exports.createFaculty = async (req, res) => {
   try {
-    const { name, code } = req.body;
+    const { name, code, description } = req.body;
 
+    // Validation
     if (!name || !code) {
-      return res.status(400).json({ message: "Name and code are required" });
+      return res.status(400).json({
+        message: "Name and code are required"
+      });
     }
 
-    const existing = await Faculty.findOne({ $or: [{ name }, { code }] });
+    // Check duplicates
+    const existing = await Faculty.findOne({
+      $or: [{ name }, { code }]
+    });
+
     if (existing) {
-      return res.status(409).json({ message: "Faculty already exists" });
+      return res.status(409).json({
+        message: "Faculty already exists"
+      });
     }
 
-    const faculty = await Faculty.create({ name, code });
-    res.status(201).json(faculty);
+    // Create faculty (description is optional)
+    const faculty = await Faculty.create({
+      name,
+      code,
+      description: description || ""
+    });
+
+    return res.status(201).json(faculty);
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("CREATE FACULTY ERROR:", error);
+
+    return res.status(500).json({
+      message: "Server error"
+    });
   }
 };
-
 // Get all faculties (any authenticated user)
 exports.getAllFaculties = async (req, res) => {
   try {

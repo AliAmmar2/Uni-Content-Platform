@@ -1,14 +1,15 @@
 const allowStudentOrAdminRole = (studentRoles = [], adminRoles = []) => {
     return (req, res, next) => {
 
-        if (req.user && req.user.role) {
+        //  STUDENT SYSTEM
+        if (req.user?.userType === "STUDENT") {
             if (studentRoles.includes(req.user.role)) {
                 return next();
             }
         }
 
-        // 👑 ADMIN SYSTEM
-        if (req.admin && req.admin.role) {
+        //  ADMIN SYSTEM
+        if (req.admin?.userType === "ADMIN") {
             if (adminRoles.includes(req.admin.role)) {
                 return next();
             }

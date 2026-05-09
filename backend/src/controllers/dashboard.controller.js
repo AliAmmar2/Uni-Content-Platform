@@ -1,4 +1,4 @@
-const UniStudent = require("../models/Users");
+const UniStudent = require("../models/Student");
 const Course = require("../models/Course");
 
 exports.getDashboard = async (req, res) => {

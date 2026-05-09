@@ -1,48 +1,64 @@
 const jwt = require("jsonwebtoken");
+
 const UniStudent = require("../models/Student");
 const Admin = require("../models/Admin");
 
 const anyAuth = async (req, res, next) => {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
-
-    if (!token) {
-        return res.status(401).json({message: "No token provided"});
-    }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // IMPORTANT: must be Mongo _id
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(401).json({
+                message: "No token provided"
+            });
+        }
+
+        const token = authHeader.split(" ")[1];
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
         const userId = decoded.id;
 
-        // 1️⃣ Try student DB first
+        // STUDENT
         const student = await UniStudent.findById(userId);
+
         if (student) {
             req.user = {
                 id: student._id,
-                type: "STUDENT",
-                role: student.role, // STUDENT or MODERATOR
+                userType: "STUDENT",
+                role: student.role,
                 data: student
             };
             return next();
         }
 
-        // 2️⃣ Try admin DB
+        // ADMIN
         const admin = await Admin.findById(userId);
+
         if (admin) {
             req.user = {
                 id: admin._id,
-                type: "ADMIN",
-                role: admin.role, // admin or super_admin
+                userType: "ADMIN",
+                role: admin.role,
                 data: admin
             };
             return next();
         }
 
-        return res.status(401).json({message: "User not found in any system"});
+        return res.status(401).json({
+            message: "User not found"
+        });
 
-    } catch (err) {
-        return res.status(401).json({message: "Invalid token"});
+    } catch (error) {
+
+        return res.status(401).json({
+            message: "Invalid token"
+        });
     }
 };
 

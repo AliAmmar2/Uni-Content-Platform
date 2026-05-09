@@ -39,15 +39,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { StudentModel } from './models/student.model';
-import { CreateStudentFormGroupInterface } from '../../student/interfaces/create-student-form-group.interface';
-import { UpdateStudentFormGroupInterface } from '../../student/interfaces/update-student-form-group.interface';
 
 @Injectable({ providedIn: 'root' })
 export class StudentClient {
 
   private readonly API_URL = 'http://localhost:5000/students';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   private getAuthOptions() {
     const token = localStorage.getItem('accessToken');
@@ -73,7 +72,7 @@ export class StudentClient {
     );
   }
 
-  public createStudent(student:any): Observable<any> {
+  public createStudent(student: any): Observable<any> {
     return this.http.post(
       this.API_URL,
       student,

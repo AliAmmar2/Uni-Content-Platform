@@ -102,21 +102,36 @@ exports.updateAdmin = async (req, res) => {
  */
 exports.deleteAdmin = async (req, res) => {
     try {
+
         const admin = await Admin.findById(req.params.id);
 
         if (!admin) {
-            return res.status(404).json({ message: "Admin not found" });
+            return res.status(404).json({
+                message: "Admin not found"
+            });
         }
 
-        if (admin._id.toString() === req.user.id) {
-            return res.status(400).json({ message: "You cannot delete yourself" });
+        /**
+         * Prevent self delete
+         */
+        if (admin._id.toString() === req.admin.id) {
+            return res.status(400).json({
+                message: "You cannot delete yourself"
+            });
         }
 
         await Admin.findByIdAndDelete(req.params.id);
 
-        res.json({ message: "Admin deleted successfully" });
+        res.json({
+            message: "Admin deleted successfully"
+        });
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+
+        console.error("DELETE ADMIN ERROR:", err);
+
+        res.status(500).json({
+            message: err.message
+        });
     }
 };

@@ -85,6 +85,7 @@ exports.login = async (req, res) => {
       { 
         id: user._id.toString(),
         universityId: user.universityId,
+        userType: "STUDENT",
         role: user.role
       },
       process.env.JWT_SECRET,
@@ -169,7 +170,8 @@ exports.requestMagicLink = async (req, res) => {
         id: user._id.toString(),
         universityId: user.universityId,
         type: 'magic-link',
-        role: user.role
+        role: user.role,
+        userType: "STUDENT"
       },
       process.env.JWT_SECRET,
       { expiresIn: '15m' }
@@ -213,6 +215,10 @@ exports.verifyMagicLink = async (req, res) => {
       });
     }
 
+    if (decoded.userType !== "STUDENT") {
+      return res.status(403).json({ message: "Wrong user type" });
+    }
+
     const user = await UniStudent.findById(decoded.id)
       .populate('faculty', 'name code')
       .populate('major', 'name code');
@@ -238,7 +244,8 @@ exports.verifyMagicLink = async (req, res) => {
       { 
         id: user._id.toString(),
         universityId: user.universityId,
-        role: user.role
+        role: user.role,
+        userType: "STUDENT"
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -325,7 +332,8 @@ exports.refreshToken = async (req, res) => {
       { 
         id: user._id.toString(),
         universityId: user.universityId,
-        role: user.role
+        role: user.role,
+        userType: "STUDENT"
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
