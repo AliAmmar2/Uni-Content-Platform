@@ -10,6 +10,16 @@
     "semester": "SEM1"
   },
   {
+    "name": "Introduction to Programming2",
+    "code": "CS101-SEM1-20256",
+    "description": "Fundamentals of programming using Python",
+    "credits": 3,
+    "majorCode": "CS",
+    "academicYear": 1,
+    "calendarYear": 2025,
+    "semester": "SEM1"
+  },
+  {
     "name": "Mathematics for Computing",
     "code": "CS102-SEM2-2025",
     "description": "Discrete mathematics and logic",
