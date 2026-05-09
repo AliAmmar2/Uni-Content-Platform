@@ -1,0 +1,190 @@
+<div class="major-page">
+  <!-- Breadcrumbs -->
+  <div class="major-page__breadcrumb">
+    <button
+      type="button"
+      class="major-page__breadcrumb-link"
+      (click)="goToMajorsPage()">
+
+      Majors
+
+    </button>
+
+    <span class="major-page__breadcrumb-separator">
+    ›
+  </span>
+
+    <span class="major-page__breadcrumb-current">
+        {{ isEditMode ? 'Edit Major' : 'Add New Major' }}
+  </span>
+
+  </div>
+  <div class="major-page__top">
+
+    <div class="major-page__header">
+
+      <h1>
+        {{ isEditMode ? 'Edit Major' : 'Major Registration' }}
+      </h1>
+
+      @if (!isEditMode) {
+        <p>
+          Create a new academic program within the Lebanese University system.
+          Ensure all details align with official accreditation documents.
+        </p>
+      }
+      @if (isEditMode) {
+        <p>
+          Update the existing academic program details. Ensure all changes remain
+          consistent with university standards and structure.
+        </p>
+      }
+
+
+    </div>
+
+  </div>
+
+  <div class="major-page__content">
+
+    <div class="major-page__form-card">
+
+      <form
+        class="major-form"
+        [formGroup]="majorForm"
+        (ngSubmit)="onSubmit()">
+
+        <div class="major-form__group">
+
+          <label class="major-form__label">
+            Major Name
+          </label>
+
+          <input
+            type="text"
+            formControlName="name"
+            class="major-form__input"
+            placeholder="e.g. Computer Science"/>
+
+        </div>
+
+        <div class="major-form__row">
+
+
+          <div class="major-form__group">
+
+            <label class="major-form__label">
+              Major Code
+            </label>
+
+            <input
+              type="text"
+              formControlName="code"
+              class="major-form__input"
+              placeholder="e.g. CS-101"/>
+
+          </div>
+
+
+          <div class="major-form__group">
+
+            <label class="major-form__label">
+              Faculty
+            </label>
+
+            <select
+              formControlName="faculty"
+              class="major-form__select">
+
+              <option value="" disabled selected>
+                Select a Faculty
+              </option>
+
+              <ng-container *ngrxLet="facultiesListSelected$ as faculties">
+
+                @for (faculty of faculties[FACULTY_KEY]; track faculty.id) {
+
+                  <option [value]="faculty.id">
+                    {{ faculty.name }}
+                  </option>
+
+                }
+
+              </ng-container>
+
+            </select>
+
+          </div>
+
+        </div>
+
+        <div class="major-form__divider"></div>
+
+        <div class="major-form__actions">
+
+          <button
+            type="submit"
+            class="major-form__submit-button"
+            [disabled]="majorForm.invalid">
+            {{ isEditMode ? 'Update Major' : 'Create Major' }}
+          </button>
+
+          <button
+            type="button"
+            class="major-form__cancel-button"
+            (click)="onCancel()">
+
+            Cancel
+
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="major-page__sidebar">
+
+      <div class="sidebar-card">
+
+        <div class="sidebar-card__title">
+          <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
+          <span>Quick Actions</span>
+        </div>
+
+        <div class="sidebar-card__actions">
+
+          <button type="button"
+                  (click)="goToMajorsPage()"
+                  class="sidebar-action">
+            <fa-icon [icon]="['fas', 'diagram-project']"></fa-icon>
+            <span>View All Majors</span>
+
+          </button>
+
+          <button type="button"
+                  (click)="goToFacultiesPage()"
+                  class="sidebar-action">
+            <fa-icon [icon]="['far', 'rectangle-list']"></fa-icon>
+
+            <span>View All Faculties</span>
+
+          </button>
+
+          <button type="button" class="sidebar-action">
+
+            <fa-icon [icon]="['fas', 'dashboard']"></fa-icon>
+            <span>Navigate to Dashboard</span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

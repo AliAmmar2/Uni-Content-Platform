@@ -1,0 +1,119 @@
+$mat-text-color: #5a6770;
+$bg: white;
+
+$popover-min-width: 110px;
+$popover-max-height: 100%;
+$popover-bg: $bg;
+
+$popover-border-width: 2px;
+$popover-border-color: #ccc;
+$popover-border-radius: 15px;
+
+$popover-arrow-width: 10px;
+$popover-arrow-height: 10px;
+$popover-arrow-outer-color: $popover-border-color;
+$popover-arrow-color: $bg;
+
+$popover-header-bg: $bg;
+$popover-header-color: $mat-text-color;
+$popover-header-padding-y: 10px;
+$popover-header-padding-x: 10px;
+
+$popover-body-padding-y: 10px;
+$popover-body-padding-x: 10px;
+$popover-body-color: $mat-text-color;
+
+.popover {
+	position: relative;
+	display: block;
+	padding: 5px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	min-width: $popover-min-width;
+	max-height: $popover-max-height;
+	margin-right: 20px;
+	border-radius: 8px;
+	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+	word-wrap: break-word;
+	background-color: $popover-bg;
+	background-clip: padding-box;
+	width: fit-content;
+}
+
+:host::ng-deep {
+	mat-action-list {
+		&.mat-list-base {
+			padding-top: 0 !important;
+		}
+
+		.mat-list-item {
+			.mat-list-item-content {
+				padding: 0 5px !important;
+			}
+		}
+	}
+}
+
+.mat-popover {
+	mat-list-item {
+		display: flex;
+		align-items: center;
+		height: 34px;
+
+		button {
+			display: flex;
+			align-items: center;
+			cursor: pointer !important;
+			background-color: $popover-bg;
+			border: none;
+
+			.action-label {
+				font-size: 15px;
+				margin-left: 10px;
+			}
+
+			&.disabled {
+				opacity: 0.5;
+				cursor: not-allowed !important;
+			}
+		}
+	}
+
+	.mat-list-item {
+		&:hover, &:focus {
+			background-color: unset !important;
+		}
+
+		.disabled {
+			&:hover, &:focus {
+				background-color: #FFF !important;
+			}
+		}
+
+		.mat-list-icon {
+			display: inline-flex;
+
+			fa-icon {
+				font-size: 24px;
+				color: var(--charcoal-color);
+			}
+		}
+
+		.mat-line {
+			position: relative;
+			top: 5px;
+			color: $mat-text-color;
+			font-size: 18px;
+		}
+
+		.action-label {
+			display: inline;
+			padding-left: 20px;
+		}
+	}
+}
+
+.popover-body {
+	padding: $popover-body-padding-y $popover-body-padding-x;
+	color: $popover-body-color;
+}

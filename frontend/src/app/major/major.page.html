@@ -1,0 +1,86 @@
+<section class="majors-admin">
+
+  <!-- Header -->
+  <div class="majors-admin__header">
+    <div class="majors-admin__title-block">
+      <h1 class="majors-admin__title">Majors Administration</h1>
+      <p class="majors-admin__subtitle">
+        Oversee academic programs, course distribution, and faculty assignments for the current academic cycle.
+      </p>
+    </div>
+
+    <button class="majors-admin__add-btn"
+            (click)="navigateToAddNewMajor()">
+      <fa-icon [icon]="['fas','plus']"></fa-icon>
+      Add New Major
+    </button>
+  </div>
+
+  <!-- Controls -->
+  <div class="majors-admin__controls">
+      <div class="search-box">
+
+        <fa-icon [icon]="['fas','magnifying-glass']"></fa-icon>
+        <input
+          type="text"
+          placeholder="Search majors by name or code..."
+          (input)="onSearch($event)"
+        />
+      </div>
+
+      <div class="total-box">
+        Total:
+        <span>{{ (majorsListSelected$ | async)?.length || 0 }} Majors</span>
+      </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="majors-admin__grid">
+
+    <ng-container *ngrxLet="majorsListSelected$ as majors">
+
+      @for (major of majors; track major.id) {
+        <div class="major-card">
+
+          <div class="major-card__top">
+            <span class="major-card__code">{{ major.code }}</span>
+
+            <button class="major-card__menu"
+                    (click)="presentPopoverActions($event,major)">
+              <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+            </button>
+          </div>
+
+          <div class="major-card__content">
+
+            <h2 class="major-card__name">
+              {{ major.name }}
+            </h2>
+
+            <div class="major-card__faculty">
+              <span class="major-card__dot"></span>
+              {{ major.faculty?.name }}
+            </div>
+
+            <div class="major-card__courses">
+              <fa-icon [icon]="['fas','book']"></fa-icon>
+              {{ major.courseCount || 0 }} Courses
+            </div>
+
+          </div>
+
+          <div class="major-card__footer">
+            <button class="major-card__btn"
+            (click)="navigateToMajorDetails(major.id)">
+              View Details
+            </button>
+          </div>
+
+        </div>
+      }
+
+    </ng-container>
+
+  </div>
+
+</section>

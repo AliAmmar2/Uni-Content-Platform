@@ -1,0 +1,325 @@
+/* add-new-faculty.page.scss */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.faculty-page {
+  padding: 2rem;
+  background: #f5f6fa;
+  min-height: 100vh;
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    margin-bottom: 1.25rem;
+
+    font-size: 0.9rem;
+  }
+
+  &__breadcrumb-link {
+    border: none;
+    background: transparent;
+
+    padding: 0;
+
+    color: #6b7280;
+    font-size: 0.9rem;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+    &:hover {
+      color: #b00020;
+    }
+  }
+
+  &__breadcrumb-separator {
+    color: #9ca3af;
+  }
+
+  &__breadcrumb-current {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  &__form-card {
+    background: #ffffff;
+
+    border: 1px solid #e7caca;
+    border-radius: 12px;
+
+    overflow: hidden;
+  }
+
+  &__form-header {
+    padding: 2rem;
+
+    border-bottom: 1px solid #ececec;
+
+    h1 {
+      margin: 0 0 0.5rem;
+
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.2;
+
+      color: #111827;
+    }
+
+    p {
+      margin: 0;
+
+      max-width: 620px;
+
+      line-height: 1.6;
+      font-size: 0.95rem;
+
+      color: #6b7280;
+    }
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.faculty-form {
+  padding: 2rem;
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 1.5rem;
+  }
+
+  &__label {
+    margin-bottom: 0.5rem;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    color: #111827;
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+
+    padding: 0 1rem;
+    height: 52px;
+
+    border: 1px solid #d8bcbc;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    font-size: 0.95rem;
+    color: #111827;
+
+    transition: 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #b00020;
+      box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.08);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  &__textarea {
+    padding: 1rem;
+
+    min-height: 160px;
+    resize: vertical;
+
+    font-family: inherit;
+  }
+
+  &__divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 1.5rem 0;
+
+    background: #ececec;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  &__submit-button,
+  &__cancel-button {
+    height: 44px;
+    padding: 0 1.5rem;
+
+    border-radius: 8px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+  }
+
+  &__submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    border: none;
+
+    background: #b00020;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background: #95001b;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__cancel-button {
+    border: none;
+
+    background: transparent;
+    color: #b00020;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.sidebar-card {
+  padding: 1.5rem;
+
+  background: #ffffff;
+
+  border: 1px solid #e7caca;
+  border-radius: 12px;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    margin-bottom: 1.25rem;
+
+    color: #b00020;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    span {
+      font-size: 1.1rem;
+      line-height: 1.4;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.sidebar-action {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  width: 100%;
+
+  padding: 0.8rem;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  text-align: left;
+
+  font-size: 0.95rem;
+  color: #374151;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+  &:hover {
+    background: #f9fafb;
+    color: #b00020;
+  }
+}
+
+@media (max-width: 1200px) {
+
+  .faculty-page {
+
+    &__content {
+      grid-template-columns: 1fr;
+    }
+
+    &__sidebar {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+
+  .faculty-page {
+    padding: 1rem;
+
+    &__form-header {
+      padding: 1.5rem;
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  }
+
+  .faculty-form {
+    padding: 1.5rem;
+
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__submit-button,
+    &__cancel-button {
+      width: 100%;
+    }
+  }
+}

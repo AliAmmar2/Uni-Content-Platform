@@ -1,0 +1,65 @@
+<mat-toolbar class="with-top-itm-colors">
+  <mat-toolbar-row>
+        <span>
+            {{ data.title }}
+        </span>
+    <span class="flex-space-to-right"></span>
+    <mat-icon (click)="dialogRef.close()"
+              class="cursor-pointer"
+              mat-list-icon>close
+    </mat-icon>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-dialog-content>
+  @if (data.checkboxCheckedTitle
+  && data.checkboxIntermediateTitle) {
+    <div class="dialog-checkbox-definition">
+      <div>
+        <img src="images/checkbox-checked.png">
+        {{ data.checkboxCheckedTitle }}
+      </div>
+      <div>
+        <img src="images/checkbox-intermediate.png">
+        {{ data.checkboxIntermediateTitle }}
+      </div>
+    </div>
+  }
+  <mat-divider></mat-divider>
+  <div class="grid">
+    @if (data.checkboxList?.length) {
+      <div>
+        @for (control of data.checkboxList; track control.id) {
+          <div class="cell">
+            <mat-checkbox (change)="changeState(control)"
+                          [indeterminate]="control.state === CheckboxStateEnum.undeterminated"
+                          [ngModel]="control.state === CheckboxStateEnum.checked">
+              {{ control.label }}
+            </mat-checkbox>
+          </div>
+        }
+      </div>
+    } @else {
+      <div>No products found</div>
+    }
+    <ng-template #noProducts>
+      <p>No products found</p>
+    </ng-template>
+  </div>
+</mat-dialog-content>
+<mat-toolbar class="with-top-border with-bottom-padding">
+  <mat-toolbar-row>
+    <div class="flex-space-to-right"></div>
+    <mat-dialog-actions>
+      <button (click)="cancel()"
+              mat-raised-button
+              type="button">
+        {{ data.textCancelButton }}
+      </button>
+      <button (click)="save()"
+              color="primary"
+              mat-flat-button>
+        {{ data.textOkButton }}
+      </button>
+    </mat-dialog-actions>
+  </mat-toolbar-row>
+</mat-toolbar>

@@ -1,0 +1,215 @@
+.faculties-page {
+  background: #f6f7fb;
+  padding: 30px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.header-text h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.header-text p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #667085;
+}
+
+.add-faculty-btn {
+  background: #c40010;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+
+  font-weight: 600;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+}
+
+.add-faculty-btn span {
+  font-size: 16px;
+}
+
+.filters-container {
+  display: flex;
+  align-items: center;
+  gap: 70px;
+
+  background: white;
+  padding: 15px;
+  border: 1px solid #f1c9c9;
+  border-radius: 14px;
+
+  margin-bottom: 25px;
+}
+
+.search-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-box fa-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #667085;
+}
+
+.search-box input {
+  width: 100%;
+  height: 44px;
+
+  padding-left: 40px;
+  padding-right: 12px;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.total-box {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475467;
+}
+
+.total-box span {
+  color: #c40010;
+}
+
+.faculties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.faculty-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #f1d1d1;
+  overflow: hidden;
+
+  transition: 0.2s ease;
+}
+
+.faculty-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.faculty-image-container {
+  padding: 12px;
+}
+
+.card-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faculty-code {
+  background: #d90416;
+  color: white;
+
+  padding: 5px 10px;
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card-menu-btn {
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: rgba(255,255,255,0.9);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.card-menu-btn fa-icon {
+  font-size: 14px;
+  color: #344054;
+}
+
+.card-menu-btn:hover {
+  background: #fff;
+}
+
+.faculty-content {
+  padding: 18px;
+}
+
+.faculty-content h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.description {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #667085;
+  line-height: 1.5;
+
+  height: 60px;
+  overflow: hidden;
+}
+
+.divider {
+  height: 1px;
+  background: #e4e7ec;
+  margin: 14px 0;
+}
+
+.faculty-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.departments-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #c40010;
+}
+
+.arrow-btn {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f3f4f6;
+
+  cursor: pointer;
+}
+
+.arrow-btn:hover {
+  background: #e5e7eb;
+}

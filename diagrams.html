@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCMMS — System Documentation Diagrams</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2230;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent2: #3fb950;
+    --accent3: #f78166;
+    --accent4: #d2a8ff;
+    --accent5: #ffa657;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --heading-font: 'IBM Plex Sans', sans-serif;
+    --mono-font: 'IBM Plex Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--heading-font);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 64px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(88,166,255,0.12) 0%, transparent 70%);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--accent);
+    font-family: var(--mono-font);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  header h1 span { color: var(--accent); }
+  header p {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 560px;
+  }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 32px;
+    margin: 40px 64px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 8px 32px;
+  }
+  .toc-title {
+    grid-column: 1/-1;
+    font-family: var(--mono-font);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .toc a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    transition: color .15s;
+  }
+  .toc a:hover { color: var(--accent); }
+  .toc a .num {
+    font-family: var(--mono-font);
+    font-size: 11px;
+    color: var(--accent);
+    min-width: 22px;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main { padding: 0 64px 80px; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-top: 60px;
+    scroll-margin-top: 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: var(--mono-font);
+    font-size: 12px;
+    color: var(--accent);
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .section h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .section-desc {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+
+  /* ── DIAGRAM BOX ── */
+  .diagram-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px;
+    overflow-x: auto;
+  }
+  .diagram-box .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  thead tr {
+    background: rgba(88,166,255,0.08);
+    border-bottom: 2px solid rgba(88,166,255,0.25);
+  }
+  thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-family: var(--mono-font);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background .12s;
+  }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td {
+    padding: 11px 16px;
+    vertical-align: top;
+    color: var(--text);
+  }
+  tbody td:first-child { color: var(--text-muted); font-family: var(--mono-font); font-size: 13px; }
+
+  /* role pills */
+  .pill {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--mono-font);
+    white-space: nowrap;
+  }
+  .pill-s  { background: rgba(63,185,80,0.12);  color: var(--accent2); border: 1px solid rgba(63,185,80,0.25); }
+  .pill-m  { background: rgba(88,166,255,0.12); color: var(--accent);  border: 1px solid rgba(88,166,255,0.25); }
+  .pill-a  { background: rgba(247,129,102,0.12);color: var(--accent3); border: 1px solid rgba(247,129,102,0.25); }
+  .pill-sm { background: rgba(210,168,255,0.12);color: var(--accent4); border: 1px solid rgba(210,168,255,0.25); }
+
+  /* priority badges */
+  .pri { padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+  .pri-high   { background: rgba(247,129,102,0.15); color: var(--accent3); }
+  .pri-medium { background: rgba(255,166,87,0.15);  color: var(--accent5); }
+  .pri-low    { background: rgba(88,166,255,0.12);  color: var(--accent); }
+
+  /* ── GANTT ── */
+  .gantt-wrap { overflow-x: auto; }
+  .gantt-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
+  .gantt-table th {
+    background: rgba(88,166,255,0.08);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    font-family: var(--mono-font);
+    font-size: 11px;
+    color: var(--accent);
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .gantt-table td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    vertical-align: middle;
+  }
+  .gantt-table .phase-label { color: var(--text); font-weight: 600; white-space: nowrap; }
+  .gantt-table .week-cell { background: var(--surface2); }
+  .bar {
+    height: 22px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 6px;
+  }
+  .bar-req  { background: linear-gradient(90deg, #3fb950, #2ea043); }
+  .bar-des  { background: linear-gradient(90deg, #58a6ff, #388bfd); }
+  .bar-back { background: linear-gradient(90deg, #d2a8ff, #a371f7); }
+  .bar-fro  { background: linear-gradient(90deg, #ffa657, #e3b341); }
+  .bar-test { background: linear-gradient(90deg, #f78166, #da3633); }
+  .empty-cell { background: transparent !important; }
+
+  /* ── TASK TABLE ── */
+  .status-todo   { color: var(--text-muted); }
+  .status-ip     { color: var(--accent5); }
+  .status-done   { color: var(--accent2); }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    header, main { padding-left: 24px; padding-right: 24px; }
+    .toc { margin: 24px; grid-template-columns: 1fr; }
+    header h1 { font-size: 26px; }
+  }
+
+  /* Mermaid theme overrides */
+  .mermaid svg { max-width: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════ HEADER ════════════════════════════════════ -->
+<header>
+  <div class="badge">System Documentation · v1.0 · 2025</div>
+  <h1>University Course Material<br><span>Management System</span></h1>
+  <p>Complete technical diagrams for project documentation and midterm evaluation — UML, ERD, Sequence, Architecture, and more.</p>
+</header>
+
+<!-- ════════════════════════════════════ TOC ════════════════════════════════════ -->
+<nav class="toc">
+  <div class="toc-title">Table of Contents</div>
+  <a href="#s1"><span class="num">01</span> Use Case Diagram</a>
+  <a href="#s2"><span class="num">02</span> Functional Requirements</a>
+  <a href="#s3"><span class="num">03</span> Entity-Relationship Diagram</a>
+  <a href="#s6"><span class="num">06</span> Task Table</a>
+  <a href="#s7"><span class="num">07</span> Component Diagram</a>
+  <a href="#s9"><span class="num">09</span> Architecture / Deployment</a>
+  <a href="#s10"><span class="num">10</span> Data Flow Diagram</a>
+</nav>
+
+<main>
+
+<!-- ════════════════════════════════════ 1. USE CASE ════════════════════════════════════ -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Use Case Diagram</h2>
+  </div>
+  <p class="section-desc">Actors: Student, Moderator (inherits Student), Admin (future). All primary system interactions shown with «include» and «extend» relationships.</p>
+  <div class="diagram-box">
+    <div class="mermaid">
+flowchart LR
+    subgraph System["🎓 UCMMS — University Course Material Management System"]
+        direction TB
+        UC1["🔐 Login"]
+        UC2["📋 View Dashboard"]
+        UC3["📚 View Courses (by Major & Year)"]
+        UC4["📄 View Approved Materials"]
+        UC5["⬆️ Upload Material"]
+        UC6["✅ Approve Material"]
+        UC7["❌ Reject Material"]
+        UC8["🗑️ Delete Material"]
+        UC9["⬆️ Upload Pre-Approved Material"]
+        UC10["➕ Add Course"]
+        UC11["🏛️ Manage Majors & Faculties"]
+        UC12["👤 Assign Moderator Role"]
+
+        UC2 -- "«include»" --> UC1
+        UC3 -- "«include»" --> UC2
+        UC4 -- "«include»" --> UC3
+        UC5 -- "«include»" --> UC1
+        UC6 -- "«include»" --> UC1
+        UC7 -- "«include»" --> UC1
+        UC8 -- "«include»" --> UC1
+        UC9 -- "«extend»" --> UC6
+    end
+
+    STUDENT(["👤 Student"])
+    MODERATOR(["🛡️ Moderator"])
+    ADMIN(["⚙️ Admin\n(future)"])
+
+    MODERATOR -- "«extends»" --> STUDENT
+
+    STUDENT --- UC1
+    STUDENT --- UC2
+    STUDENT --- UC3
+    STUDENT --- UC4
+    STUDENT --- UC5
+
+    MODERATOR --- UC6
+    MODERATOR --- UC7
+    MODERATOR --- UC8
+    MODERATOR --- UC9
+
+    ADMIN -. "«future»" .- UC10
+    ADMIN -. "«future»" .- UC11
+    ADMIN -. "«future»" .- UC12
+
+    style System fill:#161b22,stroke:#30363d,color:#e6edf3
+    style STUDENT fill:#0d3321,stroke:#3fb950,color:#3fb950
+    style MODERATOR fill:#0c2338,stroke:#58a6ff,color:#58a6ff
+    style ADMIN fill:#2a1a1a,stroke:#f78166,color:#f78166
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ 2. REQUIREMENTS ════════════════════════════════════ -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Functional Requirements Table</h2>
+  </div>
+  <p class="section-desc">User stories expressed as structured functional requirements with actor, priority, and acceptance criteria.</p>
+  <div class="diagram-box" style="padding:0">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Actor</th>
+            <th>User Story</th>
+            <th>Acceptance Criteria</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>FR-01</td>
+            <td><span class="pill pill-s">Student</span></td>
+            <td>As a student, I want to log in with my university credentials so I can access my personalized dashboard.</td>
+            <td>Student logs in via university ID + password. Session is created. Redirect to dashboard.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-02</td>
+            <td><span class="pill pill-s">Student</span></td>
+            <td>As a student, I want to see only the courses relevant to my major and academic year.</td>
+            <td>Dashboard shows courses filtered by <code>major</code> and <code>academicYear</code> matching the logged-in student.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-03</td>
+            <td><span class="pill pill-s">Student</span></td>
+            <td>As a student, I want to view all approved materials for a course I'm enrolled in.</td>
+            <td>Clicking a course shows a list of materials with <code>approvalStatus = APPROVED</code> only.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-04</td>
+            <td><span class="pill pill-s">Student</span></td>
+            <td>As a student, I want to upload a material for one of my courses so it can be reviewed.</td>
+            <td>Upload form accepts title, description, and file. Material is saved with <code>approvalStatus = PENDING</code>. Confirmation shown.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-05</td>
+            <td><span class="pill pill-m">Moderator</span></td>
+            <td>As a moderator, I want to see all pending materials so I can review them.</td>
+            <td>Moderator dashboard shows all materials with <code>PENDING</code> status.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-06</td>
+            <td><span class="pill pill-m">Moderator</span></td>
+            <td>As a moderator, I want to approve a pending material so it becomes visible to students.</td>
+            <td>Clicking Approve sets <code>approvalStatus = APPROVED</code>. Material appears in student course view.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-07</td>
+            <td><span class="pill pill-m">Moderator</span></td>
+            <td>As a moderator, I want to reject a material with a reason so the uploader understands why.</td>
+            <td>Clicking Reject prompts for a <code>rejectionReason</code>. Status becomes <code>REJECTED</code>.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-08</td>
+            <td><span class="pill pill-m">Moderator</span></td>
+            <td>As a moderator, I want to delete any material that violates content policies.</td>
+            <td>Delete button removes the material from DB and cloud storage. Confirmation dialog shown first.</td>
+            <td><span class="pri pri-high">High</span></td>
+          </tr>
+          <tr>
+            <td>FR-09</td>
+            <td><span class="pill pill-m">Moderator</span></td>
+            <td>As a moderator, I want to upload a material that is automatically approved.</td>
+            <td>When a moderator uploads, <code>approvalStatus</code> is automatically set to <code>APPROVED</code>.</td>
+            <td><span class="pri pri-medium">Medium</span></td>
+          </tr>
+          <tr>
+            <td>FR-10</td>
+            <td><span class="pill pill-sm">Mod / Admin</span></td>
+            <td>As an admin, I want to assign the moderator role to a student.</td>
+            <td>Admin can set <code>roles = [STUDENT, MODERATOR]</code> for any UniStudent. (Future)</td>
+            <td><span class="pri pri-low">Low (Future)</span></td>
+          </tr>
+          <tr>
+            <td>FR-11</td>
+            <td><span class="pill pill-a">Admin</span></td>
+            <td>As an admin, I want to add new courses and manage majors/faculties.</td>
+            <td>Admin CRUD panel for Course, Major, Faculty models. (Future)</td>
+            <td><span class="pri pri-low">Low (Future)</span></td>
+          </tr>
+          <tr>
+            <td>FR-12</td>
+            <td><span class="pill pill-s">Student</span></td>
+            <td>As a student, I want to download approved materials from a course.</td>
+            <td>Each material row shows a download/view link pointing to <code>fileUrl</code>.</td>
+            <td><span class="pri pri-medium">Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ 3. ERD ════════════════════════════════════ -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Entity-Relationship Diagram (ERD)</h2>
+  </div>
+  <p class="section-desc">All entities, attributes (PK/FK marked), and cardinality relationships using Crow's Foot notation.</p>
+  <div class="diagram-box">
+    <div class="mermaid">
+erDiagram
+    FACULTY {
+        ObjectId id PK
+        string   name
+    }
+
+    MAJOR {
+        ObjectId id PK
+        string   name
+    }
+
+    UNI_STUDENT {
+        ObjectId id          PK
+        string   universityId  UK
+        string   name
+        string   universityEmail UK
+        ObjectId major_id    FK
+        ObjectId faculty_id  FK
+        string   academicYear
+        int      calendarYear
+        array    roles
+    }
+
+    COURSE {
+        ObjectId id          PK
+        string   name
+        ObjectId major_id    FK
+        string   academicYear
+        int      calendarYear
+    }
+
+    MATERIAL {
+        ObjectId id             PK
+        string   title
+        string   description
+        string   fileUrl
+        ObjectId course_id      FK
+        ObjectId uploadedBy_id  FK
+        enum     approvalStatus
+        string   rejectionReason
+        datetime createdAt
+        datetime updatedAt
+    }
+
+    FACULTY    ||--o{ UNI_STUDENT  : "belongs to"
+    MAJOR      ||--o{ UNI_STUDENT  : "belongs to"
+    MAJOR      ||--o{ COURSE       : "has"
+    UNI_STUDENT||--o{ MATERIAL     : "uploads"
+    COURSE     ||--o{ MATERIAL     : "contains"
+    </div>
+  </div>
+  <div class="legend" style="margin-top:16px">
+    <div class="legend-item"><div class="legend-dot" style="background:#3fb950"></div> PK = Primary Key</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div> FK = Foreign Key</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffa657"></div> UK = Unique Key</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d2a8ff"></div> approvalStatus ∈ { PENDING, APPROVED, REJECTED }</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f78166"></div> roles ∈ [ STUDENT, MODERATOR, ADMIN ]</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ 6. TASK TABLE ════════════════════════════════════ -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>Task Table</h2>
+  </div>
+  <p class="section-desc">Breakdown of tasks with owner, estimated weeks, status, and dependencies.</p>
+  <div class="diagram-box" style="padding:0">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Task ID</th>
+            <th>Task</th>
+            <th>Owner</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Depends On</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>T-01</td><td>Gather requirements & user stories</td><td>Team Lead</td><td>W1</td><td>W1</td><td>—</td><td class="status-done">✅ Done</td></tr>
+          <tr><td>T-02</td><td>Create system diagrams (UML, ERD, etc.)</td><td>Analyst</td><td>W2</td><td>W2</td><td>T-01</td><td class="status-done">✅ Done</td></tr>
+          <tr><td>T-03</td><td>Design database schema (MongoDB)</td><td>Backend Dev</td><td>W3</td><td>W3</td><td>T-02</td><td class="status-done">✅ Done</td></tr>
+          <tr><td>T-04</td><td>Design REST API endpoints</td><td>Backend Dev</td><td>W3</td><td>W4</td><td>T-03</td><td class="status-ip">🔄 In Progress</td></tr>
+          <tr><td>T-05</td><td>Implement auth (login, JWT, roles)</td><td>Backend Dev</td><td>W4</td><td>W5</td><td>T-04</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-06</td><td>Implement course & material APIs</td><td>Backend Dev</td><td>W5</td><td>W6</td><td>T-05</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-07</td><td>Integrate cloud storage (file upload/download)</td><td>Backend Dev</td><td>W6</td><td>W7</td><td>T-06</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-08</td><td>Implement moderation endpoints (approve/reject/delete)</td><td>Backend Dev</td><td>W6</td><td>W7</td><td>T-06</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-09</td><td>Build student dashboard UI</td><td>Frontend Dev</td><td>W5</td><td>W6</td><td>T-05</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-10</td><td>Build course view & material list UI</td><td>Frontend Dev</td><td>W6</td><td>W7</td><td>T-09</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-11</td><td>Build material upload form UI</td><td>Frontend Dev</td><td>W7</td><td>W7</td><td>T-10</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-12</td><td>Build moderator review panel UI</td><td>Frontend Dev</td><td>W7</td><td>W8</td><td>T-08, T-11</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-13</td><td>Integration testing (end-to-end)</td><td>QA</td><td>W8</td><td>W9</td><td>T-07, T-12</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-14</td><td>Bug fixing & performance review</td><td>Full Team</td><td>W9</td><td>W10</td><td>T-13</td><td class="status-todo">⬜ To Do</td></tr>
+          <tr><td>T-15</td><td>Final documentation & submission</td><td>Team Lead</td><td>W10</td><td>W10</td><td>T-14</td><td class="status-todo">⬜ To Do</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ 7. COMPONENT ════════════════════════════════════ -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Component Diagram</h2>
+  </div>
+  <p class="section-desc">High-level software components: frontend SPA, backend REST API, database, and cloud storage with their interfaces.</p>
+  <div class="diagram-box">
+    <div class="mermaid">
+graph TB
+    subgraph Client["🖥️ Client Layer"]
+        SPA["Single Page Application\n(React / Next.js)"]
+        subgraph Pages["Pages / Components"]
+            PLogin["MajorDetailsPage"]
+            PDash["DashboardPage"]
+            PCourse["CoursePage"]
+            PMod["ModeratorPanel"]
+        end
+        SPA --> PLogin & PDash & PCourse & PMod
+    end
+
+    subgraph API["⚙️ Backend API (Node.js / Express)"]
+        Auth["AuthController\n/api/auth"]
+        CourseC["CourseController\n/api/courses"]
+        MaterialC["MaterialController\n/api/materials"]
+        UserC["UserController\n/api/users"]
+        MW["Auth Middleware\n(JWT + Role Check)"]
+        MW --> Auth & CourseC & MaterialC & UserC
+    end
+
+    subgraph Data["🗄️ Data Layer"]
+        DB[("MongoDB\nDatabase")]
+        CS["☁️ Cloud Storage\n(S3 / Firebase Storage)"]
+    end
+
+    SPA -- "HTTPS REST" --> API
+    CourseC & UserC --> DB
+    MaterialC --> DB
+    MaterialC -- "upload / get URL" --> CS
+
+    style Client fill:#0d1f12,stroke:#3fb950,color:#e6edf3
+    style API fill:#0c1e30,stroke:#58a6ff,color:#e6edf3
+    style Data fill:#1e1428,stroke:#d2a8ff,color:#e6edf3
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ 9. ARCHITECTURE ════════════════════════════════════ -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Architecture / Deployment Diagram</h2>
+  </div>
+  <p class="section-desc">Physical deployment view: client, hosting platform, backend server, database cluster, and cloud storage services.</p>
+  <div class="diagram-box">
+    <div class="mermaid">
+graph TB
+    subgraph Users["👥 End Users"]
+        Browser["🌐 Web Browser"]
+        Mobile["📱 Mobile Browser"]
+    end
+
+    subgraph CDN["🌍 CDN / Hosting (Vercel / Netlify)"]
+        FE_HOST["React / Next.js App\n(Static Build)"]
+    end
+
+    subgraph Backend["☁️ Cloud Server (Render / Railway / AWS EC2)"]
+        API_SRV["Node.js Express Server\n:3000"]
+        JWT_MW["JWT Auth Middleware"]
+        API_SRV --> JWT_MW
+    end
+
+    subgraph DBCluster["🗄️ Database (MongoDB Atlas)"]
+        PRIMARY[("Primary Node")]
+        REPLICA[("Replica Set")]
+        PRIMARY <--> REPLICA
+    end
+
+    subgraph Storage["☁️ Cloud Storage"]
+        S3["AWS S3 / Firebase Storage\n(PDFs, Docs, Images)"]
+    end
+
+    Browser & Mobile -- "HTTPS" --> FE_HOST
+    FE_HOST -- "REST API calls\nHTTPS" --> API_SRV
+    API_SRV -- "Mongoose ODM\nTLS" --> PRIMARY
+    API_SRV -- "AWS SDK / Firebase SDK" --> S3
+
+    style Users fill:#0d1117,stroke:#30363d,color:#e6edf3
+    style CDN fill:#0d1f12,stroke:#3fb950,color:#e6edf3
+    style Backend fill:#0c1e30,stroke:#58a6ff,color:#e6edf3
+    style DBCluster fill:#1e1428,stroke:#d2a8ff,color:#e6edf3
+    style Storage fill:#1f1a0d,stroke:#ffa657,color:#e6edf3
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════ 10. DFD ════════════════════════════════════ -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Data Flow Diagram (Level 1)</h2>
+  </div>
+  <p class="section-desc">Shows how data flows between external entities (Student, Moderator), the system processes, database stores, and cloud storage.</p>
+  <div class="diagram-box">
+    <div class="mermaid">
+flowchart LR
+    STU(["👤 Student"])
+    MOD(["🛡️ Moderator"])
+
+    subgraph System["UCMMS Backend Processes"]
+        P1["P1\nAuthenticate\nUser"]
+        P2["P2\nLoad Courses\n& Materials"]
+        P3["P3\nUpload\nMaterial"]
+        P4["P4\nModerate\nMaterial"]
+    end
+
+    subgraph Stores["Data Stores"]
+        DS1[("DS1\nMongoDB\nUsers/Courses/Materials")]
+        DS2[("DS2\nCloud Storage\nFiles")]
+    end
+
+    STU -- "credentials" --> P1
+    P1 -- "JWT token + profile" --> STU
+    P1 -- "validate user" --> DS1
+
+    STU -- "major, year" --> P2
+    P2 -- "query courses" --> DS1
+    P2 -- "query approved materials" --> DS1
+    DS1 -- "courses list" --> P2
+    DS1 -- "materials list" --> P2
+    P2 -- "courses + materials" --> STU
+
+    STU -- "file + metadata" --> P3
+    P3 -- "upload file" --> DS2
+    DS2 -- "file URL" --> P3
+    P3 -- "save material record" --> DS1
+    P3 -- "confirmation + status" --> STU
+
+    MOD -- "review action\n(approve/reject/delete)" --> P4
+    P4 -- "query pending materials" --> DS1
+    DS1 -- "pending materials" --> P4
+    P4 -- "update status / delete" --> DS1
+    P4 -- "delete file (on delete)" --> DS2
+    P4 -- "result" --> MOD
+
+    style System fill:#0c1e30,stroke:#58a6ff,color:#e6edf3
+    style Stores fill:#1e1428,stroke:#d2a8ff,color:#e6edf3
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- footer -->
+<footer style="text-align:center; padding:32px; color: #484f58; font-family: var(--mono-font); font-size:12px; border-top:1px solid #21262d">
+  UCMMS System Documentation · Generated 2025 · All diagrams follow UML 2.x and standard ERD conventions
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'dark',
+    themeVariables: {
+      primaryColor: '#1c2230',
+      primaryTextColor: '#e6edf3',
+      primaryBorderColor: '#30363d',
+      lineColor: '#58a6ff',
+      secondaryColor: '#161b22',
+      tertiaryColor: '#0d1117',
+      background: '#0d1117',
+      mainBkg: '#161b22',
+      nodeBorder: '#30363d',
+      clusterBkg: '#161b22',
+      titleColor: '#e6edf3',
+      edgeLabelBackground: '#1c2230',
+      attributeBackgroundColorEven: '#161b22',
+      attributeBackgroundColorOdd: '#1c2230',
+    },
+    flowchart: { curve: 'basis', htmlLabels: true },
+    sequence: {
+      mirrorActors: false,
+      actorMargin: 80,
+      messageMargin: 35,
+      useMaxWidth: true,
+    },
+    er: { useMaxWidth: true },
+  });
+</script>
+</body>
+</html>

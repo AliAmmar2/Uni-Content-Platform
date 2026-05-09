@@ -1,0 +1,14 @@
+<div *ngIf="emptyTemplateDetails"
+	 [class.error]="emptyTemplateDetails?.mode === TemplateMode.errorTemplate"
+	 [class.info]="emptyTemplateDetails?.mode === TemplateMode.infoTemplate"
+	 class="template-content">
+	<ng-container *ngIf="emptyTemplateDetails.faIcon">
+		<fa-icon [icon]="emptyTemplateDetails?.faIcon"></fa-icon>
+	</ng-container>
+	<div class="title">
+		{{ emptyTemplateDetails?.title }}
+	</div>
+	<div class="description">
+		{{ emptyTemplateDetails?.description }}
+	</div>
+</div>

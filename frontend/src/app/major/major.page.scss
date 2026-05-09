@@ -1,0 +1,241 @@
+.majors-admin {
+  background: #f6f7fb;
+  padding: 30px;
+}
+
+/* ===================== */
+/* HEADER (same pattern) */
+/* ===================== */
+
+.majors-admin__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 25px;
+}
+
+.majors-admin__title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.majors-admin__subtitle {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #667085;
+}
+
+.majors-admin__add-btn {
+  background: #c40010;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+
+  font-weight: 600;
+  font-size: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+}
+
+.majors-admin__add-btn span {
+  font-size: 16px;
+}
+
+/* ===================== */
+/* FILTERS (EXACT SAME AS FACULTIES) */
+/* ===================== */
+
+.majors-admin__controls {
+  display: flex;
+  align-items: center;
+  gap: 70px;
+
+  background: white;
+  padding: 15px;
+  border: 1px solid #f1c9c9;
+  border-radius: 14px;
+
+  margin-bottom: 25px;
+}
+
+/* ===================== */
+/* SEARCH BOX (same logic) */
+/* ===================== */
+
+.search-box {
+  flex: 1;
+  position: relative;
+}
+
+.search-box fa-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #667085;
+}
+
+.search-box input {
+  width: 100%;
+  height: 44px;
+
+  padding-left: 40px;
+  padding-right: 12px;
+
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+/* ===================== */
+/* TOTAL BOX */
+/* ===================== */
+
+.total-box {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475467;
+}
+
+.total-box span {
+  color: #c40010;
+}
+
+/* ===================== */
+/* GRID (same pattern as faculties) */
+/* ===================== */
+
+.majors-admin__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* ===================== */
+/* CARD (same structure logic) */
+/* ===================== */
+
+.major-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #f1d1d1;
+  overflow: hidden;
+
+  transition: 0.2s ease;
+}
+
+.major-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* TOP BAR */
+
+.major-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 12px;
+}
+
+.major-card__code {
+  background: #d90416;
+  color: white;
+
+  padding: 5px 10px;
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.major-card__menu {
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: rgba(255,255,255,0.9);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+/* CONTENT */
+
+.major-card__content {
+  padding: 18px;
+}
+
+.major-card__name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.major-card__faculty {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #667085;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.major-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+}
+
+.major-card__courses {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #667085;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* FOOTER */
+
+.major-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px;
+}
+
+.major-card__btn {
+  width: 100%;
+  padding: 10px;
+
+  border: 1px solid #c40010;
+  background: transparent;
+  color: #c40010;
+
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.major-card__btn:hover {
+  background: #fff5f5;
+}
