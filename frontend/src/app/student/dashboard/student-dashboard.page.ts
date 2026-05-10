@@ -1,4 +1,4 @@
-import { Component, inject,OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -10,10 +10,11 @@ import { STUDENT_DETAILS_KEY } from '../+state/student-details.reducer';
 import { LetDirective } from '@ngrx/component';
 import { StudentActions } from '../+state/student.action';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { selectCourses } from '../../courses/+state/courses.selector';
-import { CoursesActions } from '../../courses/+state/courses.action';
 import { CoursesStatusEnum } from '../../courses/+state/enums/courses-status.enum';
-import { COURSES_KEY } from '../../courses/+state/courses.reducer';
+import { selectAllCourses } from '../../courses/+state/courses.selector';
+import { CourseActions } from '../../courses/+state/courses.action';
+import { COURSE_KEY } from '../../courses/+state/course.reducer';
+
 
 @Component({
   standalone: true,
@@ -37,7 +38,7 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   public studentDetailsSelected$ = this.store.pipe(select(selectStudentDetails));
-  public coursesSelected$ = this.store.pipe(select(selectCourses));
+  public coursesSelected$ = this.store.pipe(select(selectAllCourses));
 
   constructor() {
   }
@@ -77,9 +78,9 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
 
   CoursesSubscription(academicYear: number, calendarYear: number) {
     console.log(academicYear, calendarYear);
-    this.store.dispatch(CoursesActions.loadCourses({ academicYear, calendarYear }))
+    this.store.dispatch(CourseActions.loadMyMajorCourses())
   }
 
   protected readonly CoursesStatusEnum = CoursesStatusEnum;
-  protected readonly COURSES_KEY = COURSES_KEY;
+  protected readonly COURSES_KEY = COURSE_KEY;
 }

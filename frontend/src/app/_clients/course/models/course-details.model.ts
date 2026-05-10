@@ -1,15 +1,17 @@
-export interface CourseModel {
+export interface MajorMiniModel {
+  _id: string;
+  name: string;
+  code: string;
+}
+
+export interface CourseDetailsModel {
   _id: string;
   name: string;
   code: string;
   description?: string;
   credits: number;
 
-  major: {
-    _id: string;
-    name: string;
-    code: string;
-  };
+  major: MajorMiniModel;
 
   academicYear: number;
   calendarYear: number;
