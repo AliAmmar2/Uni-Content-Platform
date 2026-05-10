@@ -1,0 +1,203 @@
+<div class="dashboard-right">
+
+  <!-- Statistics -->
+  @if (statistics$ | async; as statistics) {
+
+    <section class="statistics-grid">
+
+      @for (statistic of statistics; track statistic.title) {
+
+        <article
+          class="stat-card"
+          [ngClass]="'stat-card--' + statistic.variant"
+        >
+
+          <div class="stat-card__icon-wrapper">
+
+            <fa-icon
+              [icon]="statistic.icon"
+            ></fa-icon>
+
+          </div>
+
+          <div class="stat-card__content">
+
+            <span class="stat-card__title">
+              {{ statistic.title }}
+            </span>
+
+            <h3 class="stat-card__value">
+              {{ statistic.value | number }}
+            </h3>
+
+          </div>
+
+        </article>
+
+      }
+
+    </section>
+
+  }
+
+  <!-- Main Content -->
+  <div class="dashboard-right__content-grid">
+
+    <!-- Account -->
+
+    <ng-container *ngrxLet="adminDetailsSelected$ as admin">
+      <section class="account-section">
+
+        <div class="section-header">
+
+          <h2 class="section-header__title">
+            Account Settings
+          </h2>
+
+        </div>
+
+        <article class="account-card">
+
+          <div class="account-card__header">
+
+            <div class="account-card__profile">
+
+              <div class="account-card__avatar account-card__avatar--initials">
+                {{ getInitials(admin[ADMIN_DETAILS_KEY]?.fullName) }}
+              </div>
+
+              <div class="account-card__identity">
+
+                <h3 class="account-card__name">
+                  {{ admin[ADMIN_DETAILS_KEY]?.fullName }}
+                </h3>
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              class="account-card__menu-button"
+            >
+
+              <fa-icon
+                [icon]="faEllipsisVertical"
+              ></fa-icon>
+
+            </button>
+
+          </div>
+
+          <div class="account-card__details">
+
+            <div class="account-field">
+
+            <span class="account-field__label">
+              Email Address
+            </span>
+
+              <span class="account-field__value">
+                {{ admin[ADMIN_DETAILS_KEY]?.email }}
+            </span>
+
+            </div>
+
+            <div class="account-field">
+
+            <span class="account-field__label">
+              Username
+            </span>
+
+              <span class="account-field__value">
+              {{ admin[ADMIN_DETAILS_KEY]?.username }}
+            </span>
+
+            </div>
+
+          </div>
+
+          <div class="account-card__actions">
+
+            <button
+              type="button"
+              class="primary-action-button"
+              (click)="onEditAccount()">
+
+              <fa-icon
+                [icon]="faPen"
+              ></fa-icon>
+
+              <span>
+              Edit Account Details
+            </span>
+
+            </button>
+
+            <button
+              type="button"
+              class="secondary-action-button"
+              (click)="onSignOut()"
+            >
+
+              <fa-icon
+                [icon]="faRightFromBracket"
+              ></fa-icon>
+
+              <span>
+              Sign Out
+            </span>
+
+            </button>
+
+          </div>
+
+        </article>
+
+      </section>
+    </ng-container>
+
+    <!-- Quick Actions -->
+    <aside class="quick-actions-section">
+
+      <div class="section-header">
+
+        <h2 class="section-header__title">
+          Quick Actions
+        </h2>
+
+      </div>
+
+
+      <div class="quick-actions-list">
+
+        @for (action of quickActions; track action.title) {
+
+          <button
+            type="button"
+            class="quick-action-button"
+            (click)="onQuickAction(action.route)"
+          >
+
+            <div class="quick-action-button__content">
+
+              <fa-icon
+                [icon]="action.icon"
+              ></fa-icon>
+
+              <span>
+                {{ action.title }}
+              </span>
+
+            </div>
+
+          </button>
+
+        }
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>

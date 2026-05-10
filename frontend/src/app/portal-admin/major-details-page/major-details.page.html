@@ -1,0 +1,393 @@
+<!--<div class="major-details-page">-->
+
+<!--  <ng-container *ngrxLet="majorDetailsSelected$ as major">-->
+
+<!--    <div class="major-details-page__breadcrumb">-->
+<!--      <button-->
+<!--        type="button"-->
+<!--        class="major-details-page__breadcrumb-link"-->
+<!--        (click)="goToMajorsPage()">-->
+<!--        Majors-->
+<!--      </button>-->
+
+<!--      <span class="major-details-page__breadcrumb-separator">-->
+<!--    ›-->
+<!--  </span>-->
+<!--      <span class="major-details-page__breadcrumb-current">-->
+<!--       {{ major[MAJOR_DETAILS_KEY]?.name }}-->
+<!--  </span>-->
+
+<!--    </div>-->
+<!--    &lt;!&ndash; HEADER &ndash;&gt;-->
+<!--    <div class="major-header-card">-->
+
+<!--      <div class="left">-->
+
+<!--        <div class="icon"></div>-->
+<!--        <div>-->
+<!--          <h1>{{ major[MAJOR_DETAILS_KEY]?.name }}</h1>-->
+<!--          <p>{{ major[MAJOR_DETAILS_KEY]?.faculty?.name }}</p>-->
+<!--        </div>-->
+
+<!--        <span class="code">{{ major[MAJOR_DETAILS_KEY]?.code }}</span>-->
+
+<!--      </div>-->
+
+<!--      <div class="actions">-->
+
+<!--        <button class="secondary" type="button" (click)="goToMajorsPage()">-->
+
+<!--          <fa-icon [icon]="['fas','arrow-left']"></fa-icon>-->
+<!--          <span>Back to List</span>-->
+
+<!--        </button>-->
+
+<!--        <button class="primary" type="button" (click)="goToEditMajor()">-->
+
+<!--          <fa-icon [icon]="['fas','pen-to-square']"></fa-icon>-->
+<!--          <span>Edit Major</span>-->
+
+<!--        </button>-->
+
+<!--      </div>-->
+
+<!--    </div>-->
+
+<!--    &lt;!&ndash; STATS &ndash;&gt;-->
+<!--    <div class="stats">-->
+
+<!--      <div class="card">-->
+<!--        <div class="label">Total Credits</div>-->
+<!--        <div class="value">{{ major[MAJOR_DETAILS_KEY]?.totalCredits }} ECTS</div>-->
+<!--      </div>-->
+
+<!--      <div class="card">-->
+<!--        <div class="label">Duration</div>-->
+<!--        <div class="value">{{ major[MAJOR_DETAILS_KEY]?.duration }}</div>-->
+<!--      </div>-->
+
+<!--    </div>-->
+
+<!--    &lt;!&ndash; TABLE &ndash;&gt;-->
+<!--    <div class="table-card">-->
+
+<!--      <div class="table-header">-->
+
+<!--        <h2>Associated Courses</h2>-->
+
+<!--          <div class="table-actions">-->
+<!--            @if (major[MAJOR_DETAILS_KEY]?.courses?.length > 0) {-->
+<!--            <div class="search-box">-->
+<!--              <fa-icon [icon]="['fas', 'search']"></fa-icon>-->
+
+<!--              <input-->
+<!--                type="text"-->
+<!--                placeholder="Search courses..."-->
+<!--              />-->
+<!--            </div>-->
+<!--            }-->
+<!--&lt;!&ndash;          <button class="add-btn" type="button">&ndash;&gt;-->
+<!--&lt;!&ndash;            <fa-icon [icon]="['fas', 'plus']"></fa-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;          </button>&ndash;&gt;-->
+
+<!--        </div>-->
+
+<!--      </div>-->
+
+
+<!--      <div class="table-wrapper">-->
+
+<!--        @if (major[MAJOR_DETAILS_KEY]?.courses?.length > 0) {-->
+<!--          <table-->
+<!--            mat-table-->
+<!--            [dataSource]="major[MAJOR_DETAILS_KEY]?.courses"-->
+<!--            class="mat-table-custom">-->
+
+<!--            &lt;!&ndash; NAME &ndash;&gt;-->
+<!--            <ng-container matColumnDef="name">-->
+<!--              <th mat-header-cell *matHeaderCellDef>Course Name</th>-->
+<!--              <td mat-cell *matCellDef="let c">-->
+<!--                <div class="course-name">-->
+<!--                  <div class="title">{{ c.name }}</div>-->
+<!--                  <div class="sub">{{ c.type }}</div>-->
+<!--                </div>-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; CODE &ndash;&gt;-->
+<!--            <ng-container matColumnDef="code">-->
+<!--              <th mat-header-cell *matHeaderCellDef>Code</th>-->
+<!--              <td mat-cell *matCellDef="let c">-->
+<!--                <span class="code">{{ c.code }}</span>-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; SEMESTER &ndash;&gt;-->
+<!--            <ng-container matColumnDef="semester">-->
+<!--              <th mat-header-cell *matHeaderCellDef>Semester</th>-->
+<!--              <td mat-cell *matCellDef="let c">-->
+<!--                {{ c.semester }}-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; CREDITS &ndash;&gt;-->
+<!--            <ng-container matColumnDef="credits">-->
+<!--              <th mat-header-cell *matHeaderCellDef>Credits</th>-->
+<!--              <td mat-cell *matCellDef="let c">-->
+<!--                {{ c.credits }} ECTS-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; ACTIONS &ndash;&gt;-->
+<!--            <ng-container matColumnDef="actions">-->
+<!--              <th mat-header-cell *matHeaderCellDef></th>-->
+<!--              <td mat-cell *matCellDef="let c">-->
+<!--                <button class="icon-btn">-->
+<!--                  <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>-->
+<!--                </button>-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+<!--            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+
+<!--          </table>-->
+<!--        } @else {-->
+
+<!--          <div class="empty-state">-->
+
+<!--            <div class="empty-state__icon">-->
+<!--              <fa-icon [icon]="['fas', 'book']"></fa-icon>-->
+<!--            </div>-->
+
+<!--            <h3>No courses in this major</h3>-->
+<!--            <p>This major does not have any assigned courses yet.</p>-->
+
+<!--          </div>-->
+
+<!--        }-->
+
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </ng-container>-->
+
+<!--</div>-->
+<div class="major-details">
+
+  <ng-container *ngrxLet="majorDetailsSelected$ as major">
+
+    <!-- BREADCRUMB -->
+    <div class="major-details__breadcrumb">
+
+      <button
+        type="button"
+        class="major-details__breadcrumb-link"
+        (click)="goToMajorsPage()">
+        Majors
+      </button>
+
+      <span class="major-details__breadcrumb-separator">›</span>
+
+      <span class="major-details__breadcrumb-current">
+        {{ major[MAJOR_DETAILS_KEY]?.name }}
+      </span>
+
+    </div>
+
+    <!-- HEADER -->
+    <div class="major-details__header">
+
+      <div class="major-details__header-left">
+
+        <div class="major-details__icon"></div>
+
+        <div class="major-details__title-wrapper">
+          <h1 class="major-details__title">
+            {{ major[MAJOR_DETAILS_KEY]?.name }}
+          </h1>
+
+          <p class="major-details__faculty">
+            {{ major[MAJOR_DETAILS_KEY]?.faculty?.name }}
+          </p>
+        </div>
+
+        <span class="major-details__code">
+          {{ major[MAJOR_DETAILS_KEY]?.code }}
+        </span>
+
+      </div>
+
+      <div class="major-details__actions">
+
+        <button
+          class="major-details__button major-details__button--secondary"
+          type="button"
+          (click)="goToMajorsPage()">
+
+          <fa-icon [icon]="['fas','arrow-left']"></fa-icon>
+          <span>Back to List</span>
+
+        </button>
+
+        <button
+          class="major-details__button major-details__button--primary"
+          type="button"
+          (click)="goToEditMajor()">
+
+          <fa-icon [icon]="['fas','pen-to-square']"></fa-icon>
+          <span>Edit Major</span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="major-details__stats">
+
+      <div class="major-details__stat-card">
+
+        <div class="major-details__stat-label">
+          Total Credits
+        </div>
+
+        <div class="major-details__stat-value">
+          {{ major[MAJOR_DETAILS_KEY]?.totalCredits }} ECTS
+        </div>
+
+      </div>
+
+      <div class="major-details__stat-card">
+
+        <div class="major-details__stat-label">
+          Duration
+        </div>
+
+        <div class="major-details__stat-value">
+          {{ major[MAJOR_DETAILS_KEY]?.duration }}
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="major-details__table-card">
+
+      <div class="major-details__table-header">
+
+        <h2 class="major-details__table-title">
+          Associated Courses
+        </h2>
+
+        <div class="major-details__table-actions">
+
+          @if (major[MAJOR_DETAILS_KEY]?.courses?.length > 0) {
+
+            <div class="major-details__search-box">
+
+              <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+              <input
+                type="text"
+                class="major-details__search-input"
+                placeholder="Search courses..."
+              />
+
+            </div>
+
+          }
+
+          <button class="add-btn" type="button">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="major-details__table-wrapper">
+
+        @if (major[MAJOR_DETAILS_KEY]?.courses?.length > 0) {
+
+          <table
+            mat-table
+            [dataSource]="major[MAJOR_DETAILS_KEY]?.courses"
+            class="major-details__table">
+
+            <!-- NAME -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Course Name</th>
+              <td mat-cell *matCellDef="let c">
+                <div class="major-details__course-title">{{ c.name }}</div>
+              </td>
+            </ng-container>
+
+            <!-- CODE -->
+            <ng-container matColumnDef="code">
+              <th mat-header-cell *matHeaderCellDef>Code</th>
+              <td mat-cell *matCellDef="let c">
+                <span class="major-details__course-code">{{ c.code }}</span>
+              </td>
+            </ng-container>
+
+            <!-- SEMESTER -->
+            <ng-container matColumnDef="semester">
+              <th mat-header-cell *matHeaderCellDef>Semester</th>
+              <td mat-cell *matCellDef="let c">
+                {{ c.semester }}
+              </td>
+            </ng-container>
+
+            <!-- CREDITS -->
+            <ng-container matColumnDef="credits">
+              <th mat-header-cell *matHeaderCellDef>Credits</th>
+              <td mat-cell *matCellDef="let c">
+                {{ c.credits }} ECTS
+              </td>
+            </ng-container>
+
+            <!-- ACTIONS -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let c">
+                <button class="major-details__icon-button">
+                  <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          </table>
+
+        } @else {
+
+          <div class="major-details__empty-state">
+
+            <div class="major-details__empty-icon">
+              <fa-icon [icon]="['fas', 'book']"></fa-icon>
+            </div>
+
+            <h3 class="major-details__empty-title">
+              No courses in this major
+            </h3>
+
+            <p class="major-details__empty-description">
+              This major does not have any assigned courses yet.
+            </p>
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+
+  </ng-container>
+
+</div>

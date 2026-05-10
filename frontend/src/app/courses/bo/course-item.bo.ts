@@ -6,6 +6,7 @@ export class CourseItemBo {
   description?: string;
   credits: number;
   majorCode: string;
+  majorName: string;
   academicYear: number;
   calendarYear: number;
   semester: 'SEM1' | 'SEM2';
@@ -15,7 +16,10 @@ export class CourseItemBo {
     this.code = courseModel.code;
     this.description = courseModel.description;
     this.credits = courseModel.credits;
-    this.majorCode = courseModel.majorCode;
+
+    this.majorCode = courseModel.major?.code;
+    this.majorName = courseModel.major?.name;
+
     this.academicYear = courseModel.academicYear;
     this.calendarYear = courseModel.calendarYear;
     this.semester = courseModel.semester;

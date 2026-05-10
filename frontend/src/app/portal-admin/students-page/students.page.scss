@@ -1,0 +1,177 @@
+.student-page {
+  padding: 30px;
+
+  &__breadcrumb {
+    font-size: 0.9rem;
+    color: gray;
+
+    .sep {
+      margin: 0 0.5rem;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+  }
+
+  &__add-btn {
+    background: #b00020;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    border: none;
+
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    cursor: pointer;
+  }
+
+  &__toolbar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+}
+
+/* SEARCH */
+.search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 15px;
+  border: 1px solid #f1c9c9;
+  border-radius: 14px;
+  margin-bottom: 25px;
+
+  input {
+    border: none;
+    outline: none;
+    width: 100%;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+
+  button {
+    border: 1px solid #ddd;
+    background: white;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}
+
+/* TABLE WRAPPER (IMPORTANT FOR MOBILE SCROLL) */
+.table-container {
+  margin-top: 2rem;
+  border: 1px solid #f0d6d6;
+  border-radius: 12px;
+
+  overflow-x: auto; // ✅ horizontal scroll
+  overflow-y: hidden;
+
+  -webkit-overflow-scrolling: touch; // smooth iOS scroll
+}
+
+/* TABLE */
+.table-style {
+  width: 100%;
+  min-width: 900px; // ✅ forces scroll instead of squishing columns
+}
+
+
+/* NAME CELL */
+.student-name {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #d9e2ff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+  }
+
+  .email {
+    font-size: 0.8rem;
+    color: gray;
+  }
+}
+
+/* OPTIONAL TEXT STYLING */
+.name {
+  font-weight: 600;
+}
+
+.faculty {
+  font-weight: 500;
+}
+
+.major {
+  font-size: 0.85rem;
+  color: gray;
+}
+
+/* BADGES */
+.badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+
+  &.student {
+    background: #e8eefc;
+    color: #3b5bdb;
+  }
+
+  &.moderator {
+    background: #ffe3e3;
+    color: #c92a2a;
+  }
+}
+
+/* STATUS */
+.status {
+  font-size: 0.8rem;
+
+  &.active {
+    color: green;
+  }
+
+  &.suspended {
+    color: red;
+  }
+
+  &.graduated {
+    color: gray;
+  }
+}
+
+/* PAGINATOR spacing */
+mat-paginator {
+  margin-top: 1rem;
+}
+.mat-mdc-table tbody, .mat-mdc-table tfoot, .mat-mdc-table thead, .mat-mdc-cell, .mat-mdc-footer-cell, .mat-mdc-header-row, .mat-mdc-row, .mat-mdc-footer-row, .mat-mdc-table .mat-mdc-header-cell {
+  background: white;
+}

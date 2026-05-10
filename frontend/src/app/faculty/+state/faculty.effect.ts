@@ -4,6 +4,9 @@ import { catchError, map, of, switchMap } from 'rxjs';
 import { FacultyItemBo } from '../bo/faculty-item.bo';
 import { FacultyActions } from './faculty.action';
 import { FacultyService } from '../service/faculty.service';
+import { MajorActions } from '../../major/+state/major.action';
+import { MajorDetailsBo } from '../../major/bo/major-details.bo';
+import { FacultyDetailsBo } from '../bo/faculty-details.bo';
 
 @Injectable()
 export class FacultyEffect {
@@ -28,6 +31,24 @@ export class FacultyEffect {
             );
         })
       )
+  );
+
+  public loadFacultyDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(FacultyActions.loadFacultyDetails),
+      switchMap((action) => {
+        return this.facultiesService.getFacultyById(action.id).pipe(
+          map((faculty: FacultyDetailsBo) => {
+            return FacultyActions.loadFacultyDetailsSuccess({
+              faculty: faculty
+            });
+          }),
+          catchError((error) => {
+            return of(FacultyActions.loadFacultyDetailsFailure({ error }));
+          })
+        );
+      })
+    )
   );
 
 

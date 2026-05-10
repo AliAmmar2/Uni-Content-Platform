@@ -25,11 +25,17 @@ const CourseSchema = new mongoose.Schema({
   },
   semester: {
     type: String,
-    enum: ["SEM1", "SEM2"],   
+    enum: ["SEM1", "SEM2"],
     required: true
   }
 }, { timestamps: true });
 
 CourseSchema.index({ major: 1, academicYear: 1, calendarYear: 1 });
+
+//inside same major the name should be unique
+CourseSchema.index(
+    { major: 1, name: 1 },
+    { unique: true }
+);
 
 module.exports = mongoose.model("Course", CourseSchema);

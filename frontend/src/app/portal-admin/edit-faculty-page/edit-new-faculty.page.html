@@ -1,0 +1,190 @@
+<!-- add-new-faculty.page.html -->
+<div class="faculty-page">
+
+  <!-- Breadcrumb -->
+  <div class="faculty-page__breadcrumb">
+    <button
+      type="button"
+      class="faculty-page__breadcrumb-link"
+      (click)="goToFacultiesPage()">
+      Faculties
+    </button>
+
+    <span class="faculty-page__breadcrumb-separator">›</span>
+    <span class="faculty-page__breadcrumb-current">
+        {{ isEditMode ? 'Edit Faculty' : 'Add New Faculty' }}
+    </span>
+  </div>
+
+  <!-- Content -->
+  <div class="faculty-page__content">
+
+    <!-- Left Card -->
+    <div class="faculty-page__form-card">
+
+      <!-- Header -->
+      <div class="faculty-page__form-header">
+        <h1>
+          {{ isEditMode ? 'Edit Faculty' : 'Faculty Registration' }}
+        </h1>
+
+        @if (!isEditMode) {
+          <p>
+            Create a new academic entity within the Lebanese University
+            infrastructure.
+          </p>
+        }
+        @if (isEditMode) {
+          <p>
+            Update the existing academic program details. Ensure all changes remain
+            consistent with university standards and structure.
+          </p>
+        }
+      </div>
+
+      <!-- Form -->
+      <form
+        class="faculty-form"
+        [formGroup]="facultyForm"
+        (ngSubmit)="onSubmit()">
+
+        <!-- Faculty Name -->
+        <div class="faculty-form__group">
+          <label class="faculty-form__label">
+            Faculty Name
+          </label>
+
+          <input
+            type="text"
+            formControlName="name"
+            class="faculty-form__input"
+            placeholder="e.g. Faculty of Sciences"/>
+        </div>
+
+        <!-- Faculty Code -->
+        <div class="faculty-form__group">
+          <label class="faculty-form__label">
+            Faculty Code
+          </label>
+
+          <input
+            type="text"
+            formControlName="code"
+            class="faculty-form__input"
+            placeholder="e.g. FS-01"/>
+        </div>
+
+        <!-- Description -->
+        <div class="faculty-form__group">
+          <label class="faculty-form__label">
+            Description
+          </label>
+
+          <textarea
+            formControlName="description"
+            class="faculty-form__textarea"
+            rows="6"
+            placeholder="Brief overview of the faculty's academic mission and departments...">
+          </textarea>
+        </div>
+
+        <!-- Divider -->
+        <div class="faculty-form__divider"></div>
+
+        <!-- Actions -->
+        <div class="faculty-form__actions">
+
+          <button
+            type="submit"
+            class="faculty-form__submit-button"
+            [disabled]="facultyForm.invalid">
+
+            <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
+
+            <span>
+               {{ isEditMode ? 'Update Faculty' : 'Create Faculty' }}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="faculty-form__cancel-button"
+            (click)="onCancel()">
+
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="faculty-page__sidebar">
+
+      <!-- Guidance -->
+      <div class="sidebar-card">
+
+        <div class="sidebar-card__title">
+          <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+
+          <span>Administrative Guidance</span>
+        </div>
+
+        <div class="sidebar-card__content">
+
+          <div class="sidebar-card__section">
+            <h4>Faculty Codes</h4>
+
+            <p>
+              Use the standardized two-letter prefix followed by a numeric
+              identifier (e.g., FS-01 for Faculty of Sciences).
+            </p>
+          </div>
+
+          <div class="sidebar-card__section">
+            <h4>Nomenclature</h4>
+
+            <p>
+              Ensure the faculty name is registered correctly.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="sidebar-card">
+
+        <div class="sidebar-card__title">
+          <fa-icon [icon]="['fas', 'bolt']"></fa-icon>
+
+          <span>Quick Actions</span>
+        </div>
+
+        <div class="sidebar-card__actions">
+
+          <button (click)="goToFacultiesPage()"
+                  type="button"
+                  class="sidebar-action">
+            <fa-icon [icon]="['far', 'rectangle-list']"></fa-icon>
+            <span>View All Faculties</span>
+          </button>
+
+          <button type="button" class="sidebar-action">
+            <fa-icon [icon]="['fas', 'diagram-project']"></fa-icon>
+            <span>View All Majors</span>
+          </button>
+
+          <button type="button" class="sidebar-action">
+            <fa-icon [icon]="['fas', 'dashboard']"></fa-icon>
+            <span>Navigate to Dashboard</span>
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

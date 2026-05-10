@@ -1,5 +1,5 @@
+const bcrypt = require("bcrypt");
 const Admin = require("../models/Admin");
-const bcrypt = require("bcryptjs");
 
 /**
  * CREATE ADMIN / SUPER ADMIN
@@ -52,6 +52,25 @@ exports.getAllAdmins = async (req, res) => {
 
 
 /**
+ * GET CURRENT LOGGED IN ADMIN (/me)
+ */
+exports.getMe = async (req, res) => {
+    try {
+        const admin = await Admin.findById(req.user.id)
+            .select("-passwordHash");
+
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        res.json(admin);
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
+
+/**
  * GET ADMIN BY ID
  */
 exports.getAdminById = async (req, res) => {
@@ -76,10 +95,37 @@ exports.updateAdmin = async (req, res) => {
     try {
         const { username, email, fullName, role } = req.body;
 
+        const targetAdminId = req.params.id;
+        const requester = req.user;
+
+        const isSelf = requester.id === targetAdminId;
+        const isSuperAdmin = requester.role === "super_admin";
+
+        if (!isSelf && !isSuperAdmin) {
+            return res.status(403).json({
+                message: "You are not allowed to update this admin"
+            });
+        }
+
+        // build safe update object (NO undefined overwrite)
+        const updateData = {};
+
+        if (username !== undefined) updateData.username = username;
+        if (email !== undefined) updateData.email = email;
+        if (fullName !== undefined) updateData.fullName = fullName;
+
+        // only super admin can change role
+        if (isSuperAdmin && role) {
+            updateData.role = role;
+        }
+
         const admin = await Admin.findByIdAndUpdate(
-            req.params.id,
-            { username, email, fullName, role },
-            { new: true }
+            targetAdminId,
+            updateData,
+            {
+                new: true,
+                runValidators: true
+            }
         ).select("-passwordHash");
 
         if (!admin) {
@@ -95,8 +141,6 @@ exports.updateAdmin = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
-
-
 /**
  * DELETE ADMIN
  */

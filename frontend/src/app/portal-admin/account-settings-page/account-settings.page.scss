@@ -1,0 +1,207 @@
+.account {
+  padding: 30px;
+  background: #f6f8fb;
+
+  &__header {
+    margin-bottom: 2rem;
+
+    .account__title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1e1e2f;
+      margin-bottom: 0.25rem;
+    }
+
+    .account__subtitle {
+      font-size: 14px;
+      color: #6b7280;
+    }
+  }
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #f0d6d6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+
+    fa-icon {
+      color: #c4001a;
+      font-size: 18px;
+    }
+  }
+
+  &__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 2px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #4b5563;
+  }
+
+  input {
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+
+    &:focus {
+      border-color: #c4001a;
+      box-shadow: 0 0 0 2px rgba(196, 0, 26, 0.1);
+    }
+  }
+}
+
+.form-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.security-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 10px;
+  background: #f9fafb;
+  border: 1px solid #eef0f3;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    fa-icon {
+      color: #c4001a;
+      font-size: 18px;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  &__desc {
+    font-size: 12px;
+    color: #6b7280;
+  }
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  border: none;
+
+  &--primary {
+    background: #c4001a;
+    color: #fff;
+
+    &:hover {
+      background: #a80016;
+    }
+
+    &:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    border: 1px solid #c4001a;
+    color: #c4001a;
+
+    &:hover {
+      background: #c4001a;
+      color: #fff;
+    }
+  }
+}
+@media (max-width: 768px) {
+
+  .account {
+    padding: 16px;
+  }
+
+  .account__header {
+    margin-bottom: 1.5rem;
+
+    .account__title {
+      font-size: 22px;
+    }
+
+    .account__subtitle {
+      font-size: 13px;
+    }
+  }
+
+  .card {
+    padding: 1rem;
+  }
+
+  .form-group-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card__actions {
+    justify-content: stretch;
+
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .security-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+}

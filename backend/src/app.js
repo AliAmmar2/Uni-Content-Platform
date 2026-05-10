@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/auth.routes");
 const adminAuthRoutes = require("./routes/admin-auth.routes");
+const adminRoutes = require("./routes/admin.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 const facultyRoutes = require("./routes/faculty.routes");
 const majorRoutes = require("./routes/major.routes");
@@ -12,7 +13,7 @@ const courseRoutes = require("./routes/course.routes");
 const materialRoutes = require("./routes/material.routes");
 const studentRoutes = require("./routes/students.routes");
 
-const authMiddleware = require("./middleware/auth.middleware");
+const authMiddleware = require("./middleware/student-auth.middleware");
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.get("/health", (req, res) => {
 
 app.use("/students", studentRoutes);
 app.use("/admin", adminAuthRoutes);
+app.use("/admins", adminRoutes);
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/faculties", facultyRoutes);

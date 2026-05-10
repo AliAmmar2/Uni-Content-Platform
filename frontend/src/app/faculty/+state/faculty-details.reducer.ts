@@ -19,6 +19,26 @@ const initialFacultyDetailsState: FacultyDetailsState = {
 
 export const facultyDetailsReducers = createReducer<FacultyDetailsState, Action>(
   initialFacultyDetailsState,
+  on(FacultyActions.loadFacultyDetails, (state) => {
+    return {
+      ...state,
+      status: FacultyStatusEnum.loading
+    };
+  }),
+  on(FacultyActions.loadFacultyDetailsSuccess, (state, { faculty }) => {
+    return {
+      ...state,
+      [FACULTY_DETAILS_KEY]: faculty,
+      status: FacultyStatusEnum.loadDetailsSuccess
+    };
+  }),
+  on(FacultyActions.loadFacultyDetailsFailure, (state, { error }) => {
+    return {
+      ...state,
+      status: FacultyStatusEnum.loadError,
+      error
+    };
+  }),
 
   on(FacultyActions.updateFaculty, (state) => {
     return {

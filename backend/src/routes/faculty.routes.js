@@ -12,6 +12,8 @@ router.get("/", anyAuthMiddleware, controller.getAllFaculties);
 // Create faculty (ADMIN only)
 router.post("/", authAdmin, controller.createFaculty);
 
+router.get("/:id", authAdmin, controller.getFacultyById);
+
 // Update faculty (ADMIN only)
 router.put("/:id", authAdmin, controller.updateFaculty);
 

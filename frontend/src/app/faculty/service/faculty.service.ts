@@ -12,6 +12,8 @@ import { CreateFacultyFormGroupInterface } from '../interfaces/create-faculty-fo
 import { FacultyForCreationDto } from '../dtos/faculty-for-creation.dto';
 import { FacultyForUpdateDto } from '../dtos/faculty-for-update.dto';
 import { FacultyClient } from '../../_clients/faculty/faculty.client';
+import { FacultyDetailsBo } from '../bo/faculty-details.bo';
+import { FacultyDetailsModel } from '../../_clients/faculty/models/faculty-details.model';
 
 @Injectable({ providedIn: 'root' })
 export class FacultyService {
@@ -32,6 +34,8 @@ export class FacultyService {
       );
   }
 
+
+
   public createFaculty(
     facultyFormValue: CreateFacultyFormGroupInterface
   ): Observable<any> {
@@ -44,6 +48,15 @@ export class FacultyService {
     );
   }
 
+  public getFacultyById(facultyId: string): Observable<FacultyDetailsBo> {
+    return this.facultyClient
+      .getFacultyById(facultyId)
+      .pipe(
+        map((facultyDetailsModel: FacultyDetailsModel) => {
+          return new FacultyDetailsBo(facultyDetailsModel);
+        })
+      );
+  }
   public updateFaculty(
     facultyId: string,
     facultyFormValue: CreateFacultyFormGroupInterface

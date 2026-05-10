@@ -4,10 +4,17 @@ export interface CourseModel {
   code: string;
   description?: string;
   credits: number;
-  majorCode: string;
+
+  major: {
+    _id: string;
+    name: string;
+    code: string;
+  };
+
   academicYear: number;
   calendarYear: number;
   semester: 'SEM1' | 'SEM2';
+
   createdAt?: string;
   updatedAt?: string;
 }

@@ -1,0 +1,370 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.major-details {
+  padding: 2rem;
+
+  /* =======================
+     BREADCRUMB
+  ======================= */
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+    flex-wrap: wrap;
+  }
+
+  &__breadcrumb-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+    cursor: pointer;
+
+    &:hover {
+      color: #d40000;
+    }
+  }
+
+  &__breadcrumb-separator {
+    color: #9ca3af;
+  }
+
+  &__breadcrumb-current {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  /* =======================
+     HEADER
+  ======================= */
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* FIX */
+    gap: 1rem;
+
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid #e7caca;
+    border-radius: 12px;
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #fce8ea;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  &__faculty {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+
+  &__code {
+    padding: 0.25rem 0.6rem;
+    border: 1px solid #e7caca;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #d40000;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap; /* FIX */
+  }
+
+  &__button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+
+    &--secondary {
+      background: #fff;
+      border: 1px solid #e7caca;
+      color: #4b5563;
+
+      &:hover {
+        background: #f9fafb;
+        color: #d40000;
+      }
+    }
+
+    &--primary {
+      background: #d40000;
+      border: 1px solid #d40000;
+      color: #fff;
+
+      &:hover {
+        background: #8e001a;
+      }
+    }
+  }
+
+  /* =======================
+     STATS
+  ======================= */
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  &__stat-card {
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid #e7caca;
+    border-radius: 12px;
+  }
+
+  &__stat-label {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  &__stat-value {
+    margin-top: 0.25rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  /* =======================
+     TABLE
+  ======================= */
+  &__table-card {
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid #e7caca;
+    border-radius: 12px;
+  }
+
+  &__table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap; /* FIX */
+    margin-bottom: 1rem;
+  }
+
+  &__table-title {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  &__table-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap; /* FIX */
+  }
+
+  /* SEARCH */
+  &__search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    padding: 0.4rem 0.75rem;
+    border: 1px solid #e7caca;
+    border-radius: 8px;
+    background: #fff;
+
+    min-width: 180px;
+    max-width: 260px;
+  }
+
+  &__search-input {
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+    width: 100%;
+    min-width: 120px;
+  }
+
+  /* ADD BUTTON */
+  .add-btn {
+    background: #d40000;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* TABLE SCROLL */
+  &__table-wrapper {
+    max-height: 260px;
+    overflow-y: auto;
+    overflow-x: auto; /* FIX for mobile */
+
+    &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 10px;
+    }
+  }
+
+  &__table {
+    width: 100%;
+    min-width: 600px; /* prevents table breaking */
+  }
+
+  &__course-title {
+    font-weight: 600;
+  }
+
+  &__course-subtitle {
+    font-size: 0.75rem;
+    color: #6b7280;
+  }
+
+  &__course-code {
+    padding: 0.2rem 0.5rem;
+    border: 1px solid #e7caca;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+
+  &__icon-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #6b7280;
+    transition: 0.2s ease;
+
+    &:hover {
+      color: #d40000;
+    }
+  }
+
+  /* EMPTY STATE */
+  &__empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #6b7280;
+  }
+
+  &__empty-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: #fce8ea;
+    color: #d40000;
+    font-size: 1.5rem;
+  }
+
+  &__empty-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  &__empty-description {
+    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+  }
+}
+
+/* =======================
+   RESPONSIVE FIXES
+======================= */
+@media (max-width: 900px) {
+  .major-details {
+
+    &__stats {
+      grid-template-columns: 1fr;
+    }
+
+    &__header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    &__table {
+      min-width: 500px;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .major-details {
+    padding: 1rem;
+
+    &__search-box {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    &__table-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .add-btn {
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

@@ -1,32 +1,133 @@
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
-import { CourseService } from '../service/course.service';
-import { CoursesDetailsBo } from '../bo/courses-details.bo';
 import { inject, Injectable } from '@angular/core';
-import { CoursesActions } from './courses.action';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+
+import { catchError, map, of, switchMap } from 'rxjs';
+import { CoursesService } from '../service/course.service';
+import { CourseActions } from './courses.action';
+import { CourseItemBo } from '../bo/course-item.bo';
+import { CourseDetailsBo } from '../bo/course-details.bo';
 
 @Injectable()
-export class CoursesEffect {
-  private actions$ = inject(Actions);
-  private courseService = inject(CourseService);
-  public $loadUsers = createEffect(() =>
-    this.actions$
-      .pipe(
-        ofType(CoursesActions.loadCourses),
-        switchMap((action) => {
-          return this.courseService
-            .getCourses(action.academicYear, action.calendarYear)
-            .pipe(
-              map((coursesList: CoursesDetailsBo[]) => {
-                return CoursesActions.loadCoursesSuccess({ courses: coursesList });
-              }),
-              catchError((error) => {
-                return of(CoursesActions.loadCoursesFailure({ error: error }));
-              })
-            );
-        })
-      ));
+export class CourseEffects {
 
-  constructor() {
-  }
+  private actions$ = inject(Actions);
+  private courseService = inject(CoursesService);
+
+  public loadCourses$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.loadAllCourses),
+      switchMap(() => {
+        return this.courseService.getAllCourses().pipe(
+          map((courses: CourseItemBo[]) =>
+            CourseActions.loadAllCoursesSuccess({ courses })
+          ),
+          catchError((error) =>
+            of(CourseActions.loadAllCoursesFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  public loadFilteredCourses$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.loadFilteredCourses),
+      switchMap((action) => {
+        return this.courseService.getCoursesFiltered(action).pipe(
+          map((courses: CourseItemBo[]) =>
+            CourseActions.loadFilteredCoursesSuccess({ courses })
+          ),
+          catchError((error) =>
+            of(CourseActions.loadFilteredCoursesFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  public loadMyMajorCourses$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.loadMyMajorCourses),
+      switchMap(() => {
+        return this.courseService.getMyMajorCourses().pipe(
+          map((courses: CourseItemBo[]) =>
+            CourseActions.loadMyMajorCoursesSuccess({ courses })
+          ),
+          catchError((error) =>
+            of(CourseActions.loadMyMajorCoursesFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  public loadCourseDetails$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.loadCourseDetails),
+      switchMap((action) => {
+        return this.courseService.getCourseById(action.id).pipe(
+          map((course: CourseDetailsBo) =>
+            CourseActions.loadCourseDetailsSuccess({ course })
+          ),
+          catchError((error) =>
+            of(CourseActions.loadCourseDetailsFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  public createCourse$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.createCourse),
+      switchMap((action) => {
+        return this.courseService.createCourse(action.course).pipe(
+          switchMap(() => [
+            CourseActions.createCourseSuccess(),
+            CourseActions.loadAllCourses(),
+            CourseActions.resetCourseState()
+          ]),
+          catchError((error) =>
+            of(CourseActions.createCourseFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  public updateCourse$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.updateCourse),
+      switchMap((action) => {
+        return this.courseService.updateCourse(action.id, action.course).pipe(
+          switchMap(() => [
+            CourseActions.updateCourseSuccess(),
+            CourseActions.loadAllCourses(),
+            CourseActions.resetCourseState()
+          ]),
+          catchError((error) =>
+            of(CourseActions.updateCourseFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  public deleteCourse$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CourseActions.deleteCourse),
+      switchMap((action) => {
+        return this.courseService.deleteCourse(action.id).pipe(
+          switchMap(() => [
+            CourseActions.deleteCourseSuccess(),
+            CourseActions.loadAllCourses(),
+            CourseActions.resetCourseState()
+          ]),
+          catchError((error) =>
+            of(CourseActions.deleteCourseFailure({ error }))
+          )
+        );
+      })
+    )
+  );
 }

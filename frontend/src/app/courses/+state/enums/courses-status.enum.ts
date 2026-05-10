@@ -3,6 +3,8 @@ export enum CoursesStatusEnum {
   loading = 'loading',
   loadSuccess = 'loadSuccess',
   loadError = 'loadError',
+  loadFilteredSuccess = 'loadFilteredSuccess',
+  loadFilteredFailure = 'loadFilteredFailure',
   loadDetailsSuccess = 'loadDetailsSuccess',
   loadDetailsFailure = 'loadDetailsFailure',
   createSuccess = 'createSuccess',
