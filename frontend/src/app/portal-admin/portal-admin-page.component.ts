@@ -45,6 +45,8 @@ export class PortalAdminPage implements OnInit {
       this.dashboardUiService.setActiveMenu('dashboard');
     }else if (currentUrl.includes('/majors')) {
       this.dashboardUiService.setActiveMenu('majors');
+    }else if (currentUrl.includes('/courses')) {
+      this.dashboardUiService.setActiveMenu('courses');
     }
   }
 

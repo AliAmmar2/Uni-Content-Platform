@@ -9,6 +9,7 @@ import { StudentsPage } from './student/students.page';
 import { MajorPage } from './major/major.page';
 import { EditMajorPage } from './major/add-new-major/edit-major.page';
 import { MajorDetailsPage } from './major/major-details/major-details.page';
+import { CoursesPage } from './courses/courses.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -44,6 +45,10 @@ export const routes: Routes = [
       {
         path: 'students',
         component: StudentsPage
+      } ,
+      {
+        path: 'courses',
+        component: CoursesPage
       }
       ,
       {
