@@ -39,6 +39,7 @@ import { AdminActions } from '../+state/admin.action';
 import { selectAdminDetails } from '../+state/admin.selector';
 import { LetDirective } from '@ngrx/component';
 import { ADMIN_DETAILS_KEY } from '../+state/faculty-details.reducer';
+import { DashboardUiService } from '../services/dashboard-ui.service';
 
 interface StatisticCard {
   title: string;
@@ -71,6 +72,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   private readonly store = inject(Store);
   private readonly subscription$ = new Subscription();
   private activatedRoute = inject(ActivatedRoute);
+  private dashboardUiService = inject(DashboardUiService);
   protected readonly faEllipsisVertical = faEllipsisVertical;
   protected readonly faPen = faPen;
   protected readonly faRightFromBracket = faRightFromBracket;
@@ -166,7 +168,8 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   public onSignOut(): void {
-    console.log('Sign Out');
+    this.dashboardUiService.clearMenu();
+    void this.router.navigate(['/login']);
   }
 
   getInitials(fullName: string | undefined): string {

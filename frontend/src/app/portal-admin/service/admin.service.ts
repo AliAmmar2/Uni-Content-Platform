@@ -70,7 +70,7 @@ export class AdminService {
   ): Observable<any> {
 
     const adminForUpdateDto = new AdminForUpdateDto(adminFormValue);
-
+console.log(adminForUpdateDto.toJSON(),'lashof hon');
     return this.adminClient.updateAdmin(
       adminId,
       adminForUpdateDto.toJSON()

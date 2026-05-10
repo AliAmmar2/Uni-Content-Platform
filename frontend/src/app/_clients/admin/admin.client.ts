@@ -24,7 +24,6 @@ export class AdminClient {
     };
   }
 
-
   public getMe(): Observable<AdminDetailsModel> {
     return this.http.get<AdminDetailsModel>(
       `${this.API_URL}/me`,

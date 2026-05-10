@@ -13,7 +13,7 @@ router.get("/me", adminController.getMe);
 router.post("/", requireSuperAdmin, adminController.createAdmin);
 router.get("/", requireSuperAdmin, adminController.getAllAdmins);
 router.get("/:id", requireSuperAdmin, adminController.getAdminById);
-router.put("/:id", requireSuperAdmin, adminController.updateAdmin);
+router.put("/:id", adminController.updateAdmin);
 router.delete("/:id", requireSuperAdmin, adminController.deleteAdmin);
 
 module.exports = router;

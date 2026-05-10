@@ -74,6 +74,16 @@
 
       </div>
 
+      <div class="item"
+           [routerLink]="['/admin', adminId, 'account-settings']"
+           (click)="setActiveMenu('account-settings'); toggleSidebar()"
+           [ngClass]="{ 'active': (activeMenu$ | async) === 'account-settings' }">
+
+        <fa-icon [icon]="['fas','user-cog']"></fa-icon>
+        <span>Account Settings</span>
+
+      </div>
+
     </div>
 
     <div class="logout-button" (click)="logout()">

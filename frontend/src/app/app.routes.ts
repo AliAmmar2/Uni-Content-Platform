@@ -11,6 +11,7 @@ import { EditMajorPage } from './portal-admin/add-new-major-page/edit-major.page
 import { MajorDetailsPage } from './portal-admin/major-details-page/major-details.page';
 import { CoursesPage } from './portal-admin/courses-page/courses.page';
 import { DashboardPage } from './portal-admin/dashboard-page/dashboard.page';
+import { AccountSettingsPage } from './portal-admin/account-settings-page/account-settings.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -46,11 +47,15 @@ export const routes: Routes = [
       {
         path: 'students',
         component: StudentsPage
-      } ,
+      },
+      {
+        path: 'account-settings',
+        component: AccountSettingsPage
+      },
       {
         path: 'dashboard',
         component: DashboardPage
-      } ,
+      },
       {
         path: 'courses',
         component: CoursesPage
