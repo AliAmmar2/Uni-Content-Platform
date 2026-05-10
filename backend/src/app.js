@@ -12,7 +12,7 @@ const courseRoutes = require("./routes/course.routes");
 const materialRoutes = require("./routes/material.routes");
 const studentRoutes = require("./routes/students.routes");
 
-const authMiddleware = require("./middleware/auth.middleware");
+const authMiddleware = require("./middleware/student-auth.middleware");
 
 const app = express();
 

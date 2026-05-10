@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-
     try {
-
         const authHeader = req.headers.authorization;
 
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -14,43 +12,29 @@ module.exports = (req, res, next) => {
 
         const token = authHeader.split(" ")[1];
 
-        const decoded = jwt.verify(
-            token,
-            process.env.JWT_SECRET
-        );
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        /**
-         * IMPORTANT
-         * Ensure token belongs to admin system
-         */
         if (decoded.userType !== "ADMIN") {
             return res.status(403).json({
                 message: "Admin access only"
             });
         }
 
-        /**
-         * Attach admin to request
-         */
-        req.admin = {
+        req.user = {
             id: decoded.id,
-            role: decoded.role // admin | super_admin
+            userType: "ADMIN",
+            role: decoded.role
         };
 
         next();
 
     } catch (error) {
-
         if (error.name === "TokenExpiredError") {
-            return res.status(401).json({
-                message: "Token expired"
-            });
+            return res.status(401).json({message: "Token expired"});
         }
 
         if (error.name === "JsonWebTokenError") {
-            return res.status(401).json({
-                message: "Invalid token"
-            });
+            return res.status(401).json({message: "Invalid token"});
         }
 
         console.error("ADMIN AUTH ERROR:", error);
