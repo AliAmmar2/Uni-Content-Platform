@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { FacultyModel } from './models/faculty.model';
 import { CreateFacultyFormGroupInterface } from '../../faculty/interfaces/create-faculty-form-group.interface';
+import { FacultyDetailsModel } from './models/faculty-details.model';
 
 @Injectable({ providedIn: 'root' })
 export class FacultyClient {
@@ -22,6 +23,7 @@ export class FacultyClient {
     };
   }
 
+
   public getFaculties(): Observable<Array<FacultyModel>> {
     return this.http.get<Array<FacultyModel>>(
       this.API_URL,
@@ -35,6 +37,13 @@ export class FacultyClient {
     return this.http.post(
       this.API_URL,
       faculty,
+      this.getAuthOptions()
+    );
+  }
+
+  public getFacultyById(facultyId: string): Observable<FacultyDetailsModel> {
+    return this.http.get<FacultyDetailsModel>(
+      `${this.API_URL}/${facultyId}`,
       this.getAuthOptions()
     );
   }

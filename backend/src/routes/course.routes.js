@@ -11,8 +11,7 @@ const controller = require("../controllers/course.controller");
 // Create course (admins or moderators only)
 router.post(
     "/",
-    anyAuth, allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]), controller.createCourse
-);
+    adminAuth, controller.createCourse);
 
 //get all courses for the student registered inside major
 router.get(

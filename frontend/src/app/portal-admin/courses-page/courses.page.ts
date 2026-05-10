@@ -27,12 +27,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 
-import { COURSE_KEY } from './+state/course.reducer';
-import { selectAllCourses } from './+state/courses.selector';
-import { CourseActions } from './+state/courses.action';
-import { selectAllMajors } from '../major/+state/major.selector';
-import { MajorActions } from '../major/+state/major.action';
-import { MAJOR_KEY } from '../major/+state/major.reducer';
+import { COURSE_KEY } from '../../courses/+state/course.reducer';
+import { selectAllCourses } from '../../courses/+state/courses.selector';
+import { CourseActions } from '../../courses/+state/courses.action';
+import { selectAllMajors } from '../../major/+state/major.selector';
+import { MajorActions } from '../../major/+state/major.action';
+import { MAJOR_KEY } from '../../major/+state/major.reducer';
 
 @Component({
   standalone: true,

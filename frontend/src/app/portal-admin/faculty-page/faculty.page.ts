@@ -8,15 +8,15 @@ import { LetDirective } from '@ngrx/component';
 
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
-import { selectAllFaculties } from './+state/faculty.selector';
-import { FacultyActions } from './+state/faculty.action';
-import { FACULTY_KEY } from './+state/faculty.reducer';
-import { PopoverBoxService } from '../components/mat-pop-over-box/src';
+import { selectAllFaculties } from '../../faculty/+state/faculty.selector';
+import { FacultyActions } from '../../faculty/+state/faculty.action';
+import { FACULTY_KEY } from '../../faculty/+state/faculty.reducer';
+import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
 import {
   MatMultiActionsInterface
-} from '../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
-import { FacultyItemBo } from './bo/faculty-item.bo';
-import { NgxMdDialogService } from '../components/mat-dialog/service/ngx-md-dialog.service';
+} from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
+import { FacultyItemBo } from '../../faculty/bo/faculty-item.bo';
+import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
 
 @Component({
   standalone: true,
@@ -89,7 +89,7 @@ export class FacultyPage implements OnInit {
         visible: true,
         label: 'Edit',
         handler: () => {
-
+          this.navigateToEditFaculty(faculty.id)
         }
       },
       {
@@ -98,7 +98,6 @@ export class FacultyPage implements OnInit {
         label: 'Delete',
         handler: () => {
           this.presentDeleteAlert(faculty)
-
         }
       }
     ]);
@@ -126,6 +125,11 @@ export class FacultyPage implements OnInit {
       ]
     };
     this.ngxMdDialogService.openMultiActionsDialog(matYesNoDialogData, { width: '400px' });
+  }
+
+
+  public navigateToEditFaculty(id: string): void {
+    void this.router.navigate(['/admin', this.adminId, id, 'edit']);
   }
 
   public deleteFaculty(facultyId: string) {

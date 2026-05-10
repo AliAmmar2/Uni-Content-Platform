@@ -24,10 +24,10 @@ import { MatPaginator } from '@angular/material/paginator';
 
 import { LetDirective } from '@ngrx/component';
 
-import { StudentActions } from './+state/student.action';
-import { selectAllStudents } from './+state/student.selector';
-import { STUDENT_KEY } from './+state/student.reducer';
-import { StudentItemBo } from './bo/student-item.bo';
+import { StudentActions } from '../../student/+state/student.action';
+import { selectAllStudents } from '../../student/+state/student.selector';
+import { STUDENT_KEY } from '../../student/+state/student.reducer';
+import { StudentItemBo } from '../../student/bo/student-item.bo';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
 

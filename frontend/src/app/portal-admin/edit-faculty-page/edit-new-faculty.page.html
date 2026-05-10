@@ -4,14 +4,16 @@
   <!-- Breadcrumb -->
   <div class="faculty-page__breadcrumb">
     <button
-    type="button"
-    class="faculty-page__breadcrumb-link"
-    (click)="goToFacultiesPage()">
-    Faculties
-  </button>
+      type="button"
+      class="faculty-page__breadcrumb-link"
+      (click)="goToFacultiesPage()">
+      Faculties
+    </button>
 
     <span class="faculty-page__breadcrumb-separator">›</span>
-    <span class="faculty-page__breadcrumb-current">Add New Faculty</span>
+    <span class="faculty-page__breadcrumb-current">
+        {{ isEditMode ? 'Edit Faculty' : 'Add New Faculty' }}
+    </span>
   </div>
 
   <!-- Content -->
@@ -22,19 +24,29 @@
 
       <!-- Header -->
       <div class="faculty-page__form-header">
-        <h1>Add New Faculty</h1>
+        <h1>
+          {{ isEditMode ? 'Edit Faculty' : 'Faculty Registration' }}
+        </h1>
 
-        <p>
-          Create a new academic entity within the Lebanese University
-          infrastructure.
-        </p>
+        @if (!isEditMode) {
+          <p>
+            Create a new academic entity within the Lebanese University
+            infrastructure.
+          </p>
+        }
+        @if (isEditMode) {
+          <p>
+            Update the existing academic program details. Ensure all changes remain
+            consistent with university standards and structure.
+          </p>
+        }
       </div>
 
       <!-- Form -->
       <form
         class="faculty-form"
         [formGroup]="facultyForm"
-        (ngSubmit)="onCreate()">
+        (ngSubmit)="onSubmit()">
 
         <!-- Faculty Name -->
         <div class="faculty-form__group">
@@ -89,7 +101,9 @@
 
             <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
 
-            <span>Create Faculty</span>
+            <span>
+               {{ isEditMode ? 'Update Faculty' : 'Create Faculty' }}
+            </span>
           </button>
 
           <button

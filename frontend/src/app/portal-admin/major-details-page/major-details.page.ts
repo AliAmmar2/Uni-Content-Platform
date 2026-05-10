@@ -7,8 +7,8 @@ import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { MajorActions } from '../+state/major.action';
-import { selectMajorDetails } from '../+state/major.selector';
+import { MajorActions } from '../../major/+state/major.action';
+import { selectMajorDetails } from '../../major/+state/major.selector';
 import {
   MatCell,
   MatCellDef,
@@ -21,7 +21,7 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
-import { MAJOR_DETAILS_KEY } from '../+state/major-details.reducer';
+import { MAJOR_DETAILS_KEY } from '../../major/+state/major-details.reducer';
 import { LetDirective } from '@ngrx/component';
 
 @Component({

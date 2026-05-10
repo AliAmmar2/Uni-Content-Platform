@@ -7,15 +7,15 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
-import { selectAllMajors } from './+state/major.selector';
-import { MajorActions } from './+state/major.action';
-import { MAJOR_KEY } from './+state/major.reducer';
-import { PopoverBoxService } from '../components/mat-pop-over-box/src';
-import { NgxMdDialogService } from '../components/mat-dialog/service/ngx-md-dialog.service';
+import { selectAllMajors } from '../../major/+state/major.selector';
+import { MajorActions } from '../../major/+state/major.action';
+import { MAJOR_KEY } from '../../major/+state/major.reducer';
+import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
+import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
 import {
   MatMultiActionsInterface
-} from '../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
-import { MajorItemBo } from './bo/major-item.bo';
+} from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
+import { MajorItemBo } from '../../major/bo/major-item.bo';
 
 @Component({
   imports: [CommonModule, LetDirective, FaIconComponent],

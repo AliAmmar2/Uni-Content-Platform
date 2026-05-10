@@ -1,0 +1,328 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+$primary-color: #d71920;
+$primary-light: #fff1f1;
+$border-color: #eadede;
+$text-primary: #1d1d1f;
+$text-secondary: #6f6f79;
+$background-soft: #f7f7f8;
+$white: #ffffff;
+
+.dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: 30px;
+}
+
+/* Statistics */
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 1rem;
+
+  border-radius: 14px;
+  border: 1px solid $border-color;
+
+  background: $white;
+
+  &__icon-wrapper {
+    width: 3rem;
+    height: 3rem;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    display: block;
+
+    font-size: 0.7rem;
+    font-weight: 600;
+
+    color: $text-secondary;
+
+    text-transform: uppercase;
+  }
+
+  &__value {
+    margin: 0.3rem 0 0;
+
+    font-size: 2rem;
+    font-weight: 700;
+
+    color: $text-primary;
+  }
+
+  &--primary {
+    .stat-card__icon-wrapper {
+      background: $primary-color;
+      color: white;
+    }
+  }
+
+  &--secondary {
+    .stat-card__icon-wrapper {
+      background: #eef2ff;
+      color: #4e5ca7;
+    }
+  }
+
+  &--dark {
+    .stat-card__icon-wrapper {
+      background: #5f6d89;
+      color: white;
+    }
+  }
+
+  &--light {
+    .stat-card__icon-wrapper {
+      background: #f3f3f3;
+      color: #888;
+    }
+  }
+}
+
+/* Layout */
+
+.dashboard-right__content-grid {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 1.5rem;
+}
+
+/* Section */
+
+.section-header {
+  margin-bottom: 1rem;
+
+  &__title {
+    margin: 0;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    color: $text-primary;
+  }
+}
+
+/* Account */
+
+.account-card {
+  background: white;
+
+  border: 1px solid $border-color;
+  border-radius: 14px;
+
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__avatar {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 12px;
+
+    object-fit: cover;
+  }
+
+  &__name {
+    margin: 0;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    color: $text-primary;
+  }
+
+  &__role {
+    font-size: 0.8rem;
+
+    color: $text-secondary;
+  }
+
+  &__menu-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.account-field {
+  background: $background-soft;
+
+  border-radius: 12px;
+
+  padding: 0.9rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  &__label {
+    font-size: 0.75rem;
+    color: $text-secondary;
+  }
+
+  &__value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+/* Quick Actions */
+
+.quick-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quick-action-button {
+  width: 100%;
+
+  border-radius: 14px;
+  border: 1px solid $border-color;
+
+  padding: 1rem;
+
+  background: white;
+  color: $text-primary;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+
+    background: $primary-color;
+    border-color: $primary-color;
+
+    color: white;
+
+    .quick-action-button__content {
+      color: white;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    font-weight: 600;
+
+    transition: color 0.2s ease;
+  }
+}
+
+/* Buttons */
+
+.primary-action-button,
+.secondary-action-button {
+  width: 100%;
+  min-height: 44px;
+
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.primary-action-button {
+  background: $primary-color;
+  border: none;
+  color: white;
+
+  &:hover {
+    opacity: 0.92;
+  }
+}
+
+.secondary-action-button {
+  background: white;
+  border: 1px solid $border-color;
+
+  &:hover {
+    background: $background-soft;
+  }
+}
+
+/* Responsive */
+
+@media (max-width: 1200px) {
+
+  .statistics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-right__content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .dashboard-right {
+    padding: 1rem;
+  }
+
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+}

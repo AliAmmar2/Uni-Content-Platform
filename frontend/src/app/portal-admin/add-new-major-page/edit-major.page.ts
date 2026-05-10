@@ -7,16 +7,16 @@ import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { MajorActions } from '../+state/major.action';
-import { selectMajorDetails } from '../+state/major.selector';
-import { MajorStatusEnum } from '../+state/enums/major-status.enum';
+import { MajorActions } from '../../major/+state/major.action';
+import { selectMajorDetails } from '../../major/+state/major.selector';
+import { MajorStatusEnum } from '../../major/+state/enums/major-status.enum';
 
 import { selectAllFaculties } from '../../faculty/+state/faculty.selector';
 import { FacultyActions } from '../../faculty/+state/faculty.action';
 
 import { LetDirective } from '@ngrx/component';
 import { FACULTY_KEY } from '../../faculty/+state/faculty.reducer';
-import { MAJOR_DETAILS_KEY } from '../+state/major-details.reducer';
+import { MAJOR_DETAILS_KEY } from '../../major/+state/major-details.reducer';
 
 @Component({
   standalone: true,
@@ -30,7 +30,6 @@ import { MAJOR_DETAILS_KEY } from '../+state/major-details.reducer';
   styleUrl: './edit-major.page.scss'
 })
 export class EditMajorPage implements OnInit, OnDestroy {
-
   private store = inject(Store);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
@@ -143,9 +142,7 @@ export class EditMajorPage implements OnInit, OnDestroy {
           major: this.majorForm.value
         })
       );
-
     }
-
   }
 
   public onCancel() {
