@@ -44,122 +44,117 @@
   <div class="dashboard-right__content-grid">
 
     <!-- Account -->
-    <section class="account-section">
 
-      <div class="section-header">
+    <ng-container *ngrxLet="adminDetailsSelected$ as admin">
+      <section class="account-section">
 
-        <h2 class="section-header__title">
-          Account Settings
-        </h2>
+        <div class="section-header">
 
-      </div>
-
-      <article class="account-card">
-
-        <div class="account-card__header">
-
-          <div class="account-card__profile">
-
-            <img
-              src="https://i.pravatar.cc/100?img=12"
-              alt="Administrator"
-              class="account-card__avatar"
-            />
-
-            <div class="account-card__identity">
-
-              <h3 class="account-card__name">
-                Dr. Antoine Mansour
-              </h3>
-
-              <span class="account-card__role">
-                Chief Administrator
-              </span>
-
-            </div>
-
-          </div>
-
-          <button
-            type="button"
-            class="account-card__menu-button"
-          >
-
-            <fa-icon
-              [icon]="faEllipsisVertical"
-            ></fa-icon>
-
-          </button>
+          <h2 class="section-header__title">
+            Account Settings
+          </h2>
 
         </div>
 
-        <div class="account-card__details">
+        <article class="account-card">
 
-          <div class="account-field">
+          <div class="account-card__header">
+
+            <div class="account-card__profile">
+
+              <div class="account-card__avatar account-card__avatar--initials">
+                {{ getInitials(admin[ADMIN_DETAILS_KEY]?.fullName) }}
+              </div>
+
+              <div class="account-card__identity">
+
+                <h3 class="account-card__name">
+                  {{ admin[ADMIN_DETAILS_KEY]?.fullName }}
+                </h3>
+              </div>
+
+            </div>
+
+            <button
+              type="button"
+              class="account-card__menu-button"
+            >
+
+              <fa-icon
+                [icon]="faEllipsisVertical"
+              ></fa-icon>
+
+            </button>
+
+          </div>
+
+          <div class="account-card__details">
+
+            <div class="account-field">
 
             <span class="account-field__label">
               Email Address
             </span>
 
-            <span class="account-field__value">
-              a.mansour@lu.edu.lb
+              <span class="account-field__value">
+                {{ admin[ADMIN_DETAILS_KEY]?.email }}
             </span>
 
-          </div>
+            </div>
 
-          <div class="account-field">
+            <div class="account-field">
 
             <span class="account-field__label">
               Username
             </span>
 
-            <span class="account-field__value">
-              a.mansour_admin
+              <span class="account-field__value">
+              {{ admin[ADMIN_DETAILS_KEY]?.username }}
             </span>
+
+            </div>
 
           </div>
 
-        </div>
+          <div class="account-card__actions">
 
-        <div class="account-card__actions">
+            <button
+              type="button"
+              class="primary-action-button"
+              (click)="onEditAccount()">
 
-          <button
-            type="button"
-            class="primary-action-button"
-            (click)="onEditAccount()"
-          >
+              <fa-icon
+                [icon]="faPen"
+              ></fa-icon>
 
-            <fa-icon
-              [icon]="faPen"
-            ></fa-icon>
-
-            <span>
+              <span>
               Edit Account Details
             </span>
 
-          </button>
+            </button>
 
-          <button
-            type="button"
-            class="secondary-action-button"
-            (click)="onSignOut()"
-          >
+            <button
+              type="button"
+              class="secondary-action-button"
+              (click)="onSignOut()"
+            >
 
-            <fa-icon
-              [icon]="faRightFromBracket"
-            ></fa-icon>
+              <fa-icon
+                [icon]="faRightFromBracket"
+              ></fa-icon>
 
-            <span>
+              <span>
               Sign Out
             </span>
 
-          </button>
+            </button>
 
-        </div>
+          </div>
 
-      </article>
+        </article>
 
-    </section>
+      </section>
+    </ng-container>
 
     <!-- Quick Actions -->
     <aside class="quick-actions-section">
@@ -171,6 +166,7 @@
         </h2>
 
       </div>
+
 
       <div class="quick-actions-list">
 

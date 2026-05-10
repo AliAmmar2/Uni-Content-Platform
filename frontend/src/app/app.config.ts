@@ -19,6 +19,9 @@ import { MAJOR_KEY, majorReducers } from './major/+state/major.reducer';
 import { MajorEffects } from './major/+state/major.effect';
 import { COURSE_KEY, coursesReducers } from './courses/+state/course.reducer';
 import { CourseEffects } from './courses/+state/courses.effect';
+import { ADMIN_KEY, adminReducer } from './portal-admin/+state/admin.reducer';
+import { ADMIN_DETAILS_KEY, adminDetailsReducers } from './portal-admin/+state/faculty-details.reducer';
+import { AdminEffects } from './portal-admin/+state/admin.effect';
 
 export function initializeFaIconLibrary(library: FaIconLibrary) {
   return () => {
@@ -30,11 +33,13 @@ export const bootstrapEffectList = [
   StudentEffect,
   CourseEffects,
   FacultyEffect,
-  MajorEffects
+  MajorEffects,
+  AdminEffects
 ]
 
 export const reducers = {
   [FACULTY_KEY]: facultyReducers,
+  [ADMIN_KEY]: adminReducer,
   [STUDENT_KEY]: studentReducers,
   [MAJOR_DETAILS_KEY]: majorDetailsReducers,
   [MAJOR_KEY]: majorReducers,
@@ -42,6 +47,7 @@ export const reducers = {
   [COURSE_KEY]: coursesReducers,
   [STUDENT_DETAILS_KEY]: studentDetailsReducers,
   [FACULTY_DETAILS_KEY]: facultyDetailsReducers,
+  [ADMIN_DETAILS_KEY]: adminDetailsReducers,
 }
 export const appConfig: ApplicationConfig = {
   providers: [

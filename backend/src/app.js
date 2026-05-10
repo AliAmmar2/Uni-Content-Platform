@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 
 const authRoutes = require("./routes/auth.routes");
 const adminAuthRoutes = require("./routes/admin-auth.routes");
+const adminRoutes = require("./routes/admin.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 const facultyRoutes = require("./routes/faculty.routes");
 const majorRoutes = require("./routes/major.routes");
@@ -44,6 +45,7 @@ app.get("/health", (req, res) => {
 
 app.use("/students", studentRoutes);
 app.use("/admin", adminAuthRoutes);
+app.use("/admins", adminRoutes);
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/faculties", facultyRoutes);

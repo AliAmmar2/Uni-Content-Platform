@@ -1,5 +1,5 @@
+const bcrypt = require("bcrypt");
 const Admin = require("../models/Admin");
-const bcrypt = require("bcryptjs");
 
 /**
  * CREATE ADMIN / SUPER ADMIN
@@ -50,6 +50,25 @@ exports.getAllAdmins = async (req, res) => {
     }
 };
 
+
+/**
+ * GET CURRENT LOGGED IN ADMIN (/me)
+ */
+exports.getMe = async (req, res) => {
+    try {
+        const admin = await Admin.findById(req.user.id)
+            .select("-passwordHash");
+
+        if (!admin) {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+
+        res.json(admin);
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 /**
  * GET ADMIN BY ID

@@ -4,11 +4,11 @@ const router = express.Router();
 const adminController = require("../controllers/admin.controller");
 const auth = require("../middleware/admin-auth.middleware");
 const {requireSuperAdmin} = require("../middleware/super-admin-roles.middleware");
-const controller = require("../controllers/admin-auth.controller");
 
 // MUST be logged in first
 router.use(auth);
 
+router.get("/me", adminController.getMe);
 // ONLY SUPER ADMIN can manage admins
 router.post("/", requireSuperAdmin, adminController.createAdmin);
 router.get("/", requireSuperAdmin, adminController.getAllAdmins);

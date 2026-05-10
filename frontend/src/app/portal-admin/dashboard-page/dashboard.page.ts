@@ -35,6 +35,10 @@ import { FacultyActions } from '../../faculty/+state/faculty.action';
 import { StudentActions } from '../../student/+state/student.action';
 import { CourseActions } from '../../courses/+state/courses.action';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AdminActions } from '../+state/admin.action';
+import { selectAdminDetails } from '../+state/admin.selector';
+import { LetDirective } from '@ngrx/component';
+import { ADMIN_DETAILS_KEY } from '../+state/faculty-details.reducer';
 
 interface StatisticCard {
   title: string;
@@ -56,6 +60,7 @@ interface QuickAction {
     CommonModule,
     ReactiveFormsModule,
     FaIconComponent,
+    LetDirective,
   ],
   templateUrl: './dashboard.page.html',
   styleUrl: './dashboard.page.scss',
@@ -70,6 +75,9 @@ export class DashboardPage implements OnInit, OnDestroy {
   protected readonly faPen = faPen;
   protected readonly faRightFromBracket = faRightFromBracket;
   private router = inject(Router);
+  public readonly adminDetailsSelected$ =
+    this.store.pipe(select(selectAdminDetails));
+
   public readonly studentsListSelected$ =
     this.store.pipe(select(selectAllStudents));
 
@@ -138,6 +146,7 @@ export class DashboardPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
+    this.store.dispatch(AdminActions.loadMe());
     this.store.dispatch(MajorActions.loadMajors());
     this.store.dispatch(FacultyActions.loadFaculties());
     this.store.dispatch(StudentActions.loadStudents());
@@ -159,4 +168,17 @@ export class DashboardPage implements OnInit, OnDestroy {
   public onSignOut(): void {
     console.log('Sign Out');
   }
+
+  getInitials(fullName: string | undefined): string {
+    if (!fullName) return '';
+
+    const words = fullName.trim().split(' ');
+
+    const first = words[0]?.charAt(0) ?? '';
+    const second = words[1]?.charAt(0) ?? '';
+
+    return (first + second).toUpperCase();
+  }
+
+  protected readonly ADMIN_DETAILS_KEY = ADMIN_DETAILS_KEY;
 }

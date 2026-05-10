@@ -1,109 +1,131 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { FacultyItemBo } from '../bo/faculty-item.bo';
-import { FacultyStatusEnum } from './enums/faculty-status.enum';
-import { FacultyActions } from './faculty.action';
+import { AdminStatusEnum } from './enums/admin-status.enum';
+import { AdminActions } from './admin.action';
+import { AdminDetailsBo } from '../bo/admin-details.bo';
 
-export const FACULTY_DETAILS_KEY = 'facultyDetailsKey';
+export const ADMIN_DETAILS_KEY = 'adminDetailsKey';
 
-export interface FacultyDetailsState {
-  readonly [FACULTY_DETAILS_KEY]: FacultyItemBo;
-  readonly status: FacultyStatusEnum;
+export interface AdminDetailsState {
+  readonly [ADMIN_DETAILS_KEY]: AdminDetailsBo;
+  readonly status: AdminStatusEnum;
   readonly error: Error;
 }
 
-const initialFacultyDetailsState: FacultyDetailsState = {
-  [FACULTY_DETAILS_KEY]: null,
-  status: FacultyStatusEnum.pending,
+const initialAdminDetailsState: AdminDetailsState = {
+  [ADMIN_DETAILS_KEY]: null,
+  status: AdminStatusEnum.pending,
   error: null
 };
 
-export const facultyDetailsReducers = createReducer<FacultyDetailsState, Action>(
-  initialFacultyDetailsState,
-  on(FacultyActions.loadFacultyDetails, (state) => {
+export const adminDetailsReducers = createReducer<AdminDetailsState, Action>(
+  initialAdminDetailsState,
+  on(AdminActions.loadAdminDetails, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.loading
+      status: AdminStatusEnum.loading
     };
   }),
-  on(FacultyActions.loadFacultyDetailsSuccess, (state, { faculty }) => {
+  on(AdminActions.loadAdminDetailsSuccess, (state, { admin }) => {
     return {
       ...state,
-      [FACULTY_DETAILS_KEY]: faculty,
-      status: FacultyStatusEnum.loadDetailsSuccess
+      [ADMIN_DETAILS_KEY]: admin,
+      status: AdminStatusEnum.loadDetailsSuccess
     };
   }),
-  on(FacultyActions.loadFacultyDetailsFailure, (state, { error }) => {
+  on(AdminActions.loadAdminDetailsFailure, (state, { error }) => {
     return {
       ...state,
-      status: FacultyStatusEnum.loadError,
+      status: AdminStatusEnum.loadError,
       error
     };
   }),
 
-  on(FacultyActions.updateFaculty, (state) => {
+  on(AdminActions.loadMe, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.loading
+      status: AdminStatusEnum.loading
     };
   }),
-  on(FacultyActions.updateFacultySuccess, (state) => {
+  on(AdminActions.loadMeSuccess, (state, { admin }) => {
     return {
       ...state,
-      status: FacultyStatusEnum.updateSuccess
+      [ADMIN_DETAILS_KEY]: admin,
+      status: AdminStatusEnum.loadDetailsSuccess
     };
   }),
-  on(FacultyActions.updateFacultyFailure, (state, { error }) => {
+  on(AdminActions.loadMeFailure, (state, { error }) => {
     return {
       ...state,
-      status: FacultyStatusEnum.updateFailure,
+      status: AdminStatusEnum.loadError,
+      error
+    };
+  }),
+
+
+  on(AdminActions.updateAdmin, (state) => {
+    return {
+      ...state,
+      status: AdminStatusEnum.loading
+    };
+  }),
+  on(AdminActions.updateAdminSuccess, (state) => {
+    return {
+      ...state,
+      status: AdminStatusEnum.updateSuccess
+    };
+  }),
+  on(AdminActions.updateAdminFailure, (state, { error }) => {
+    return {
+      ...state,
+      status: AdminStatusEnum.updateFailure,
       error: error
     };
   }),
 
-  on(FacultyActions.createFaculty, (state) => {
+  on(AdminActions.createAdmin, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.loading
+      status: AdminStatusEnum.loading
     };
   }),
-  on(FacultyActions.createFacultySuccess, (state) => {
+  on(AdminActions.createAdminSuccess, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.createSuccess
+      status: AdminStatusEnum.createSuccess
     };
   }),
-  on(FacultyActions.createFacultyFailure, (state, { error }) => {
+  on(AdminActions.createAdminFailure, (state, { error }) => {
     return {
       ...state,
-      status: FacultyStatusEnum.createFailure,
+      status: AdminStatusEnum.createFailure,
       error: error
     };
   }),
 
-  on(FacultyActions.deleteFaculty, (state) => {
+  on(AdminActions.deleteAdmin, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.loading
+      status: AdminStatusEnum.loading
     };
   }),
-  on(FacultyActions.deleteFacultySuccess, (state) => {
+  on(AdminActions.deleteAdminSuccess, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.deleteSuccess
+      status: AdminStatusEnum.deleteSuccess
     };
   }),
-  on(FacultyActions.deleteFacultyFailure, (state, { error }) => {
+  on(AdminActions.deleteAdminFailure, (state, { error }) => {
     return {
       ...state,
-      status: FacultyStatusEnum.deleteFailure,
+      status: AdminStatusEnum.deleteFailure,
       error: error
     };
   }),
 
-  on(FacultyActions.resetFacultyState, (state) => {
+  on(AdminActions.resetAdminState, (state) => {
     return {
       ...state,
-      status: FacultyStatusEnum.pending
+      status: AdminStatusEnum.pending
     };
   })
 );
