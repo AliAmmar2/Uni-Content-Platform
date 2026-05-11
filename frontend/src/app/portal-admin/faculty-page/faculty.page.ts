@@ -129,7 +129,7 @@ export class FacultyPage implements OnInit {
 
 
   public navigateToEditFaculty(id: string): void {
-    void this.router.navigate(['/admin', this.adminId, id, 'edit']);
+    void this.router.navigate(['/admin', this.adminId, id, 'edit-faculty']);
   }
 
   public deleteFaculty(facultyId: string) {

@@ -28,6 +28,11 @@ import { StudentItemBo } from '../../student/bo/student-item.bo';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
+import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
+import {
+  MatMultiActionsInterface
+} from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
 
 @Component({
   standalone: true,
@@ -58,6 +63,8 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private store = inject(Store);
+  protected popoverBoxService = inject(PopoverBoxService);
+  private ngxMdDialogService = inject(NgxMdDialogService);
   private subscription$ = new Subscription();
   public search$ = new BehaviorSubject<string>('');
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -76,9 +83,8 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   public studentsListSelected$ = this.store.pipe(select(selectAllStudents));
 
   ngOnInit(): void {
+    this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
     this.store.dispatch(StudentActions.loadStudents());
-    this.adminId = this.activatedRoute.snapshot.paramMap.get('id');
-
     this.subscription$.add(
       combineLatest([
         this.studentsListSelected$,
@@ -116,7 +122,62 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  navigatetoAddStudentsPage() {
+  public async presentPopoverActions($event: MouseEvent, student: StudentItemBo) {
+    this.popoverBoxService.openPanel($event, [
+      {
+        faIcon: ['fas', 'edit'],
+        visible: true,
+        label: 'Edit',
+        handler: () => {
+          this.navigateToEditStudent(student.id)
+        }
+      },
+      {
+        faIcon: ['fas', 'trash'],
+        visible: true,
+        label: 'Delete',
+        handler: () => {
+          this.presentDeleteAlert(student)
+        }
+      }
+    ]);
+  }
+
+  public presentDeleteAlert(student: StudentItemBo) {
+    const matYesNoDialogData: MatMultiActionsInterface = {
+      faIcon: ['fas', 'trash'],
+      title: 'Delete Faculty?',
+      message: student.name + ' will be permanently deleted!',
+      action: [
+        {
+          label: 'yes delete',
+          color: ' #d40000',
+          handler: () => {
+            this.deleteStudent(student.id);
+          }
+        },
+        {
+          label: 'cancel',
+          color: '#88a5db',
+          handler: () => {
+          }
+        }
+      ]
+    };
+    this.ngxMdDialogService.openMultiActionsDialog(matYesNoDialogData, { width: '400px' });
+  }
+
+  public deleteStudent(studentId: string) {
+    this.store.dispatch(StudentActions.deleteStudent({
+      id: studentId
+    }))
+  }
+
+  public navigateToEditStudent(id: string): void {
+    void this.router.navigate(['/admin', this.adminId, id, 'edit-student']);
+  }
+
+  navigateToAddStudentsPage() {
     const adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
 
     if (!adminId) {
@@ -134,4 +195,6 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription$.unsubscribe();
   }
+
+  protected readonly STUDENT_KEY = STUDENT_KEY;
 }
