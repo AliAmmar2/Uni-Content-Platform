@@ -42,3 +42,64 @@ exports.loginAdmin = async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 };
+
+exports.updatePassword = async (req, res) => {
+    try {
+
+        const adminId = req.user.id;
+
+        const {
+            oldPassword,
+            newPassword
+        } = req.body;
+
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({
+                message: "Old password and new password are required"
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                message: "New password must be at least 8 characters"
+            });
+        }
+
+        const admin = await Admin.findById(adminId);
+
+        if (!admin) {
+            return res.status(404).json({
+                message: "Admin not found"
+            });
+        }
+
+        const isMatch = await bcrypt.compare(
+            oldPassword,
+            admin.passwordHash
+        );
+
+        if (!isMatch) {
+            return res.status(400).json({
+                message: "Old password is incorrect"
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        admin.passwordHash = hashedPassword;
+
+        await admin.save();
+
+        res.status(200).json({
+            message: "Password updated successfully"
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).json({
+            message: err.message
+        });
+    }
+};
