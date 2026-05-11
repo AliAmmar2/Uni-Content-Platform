@@ -12,7 +12,7 @@ import { MajorDetailsPage } from './portal-admin/major-details-page/major-detail
 import { CoursesPage } from './portal-admin/courses-page/courses.page';
 import { DashboardPage } from './portal-admin/dashboard-page/dashboard.page';
 import { AccountSettingsPage } from './portal-admin/account-settings-page/account-settings.page';
-import { AddStudentPage } from './portal-admin/add-student-page/add-student.page';
+import { EditStudentPage } from './portal-admin/add-student-page/edit-student.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -36,7 +36,7 @@ export const routes: Routes = [
     path: 'admin/:id',
     component: PortalAdminPage,
     children: [
-      // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'faculties',
         component: FacultyPage
@@ -68,11 +68,15 @@ export const routes: Routes = [
       },
       {
         path: 'add-new-student',
-        component: AddStudentPage
+        component: EditStudentPage
       },
       {
-        path: ':facultyId/edit',
+        path: ':facultyId/edit-faculty',
         component: EditFacultyPage
+      }
+      ,{
+        path: ':studentId/edit-student',
+        component: EditStudentPage
       }
       ,
       {
@@ -80,7 +84,7 @@ export const routes: Routes = [
         component: EditMajorPage
       },
       {
-        path: ':majorId/edit',
+        path: ':majorId/edit-major',
         component: EditMajorPage
       },
       {

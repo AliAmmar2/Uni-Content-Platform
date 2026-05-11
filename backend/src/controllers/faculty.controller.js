@@ -1,5 +1,6 @@
 const Faculty = require("../models/Faculty");
-
+const Major = require("../models/Major");
+const UniStudent = require("../models/Student");
 // Create a new faculty (Admin only)
 exports.createFaculty = async (req, res) => {
   try {
@@ -114,12 +115,37 @@ exports.updateFaculty = async (req, res) => {
 exports.deleteFaculty = async (req, res) => {
   try {
     const { id } = req.params;
-    const faculty = await Faculty.findByIdAndDelete(id);
-    if (!faculty) return res.status(404).json({ message: "Faculty not found" });
 
-    res.json({ message: "Faculty deleted" });
+    const faculty = await Faculty.findById(id);
+
+    if (!faculty) {
+      return res.status(404).json({
+        message: "Faculty not found"
+      });
+    }
+
+    const majorCount = await Major.countDocuments({ faculty: id });
+    const studentCount = await UniStudent.countDocuments({ faculty: id });
+
+    if (majorCount > 0 || studentCount > 0) {
+      return res.status(409).json({
+        message: "Cannot delete faculty because it has assigned majors or students",
+        majorCount,
+        studentCount
+      });
+    }
+
+    await Faculty.findByIdAndDelete(id);
+
+    res.json({
+      message: "Faculty deleted"
+    });
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server error" });
+
+    res.status(500).json({
+      message: "Server error"
+    });
   }
 };

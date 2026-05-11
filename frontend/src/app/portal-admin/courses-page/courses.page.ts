@@ -26,7 +26,6 @@ import { MatPaginator } from '@angular/material/paginator';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-
 import { COURSE_KEY } from '../../courses/+state/course.reducer';
 import { selectAllCourses } from '../../courses/+state/courses.selector';
 import { CourseActions } from '../../courses/+state/courses.action';

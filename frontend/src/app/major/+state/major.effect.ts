@@ -33,6 +33,28 @@ export class MajorEffects {
     )
   );
 
+  public loadMajorsByFaculty$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MajorActions.loadMajorsByFaculty),
+      switchMap((action) => {
+        return this.majorService.getMajorsByFaculty(action.facultyId).pipe(
+          map((majors: Array<MajorItemBo>) => {
+            return MajorActions.loadMajorsByFacultySuccess({
+              majors
+            });
+          }),
+          catchError((error) => {
+            return of(
+              MajorActions.loadMajorsByFacultyFailure({
+                error
+              })
+            );
+          })
+        );
+      })
+    )
+  );
+
   public loadMajorDetails$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MajorActions.loadMajorDetails),
