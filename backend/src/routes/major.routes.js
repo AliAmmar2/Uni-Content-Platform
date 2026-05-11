@@ -10,7 +10,7 @@ router.post("/", adminAuth, majorController.createMajor);
 router.get("/", adminAuth, majorController.getAllMajors);
 router.put("/:id", adminAuth, majorController.updateMajor);
 router.delete("/:id", adminAuth, majorController.deleteMajor);
-
+router.get("/faculty/:facultyId", adminAuth, majorController.getMajorsByFaculty);
 //any auth can access this
 router.get("/:id", anyAuth, majorController.getMajorById);
 

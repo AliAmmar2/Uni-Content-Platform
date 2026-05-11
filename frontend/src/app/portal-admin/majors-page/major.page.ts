@@ -61,10 +61,6 @@ export class MajorPage implements OnInit {
     this.search$.next(value);
   }
 
-  openMajorDetails(id: string): void {
-    this.router.navigate(['/admin/majors', id]);
-  }
-
   navigateToAddNewMajor(): void {
     void this.router.navigate(['/admin', this.adminId, 'add-new-major']);
   }
@@ -92,7 +88,7 @@ export class MajorPage implements OnInit {
   }
 
   public navigateToEditMajor(id: string): void {
-    void this.router.navigate(['/admin', this.adminId, id, 'edit']);
+    void this.router.navigate(['/admin', this.adminId, id, 'edit-major']);
   }
   public navigateToMajorDetails(id: string): void {
     void this.router.navigate(['/admin', this.adminId, id, 'details']);

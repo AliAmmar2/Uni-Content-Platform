@@ -16,6 +16,10 @@ export const MajorActions = createActionGroup({
     'load Majors Success': props<{ majors: MajorItemBo[] }>(),
     'load Majors Failure': props<{ error: Error }>(),
 
+    'load Majors By Faculty': props<{ facultyId: string }>(),
+    'load Majors By Faculty Success': props<{ majors: MajorItemBo[] }>(),
+    'load Majors By Faculty Failure': props<{ error: Error }>(),
+
     'load Major Details': props<{ id: string }>(),
     'load Major Details Success': props<{ major: MajorDetailsBo }>(),
     'load Major Details Failure': props<{ error: Error }>(),

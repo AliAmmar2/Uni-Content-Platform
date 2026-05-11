@@ -43,5 +43,30 @@ export const majorReducers = createReducer<MajorState, Action>(
       status: MajorStatusEnum.loadError,
       error: error
     };
+  }),
+
+  on(MajorActions.loadMajorsByFaculty, (state: MajorState) => {
+    return {
+      ...state,
+      status: MajorStatusEnum.loading,
+      error: null
+    };
+  }),
+
+  on(MajorActions.loadMajorsByFacultySuccess, (state: MajorState, { majors }) => {
+    return {
+      ...state,
+      [MAJOR_KEY]: majors,
+      status: MajorStatusEnum.loadSuccess,
+      error: null
+    };
+  }),
+
+  on(MajorActions.loadMajorsByFacultyFailure, (state: MajorState, { error }) => {
+    return {
+      ...state,
+      status: MajorStatusEnum.loadError,
+      error
+    };
   })
 );
