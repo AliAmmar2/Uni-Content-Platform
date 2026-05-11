@@ -10,6 +10,8 @@ import { LetDirective } from '@ngrx/component';
 import { AsyncPipe } from '@angular/common';
 import { selectAdminDetails } from '../+state/admin.selector';
 import { AdminStatusEnum } from '../+state/enums/admin-status.enum';
+import { UpdatePasswordModal } from '../../update-password/update-password.modal';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-account-settings',
@@ -27,13 +29,14 @@ export class AccountSettingsPage implements OnInit {
   public store = inject(Store);
   public adminForm: FormGroup;
   public adminId: string;
+  private matDialog = inject(MatDialog);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   public adminDetailsSelected$ = this.store.pipe(select(selectAdminDetails));
 
   constructor() {
     this.adminForm = new FormGroup({
-      email: new FormControl({ value: '', disabled: true }),
+      email: new FormControl('', Validators.required),
       fullName: new FormControl('', Validators.required),
       username: new FormControl('', Validators.required),
     });
@@ -66,6 +69,14 @@ export class AccountSettingsPage implements OnInit {
       admin: this.adminForm.value,
       id: this.adminId
     }))
+  }
+
+  public async presentUpdatePasswordModal(id: string) {
+    this.matDialog.open(UpdatePasswordModal, {
+      width: '400px',
+      disableClose: true,
+      data: id
+    });
   }
 
   protected readonly ADMIN_DETAILS_KEY = ADMIN_DETAILS_KEY;

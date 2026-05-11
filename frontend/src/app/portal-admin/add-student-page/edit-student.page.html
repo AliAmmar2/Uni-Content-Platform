@@ -2,9 +2,20 @@
 
   <div class="add-student__header">
     <div>
-      <p class="add-student__breadcrumb">
-        Students <span>›</span> <strong>Add New Student</strong>
-      </p>
+      <div class="add-student__breadcrumb">
+        <button
+          type="button"
+          class="add-student__breadcrumb-link"
+          (click)="goToStudentsPage()">
+          Students
+        </button>
+
+        <span class="add-student__breadcrumb-separator">›</span>
+        <span class="add-student__breadcrumb-current">
+           {{ isEditMode ? 'Edit Student' : '  Add New Student' }}
+
+    </span>
+      </div>
 
       <h1 class="add-student__title">Student Registration</h1>
 
@@ -16,7 +27,9 @@
 
   <div class="add-student__content">
 
-    <form class="student-form" [formGroup]="studentForm">
+    <form class="student-form"
+          [formGroup]="studentForm"
+          (ngSubmit)="onSubmit()">
 
       <div class="form-row">
         <div class="form-group">
@@ -47,24 +60,25 @@
         />
       </div>
 
-      <div class="form-group form-group--full">
-        <label>Password</label>
+      @if (!isEditMode) {
+        <div class="form-group form-group--full">
+          <label>Password</label>
 
-        <div class="password-field">
-          <input
-            [type]="showPassword ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Enter student password"
-          />
+          <div class="password-field">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter student password"/>
 
-          <button
-            type="button"
-            class="password-field__toggle"
-            (click)="togglePasswordVisibility()">
-            <fa-icon [icon]="showPassword ? ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
-          </button>
+            <button
+              type="button"
+              class="password-field__toggle"
+              (click)="togglePasswordVisibility()">
+              <fa-icon [icon]="showPassword ? ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
+            </button>
+          </div>
         </div>
-      </div>
+      }
 
       <div class="form-row">
         <div class="form-group">
@@ -110,6 +124,7 @@
             <option value="2">Year 2</option>
             <option value="3">Year 3</option>
             <option value="4">Year 4</option>
+            <option value="5">Year 5</option>
           </select>
         </div>
 
@@ -143,7 +158,7 @@
           </select>
         </div>
       </div>
-
+      <div class="student-form__divider"></div>
       <div class="student-form__actions">
         <button
           type="button"
@@ -153,17 +168,18 @@
         </button>
 
         <button
-          type="button"
+          type="submit"
           class="btn btn--primary"
-          [disabled]="studentForm.invalid"
-          (click)="onCreateStudent()">
+          [disabled]="studentForm.invalid">
           <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
-          Create Student
+          <span>
+               {{ isEditMode ? 'Update Student' : ' Create Student' }}
+            </span>
+
         </button>
       </div>
 
     </form>
-
     <aside class="guidance-card">
 
       <div class="guidance-card__header">
@@ -173,24 +189,35 @@
 
       <ul class="guidance-card__list">
         <li>
-          <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
-          <span>
-            Ensure the University ID follows the XXXX.. format precisely.
-          </span>
+          <span class="guidance-card__dot"></span>
+          <p>
+            <strong>ID Integrity:</strong>
+            University IDs are immutable once assigned to prevent academic record mismatch.
+          </p>
         </li>
 
         <li>
-          <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
-          <span>
-            Institutional emails are required for all student communications.
-          </span>
+          <span class="guidance-card__dot"></span>
+          <p>
+            <strong>Email Standards:</strong>
+            Ensure the email follows the @ul.edu.lb format for official portal access.
+          </p>
         </li>
 
         <li>
-          <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
-          <span>
-            Faculty selection will filter available Majors automatically in the next update.
-          </span>
+          <span class="guidance-card__dot"></span>
+          <p>
+            <strong>Major Validity:</strong>
+            Changing a major may affect the student's credit requirements.
+          </p>
+        </li>
+
+        <li>
+          <span class="guidance-card__dot"></span>
+          <p>
+            <strong>Status Change:</strong>
+            Setting status to 'SUSPENDED' will immediately revoke campus facility and LMS access.
+          </p>
         </li>
       </ul>
 
