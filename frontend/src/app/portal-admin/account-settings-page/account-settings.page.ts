@@ -3,12 +3,13 @@ import { select, Store } from '@ngrx/store';
 import { AdminActions } from '../+state/admin.action';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UiSwitchModule } from 'ngx-ui-switch';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ADMIN_DETAILS_KEY } from '../+state/faculty-details.reducer';
 import { LetDirective } from '@ngrx/component';
 import { AsyncPipe } from '@angular/common';
 import { selectAdminDetails } from '../+state/admin.selector';
+import { AdminStatusEnum } from '../+state/enums/admin-status.enum';
 
 @Component({
   selector: 'app-account-settings',
@@ -26,6 +27,7 @@ export class AccountSettingsPage implements OnInit {
   public store = inject(Store);
   public adminForm: FormGroup;
   public adminId: string;
+  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   public adminDetailsSelected$ = this.store.pipe(select(selectAdminDetails));
 
@@ -51,6 +53,9 @@ export class AccountSettingsPage implements OnInit {
           fullName: adminDetails[ADMIN_DETAILS_KEY]?.fullName,
           username: adminDetails[ADMIN_DETAILS_KEY]?.username,
         });
+      }
+      if (adminDetails.status === AdminStatusEnum.updateSuccess) {
+        void this.router.navigate(['/admin', this.adminId, 'dashboard']);
       }
     });
   }

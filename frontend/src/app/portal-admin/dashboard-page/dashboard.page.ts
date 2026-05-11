@@ -164,7 +164,7 @@ export class DashboardPage implements OnInit, OnDestroy {
   }
 
   public onEditAccount(): void {
-    console.log('Edit Account');
+    void this.router.navigate(['/admin', this.adminId, 'account-settings']);
   }
 
   public onSignOut(): void {

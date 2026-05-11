@@ -87,8 +87,6 @@ export class AdminEffects {
         this.adminService.updateAdmin(action.id, action.admin).pipe(
           switchMap(() => [
             AdminActions.updateAdminSuccess(),
-            AdminActions.loadMe(),
-            AdminActions.loadAdmins(),
             AdminActions.resetAdminState()
           ]),
           catchError((error) =>
