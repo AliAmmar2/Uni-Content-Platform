@@ -1,0 +1,201 @@
+<section class="add-student">
+
+  <div class="add-student__header">
+    <div>
+      <p class="add-student__breadcrumb">
+        Students <span>›</span> <strong>Add New Student</strong>
+      </p>
+
+      <h1 class="add-student__title">Student Registration</h1>
+
+      <p class="add-student__subtitle">
+        Enroll a new student into the university administrative system.
+      </p>
+    </div>
+  </div>
+
+  <div class="add-student__content">
+
+    <form class="student-form" [formGroup]="studentForm">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="e.g. Jean Doe"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>University ID</label>
+          <input
+            type="text"
+            formControlName="universityId"
+            placeholder="XXXXXX"
+          />
+        </div>
+      </div>
+
+      <div class="form-group form-group--full">
+        <label>University Email</label>
+        <input
+          type="email"
+          formControlName="universityEmail"
+          placeholder="student@ul.edu.lb"
+        />
+      </div>
+
+      <div class="form-group form-group--full">
+        <label>Password</label>
+
+        <div class="password-field">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter student password"
+          />
+
+          <button
+            type="button"
+            class="password-field__toggle"
+            (click)="togglePasswordVisibility()">
+            <fa-icon [icon]="showPassword ? ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Faculty</label>
+
+          <select formControlName="faculty">
+            <option value="">Select Faculty</option>
+
+            <ng-container *ngrxLet="faculties$ | async as faculties">
+              @for (faculty of faculties[FACULTY_KEY]; track faculty.id) {
+                <option [value]="faculty.id">
+                  {{ faculty.name }}
+                </option>
+              }
+            </ng-container>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Major</label>
+
+          <select formControlName="major">
+            <option value="">Select Major</option>
+
+            <ng-container *ngrxLet="majors$ | async as majors">
+              @for (major of majors[MAJOR_KEY]; track major.id) {
+                <option [value]="major.id">
+                  {{ major.name }}
+                </option>
+              }
+            </ng-container>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Academic Year</label>
+
+          <select formControlName="academicYear">
+            <option value="">Select Year</option>
+            <option value="1">Year 1</option>
+            <option value="2">Year 2</option>
+            <option value="3">Year 3</option>
+            <option value="4">Year 4</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Calendar Year</label>
+          <input
+            type="number"
+            formControlName="calendarYear"
+            placeholder="2024"
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Role</label>
+
+          <select formControlName="role">
+            <option value="STUDENT">STUDENT</option>
+            <option value="MODERATOR">MODERATOR</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Status</label>
+
+          <select formControlName="status">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="SUSPENDED">SUSPENDED</option>
+            <option value="GRADUATED">GRADUATED</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="student-form__actions">
+        <button
+          type="button"
+          class="btn btn--outline"
+          (click)="onCancel()">
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="btn btn--primary"
+          [disabled]="studentForm.invalid"
+          (click)="onCreateStudent()">
+          <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+          Create Student
+        </button>
+      </div>
+
+    </form>
+
+    <aside class="guidance-card">
+
+      <div class="guidance-card__header">
+        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+        <h3>Admin Guidance</h3>
+      </div>
+
+      <ul class="guidance-card__list">
+        <li>
+          <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
+          <span>
+            Ensure the University ID follows the XXXX.. format precisely.
+          </span>
+        </li>
+
+        <li>
+          <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
+          <span>
+            Institutional emails are required for all student communications.
+          </span>
+        </li>
+
+        <li>
+          <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
+          <span>
+            Faculty selection will filter available Majors automatically in the next update.
+          </span>
+        </li>
+      </ul>
+
+    </aside>
+
+  </div>
+
+</section>

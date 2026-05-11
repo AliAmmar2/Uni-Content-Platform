@@ -20,9 +20,9 @@ async function seedCourses() {
     // =========================
     // Major IDs
     // =========================
-    const CS_MAJOR_ID   = "69ff5d26fb56e69ee8c378ba";
-    const EE_MAJOR_ID   = "69ff5d26fb56e69ee8c378be";
-    const MATH_MAJOR_ID = "69ff5d26fb56e69ee8c378bb";
+    const CS_MAJOR_ID   = "6a01961cd218fcd9361443cb";
+    const EE_MAJOR_ID   = "6a01961cd218fcd9361443c9";
+    const MATH_MAJOR_ID = "6a01961cd218fcd9361443cc";
 
     const courses = [
 

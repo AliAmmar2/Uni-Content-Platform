@@ -1,0 +1,377 @@
+.add-student {
+  padding: 30px;
+  background: #f6f8fb;
+
+  &__breadcrumb {
+    font-size: 13px;
+    color: #334155;
+    margin-bottom: 0.75rem;
+
+    span {
+      margin: 0 6px;
+      color: #94a3b8;
+    }
+
+    strong {
+      color: #d8001b;
+      font-weight: 700;
+    }
+  }
+
+  &__title {
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0;
+    color: #0f172a;
+  }
+
+  &__subtitle {
+    font-size: 16px;
+    color: #475569;
+    margin-top: 0.45rem;
+  }
+
+  &__content {
+    display: flex;
+    gap: 56px;
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
+.student-form {
+  flex: 1;
+  order: 1;
+  background: #ffffff;
+  border: 1px solid #f0b7b7;
+  border-radius: 8px;
+  padding: 30px;
+  box-sizing: border-box;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    margin-top: 2.4rem;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-bottom: 22px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 22px;
+
+  &--full {
+    width: 100%;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3f1f1f;
+    margin-bottom: 8px;
+  }
+
+  input,
+  select {
+    height: 48px;
+    width: 100%;
+    padding: 0 14px;
+    border: 1px solid #efbebe;
+    border-radius: 4px;
+    background: #f8fafc;
+    font-size: 16px;
+    outline: none;
+    color: #111827;
+    box-sizing: border-box;
+    transition: 0.2s ease;
+
+    &::placeholder {
+      color: #64748b;
+    }
+
+    &:focus {
+      border-color: #d8001b;
+      box-shadow: 0 0 0 2px rgba(216, 0, 27, 0.12);
+    }
+  }
+
+  select {
+    cursor: pointer;
+  }
+}
+
+.password-field {
+  position: relative;
+  width: 100%;
+
+  input {
+    padding-right: 44px;
+  }
+
+  &__toggle {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #475569;
+    cursor: pointer;
+    padding: 0;
+    font-size: 15px;
+
+    &:hover {
+      color: #c4001a;
+    }
+  }
+}
+
+.guidance-card {
+  order: 2;
+  width: 340px;
+  max-width: 100%;
+  flex-shrink: 0;
+  background: #e30619;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 30px 32px;
+  box-sizing: border-box;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+
+    fa-icon {
+      font-size: 22px;
+    }
+
+    h3 {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 1.5;
+      margin-bottom: 28px;
+
+      fa-icon {
+        font-size: 15px;
+        margin-top: 5px;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+.btn {
+  height: 44px;
+  min-width: 160px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &--primary {
+    background: #c4001a;
+    color: #ffffff;
+
+    &:hover {
+      background: #a80016;
+    }
+
+    &:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+
+  &--outline {
+    background: #ffffff;
+    border: 1px solid #efbebe;
+    color: #334155;
+
+    &:hover {
+      border-color: #c4001a;
+      color: #c4001a;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .add-student {
+    padding: 28px;
+
+    &__content {
+      flex-direction: column;
+      gap: 28px;
+      width: 100%;
+      overflow: visible;
+    }
+  }
+
+  .student-form {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .guidance-card {
+    order: 2;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-height: auto;
+    flex-shrink: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .add-student {
+    padding: 18px;
+
+    &__header {
+      margin-bottom: 2rem;
+    }
+
+    &__title {
+      font-size: 26px;
+      line-height: 1.2;
+    }
+
+    &__subtitle {
+      font-size: 14px;
+    }
+
+    &__breadcrumb {
+      font-size: 12px;
+    }
+
+    &__content {
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+
+  .student-form {
+    order: 1;
+    width: 100%;
+    padding: 18px;
+
+    &__actions {
+      flex-direction: column-reverse;
+      gap: 12px;
+      margin-top: 1.5rem;
+
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+
+  .guidance-card {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    padding: 22px;
+    display: block;
+
+    &__header {
+      margin-bottom: 18px;
+
+      h3 {
+        font-size: 22px;
+      }
+    }
+
+    &__list {
+      li {
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+    }
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 0;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+
+    label {
+      font-size: 13px;
+    }
+
+    input,
+    select {
+      height: 44px;
+      font-size: 15px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .add-student {
+    padding: 14px;
+
+    &__title {
+      font-size: 22px;
+    }
+
+    &__subtitle {
+      font-size: 13px;
+    }
+  }
+
+  .student-form {
+    padding: 14px;
+  }
+
+  .guidance-card {
+    width: 100%;
+    padding: 18px;
+
+    &__header {
+      h3 {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .btn {
+    width: 100%;
+    min-width: 100%;
+    font-size: 14px;
+  }
+}

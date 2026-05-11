@@ -1,22 +1,19 @@
-import {
-  AfterViewInit,
-  Component,
-  ViewChild,
-  inject,
-  OnDestroy,
-  OnInit
-} from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { Store, select } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
-  MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
@@ -30,6 +27,7 @@ import { STUDENT_KEY } from '../../student/+state/student.reducer';
 import { StudentItemBo } from '../../student/bo/student-item.bo';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -56,7 +54,9 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './students.page.scss'
 })
 export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
-
+  public adminId: string;
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
   private store = inject(Store);
   private subscription$ = new Subscription();
   public search$ = new BehaviorSubject<string>('');
@@ -77,6 +77,7 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(StudentActions.loadStudents());
+    this.adminId = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.subscription$.add(
       combineLatest([
@@ -99,6 +100,7 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
       })
     );
   }
+
   private filterStudents(students: any[], search: string): any[] {
     if (!search) return students;
 
@@ -113,6 +115,18 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
       );
     });
   }
+
+  navigatetoAddStudentsPage() {
+    const adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
+
+    if (!adminId) {
+      console.error('Admin ID is missing from route');
+      return;
+    }
+
+    void this.router.navigate(['/admin', adminId, 'add-new-student']);
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }

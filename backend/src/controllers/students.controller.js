@@ -1,5 +1,5 @@
 const UniStudent = require("../models/Student");
-
+const bcrypt = require("bcrypt");
 // GET ALL
 exports.getStudents = async (req, res) => {
     try {
@@ -33,12 +33,48 @@ exports.getStudentById = async (req, res) => {
 };
 
 // CREATE
+
+
 exports.createStudent = async (req, res) => {
     try {
-        const newStudent = new UniStudent(req.body);
+        const {
+            universityId,
+            universityEmail,
+            name,
+            faculty,
+            major,
+            academicYear,
+            calendarYear,
+            role,
+            status,
+            password
+        } = req.body;
+
+        if (!password) {
+            return res.status(400).json({ message: "Password is required" });
+        }
+
+        const passwordHash = await bcrypt.hash(password, 10);
+
+        const newStudent = new UniStudent({
+            universityId,
+            universityEmail,
+            name,
+            faculty,
+            major,
+            academicYear,
+            calendarYear,
+            role,
+            status,
+            passwordHash
+        });
+
         const saved = await newStudent.save();
 
-        res.status(201).json(saved);
+        const studentResponse = saved.toObject();
+        delete studentResponse.passwordHash;
+
+        res.status(201).json(studentResponse);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }

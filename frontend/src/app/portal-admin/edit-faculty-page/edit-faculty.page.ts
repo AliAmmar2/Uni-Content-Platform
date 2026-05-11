@@ -14,10 +14,10 @@ import { FACULTY_DETAILS_KEY } from '../../faculty/+state/faculty-details.reduce
 @Component({
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule],
-  templateUrl: './edit-new-faculty.page.html',
-  styleUrl: './edit-new-faculty.page.scss'
+  templateUrl: './edit-faculty.page.html',
+  styleUrl: './edit-faculty.page.scss'
 })
-export class EditNewFacultyPage implements OnInit, OnDestroy {
+export class EditFacultyPage implements OnInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
   public facultyForm: FormGroup;

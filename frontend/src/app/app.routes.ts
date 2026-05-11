@@ -4,7 +4,7 @@ import { RegisterPage } from './reigister-page/register.page';
 import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
 import { PortalAdminPage } from './portal-admin/portal-admin-page.component';
 import { FacultyPage } from './portal-admin/faculty-page/faculty.page';
-import { EditNewFacultyPage } from './portal-admin/edit-faculty-page/edit-new-faculty.page';
+import { EditFacultyPage } from './portal-admin/edit-faculty-page/edit-faculty.page';
 import { StudentsPage } from './portal-admin/students-page/students.page';
 import { MajorPage } from './portal-admin/majors-page/major.page';
 import { EditMajorPage } from './portal-admin/add-new-major-page/edit-major.page';
@@ -12,6 +12,7 @@ import { MajorDetailsPage } from './portal-admin/major-details-page/major-detail
 import { CoursesPage } from './portal-admin/courses-page/courses.page';
 import { DashboardPage } from './portal-admin/dashboard-page/dashboard.page';
 import { AccountSettingsPage } from './portal-admin/account-settings-page/account-settings.page';
+import { AddStudentPage } from './portal-admin/add-student-page/add-student.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -63,11 +64,15 @@ export const routes: Routes = [
       ,
       {
         path: 'add-new-faculty',
-        component: EditNewFacultyPage
+        component: EditFacultyPage
+      },
+      {
+        path: 'add-new-student',
+        component: AddStudentPage
       },
       {
         path: ':facultyId/edit',
-        component: EditNewFacultyPage
+        component: EditFacultyPage
       }
       ,
       {
