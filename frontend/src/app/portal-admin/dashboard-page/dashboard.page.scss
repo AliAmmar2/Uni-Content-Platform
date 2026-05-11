@@ -18,8 +18,6 @@ $white: #ffffff;
   padding: 30px;
 }
 
-/* Statistics */
-
 .statistics-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -98,15 +96,11 @@ $white: #ffffff;
   }
 }
 
-/* Layout */
-
 .dashboard-right__content-grid {
   display: grid;
   grid-template-columns: 1fr 250px;
   gap: 1.5rem;
 }
-
-/* Section */
 
 .section-header {
   margin-bottom: 1rem;
@@ -120,8 +114,6 @@ $white: #ffffff;
     color: $text-primary;
   }
 }
-
-/* Account */
 
 .account-card {
   background: white;
@@ -226,8 +218,6 @@ $white: #ffffff;
   }
 }
 
-/* Quick Actions */
-
 .quick-actions-list {
   display: flex;
   flex-direction: column;
@@ -277,8 +267,6 @@ $white: #ffffff;
   }
 }
 
-/* Buttons */
-
 .primary-action-button,
 .secondary-action-button {
   width: 100%;
@@ -316,8 +304,6 @@ $white: #ffffff;
     background: $background-soft;
   }
 }
-
-/* Responsive */
 
 @media (max-width: 1200px) {
 
