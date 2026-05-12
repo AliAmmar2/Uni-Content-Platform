@@ -17,7 +17,6 @@ export class LoginAdminService {
   }
 
   public updatePassword(updatePasswordFormValue: UpdatePasswordFormInterface) {
-
     const updatePasswordDto = new UpdatePasswordDto(
       updatePasswordFormValue
     );

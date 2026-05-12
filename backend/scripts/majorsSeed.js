@@ -17,8 +17,8 @@ async function seedMajors() {
         await Major.deleteMany({});
         console.log("Cleared Major collection");
 
-        const SCIENCE_FACULTY_ID = "69feeef748256634c3cd44ae";
-        const ENGINEERING_FACULTY_ID = "69feeef748256634c3cd44b1";
+        const SCIENCE_FACULTY_ID = "6a02d96665412ccbf85670fd";
+        const ENGINEERING_FACULTY_ID = "6a02d96665412ccbf8567100";
 
         const majors = [
 

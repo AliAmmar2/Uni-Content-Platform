@@ -1,0 +1,145 @@
+<div class="form-dialog">
+
+  <div class="form-dialog__header header">
+
+    <div class="header__title">
+      @if (data.faIcon) {
+        <fa-icon [icon]="data.faIcon"></fa-icon>
+      }
+
+      <span>{{ data.title }}</span>
+    </div>
+
+    <div
+      class="header__close-icon"
+      (click)="closeModal()">
+      <fa-icon [icon]="['far', 'times-circle']"></fa-icon>
+    </div>
+
+  </div>
+
+  <div class="form-dialog__details">
+
+    @if (data.message) {
+      <p class="form-dialog__message">
+        {{ data.message }}
+      </p>
+    }
+
+    <form
+      class="form-dialog__form"
+      [formGroup]="form">
+
+      @for (input of data.inputs; track input.controlName) {
+
+        <div class="form-group">
+
+          <label>{{ input.label }}</label>
+
+          @if (input.type === 'password') {
+
+            <div class="password-field">
+
+              <input
+                [type]="passwordVisibility[input.controlName] ? 'text' : 'password'"
+                [formControlName]="input.controlName"
+                [placeholder]="input.placeholder || input.label"
+                [autocomplete]="input.autocomplete || 'off'"
+              />
+              <button
+                type="button"
+                class="password-field__toggle"
+                (click)="togglePasswordVisibility(input.controlName)">
+
+                <fa-icon
+                  [icon]="
+                    passwordVisibility[input.controlName]
+                      ? ['fas', 'eye-slash']
+                      : ['fas', 'eye']
+                  ">
+                </fa-icon>
+
+              </button>
+
+            </div>
+
+          } @else {
+
+            <input
+              [type]="input.type || 'text'"
+              [formControlName]="input.controlName"
+              [placeholder]="input.placeholder || input.label"
+              [autocomplete]="input.autocomplete || 'off'"
+            />
+
+          }
+
+          @if (
+            form.get(input.controlName)?.invalid &&
+            form.get(input.controlName)?.touched
+            ) {
+
+            <mat-error class="error-message">
+
+              @for (
+                error of form.get(input.controlName)?.errors | keyvalue;
+                track error.key
+                ) {
+
+                @if (input.errorMessages?.[error.key]) {
+                  <span>
+                    {{ input.errorMessages?.[error.key] }}
+                  </span>
+                }
+
+              }
+
+            </mat-error>
+
+          }
+
+        </div>
+
+      }
+
+      @if (form.invalid && form.touched && form.errors) {
+
+        <mat-error class="error-message error-message--form">
+
+          @for (error of form.errors | keyvalue; track error.key) {
+
+            @if (data.formErrorMessages?.[error.key]) {
+              <span>
+                {{ data.formErrorMessages?.[error.key] }}
+              </span>
+            }
+
+          }
+
+        </mat-error>
+
+      }
+
+    </form>
+
+    <mat-dialog-actions>
+
+      @for (action of data.actions; track action.label) {
+
+        <button
+          type="button"
+          mat-raised-button
+          class="dialog-action-btn"
+          [style.background-color]="action.color"
+          [disabled]="action.disabledWhenInvalid && form.invalid"
+          (click)="runAction(action)">
+          {{ action.label }}
+        </button>
+
+      }
+
+    </mat-dialog-actions>
+
+  </div>
+
+</div>

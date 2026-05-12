@@ -8,7 +8,7 @@ const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middlewar
 
 const controller = require("../controllers/course.controller");
 
-// Create course (admins or moderators only)
+// Create course only admins
 router.post(
     "/",
     adminAuth, controller.createCourse);

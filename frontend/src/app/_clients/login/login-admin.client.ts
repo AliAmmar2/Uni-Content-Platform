@@ -24,7 +24,7 @@ export class LoginAdminClient {
   }
 
   public updatePassword(updateFormValue: UpdatePasswordFormInterface): Observable<any> {
-    return this.http.post(`${this.API_URL}/update-password`,
+    return this.http.put(`${this.API_URL}/update-password`,
       updateFormValue,
       this.getAuthOptions());
   }
