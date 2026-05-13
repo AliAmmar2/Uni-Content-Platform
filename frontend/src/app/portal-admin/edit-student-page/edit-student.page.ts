@@ -85,7 +85,7 @@ export class EditStudentPage implements OnInit, OnDestroy {
       faculty: new FormControl('', Validators.required),
       major: new FormControl('', Validators.required),
       academicYear: new FormControl('', Validators.required),
-      calendarYear: new FormControl(new Date().getFullYear(), Validators.required),
+      calendarYear: new FormControl(new Date().getFullYear(), [Validators.required, Validators.pattern(/^\d{4}$/)]),
       role: new FormControl<'STUDENT' | 'MODERATOR'>('STUDENT', Validators.required),
       status: new FormControl<'ACTIVE' | 'SUSPENDED' | 'GRADUATED'>('ACTIVE', Validators.required),
     });
@@ -169,6 +169,7 @@ export class EditStudentPage implements OnInit, OnDestroy {
           this.goToStudentsPage();
           return;
         }
+
 
         if (
           this.isEditMode &&

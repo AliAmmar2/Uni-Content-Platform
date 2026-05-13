@@ -1,21 +1,8 @@
-import {
-  AfterViewInit,
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { select, Store } from '@ngrx/store';
-import {
-  BehaviorSubject,
-  combineLatest,
-  debounceTime,
-  distinctUntilChanged,
-  Subscription
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 import {
   MatCell,
@@ -43,8 +30,10 @@ import {
   MatMultiActionsInterface
 } from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
 import { AdminActions } from '../+state/admin.action';
-import { selectAllAdmins } from '../+state/admin.selector';
+import { selectAdminDetails, selectAllAdmins } from '../+state/admin.selector';
 import { ADMIN_KEY } from '../+state/admin.reducer';
+import { AdminStatusEnum } from '../+state/enums/admin-status.enum';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -78,7 +67,10 @@ export class AdminsPage implements OnInit, AfterViewInit, OnDestroy {
   private store = inject(Store);
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
-
+  private toastr = inject(ToastrService);
+  public adminDetailsSelected$ = this.store.pipe(
+    select(selectAdminDetails)
+  );
   private subscription$ = new Subscription();
 
   public search$ = new BehaviorSubject<string>('');
@@ -103,7 +95,7 @@ export class AdminsPage implements OnInit, AfterViewInit, OnDestroy {
     this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
 
     this.store.dispatch(AdminActions.loadAdmins());
-
+    this.adminDetailsSubscription();
     this.subscription$.add(
       combineLatest([
         this.adminsListSelected$,
@@ -124,6 +116,45 @@ export class AdminsPage implements OnInit, AfterViewInit, OnDestroy {
       })
     );
   }
+
+  public adminDetailsSubscription(): void {
+    this.subscription$.add(
+      this.adminDetailsSelected$.subscribe((detailsState) => {
+        if (!detailsState) {
+          return;
+        }
+
+        if (detailsState.status === AdminStatusEnum.deleteSuccess) {
+          this.toastr.success(
+            'Admin deleted successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          return;
+        }
+
+        if (detailsState.status === AdminStatusEnum.deleteFailure) {
+          this.toastr.error(
+            detailsState.error?.message || 'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
+        }
+      })
+    );
+  }
+
 
   private filterAdmins(admins: any[], search: string): any[] {
     if (!search) {
@@ -182,7 +213,8 @@ export class AdminsPage implements OnInit, AfterViewInit, OnDestroy {
         {
           label: 'cancel',
           color: '#88a5db',
-          handler: () => {}
+          handler: () => {
+          }
         }
       ]
     };

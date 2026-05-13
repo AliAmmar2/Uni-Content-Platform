@@ -71,6 +71,15 @@
   padding: 30px;
   box-sizing: border-box;
 
+  .error-message {
+    display: block;
+    margin-top: 0.45rem;
+    color: #c40010;
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
   &__divider {
     height: 1px;
     background: #ececec;
@@ -129,7 +138,6 @@
 
     &:focus {
       border-color: #d8001b;
-      box-shadow: 0 0 0 2px rgba(216, 0, 27, 0.12);
     }
   }
 

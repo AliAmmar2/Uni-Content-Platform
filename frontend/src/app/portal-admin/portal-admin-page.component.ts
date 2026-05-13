@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { selectAdminDetails } from './+state/admin.selector';
 import { AdminActions } from './+state/admin.action';
 import { LetDirective } from '@ngrx/component';
-import { ADMIN_DETAILS_KEY } from './+state/admin-details.reducer';
+import { ADMIN_DETAILS_KEY, LOGGED_IN_ADMIN_KEY } from './+state/admin-details.reducer';
 import { MajorActions } from '../major/+state/major.action';
 import { FacultyActions } from '../faculty/+state/faculty.action';
 import { StudentActions } from '../student/+state/student.action';
@@ -48,11 +48,6 @@ export class PortalAdminPage implements OnInit {
     }
 
     this.adminId = this.activatedRoute.snapshot.paramMap.get('id');
-
-    this.store.dispatch(AdminActions.resetAdminState());
-    this.store.dispatch(MajorActions.resetMajorState());
-    this.store.dispatch(FacultyActions.resetFacultyState());
-    this.store.dispatch(StudentActions.resetStudentState());
 
     this.store.dispatch(AdminActions.loadMe());
 
@@ -93,4 +88,5 @@ export class PortalAdminPage implements OnInit {
   }
 
   protected readonly ADMIN_DETAILS_KEY = ADMIN_DETAILS_KEY;
+  protected readonly LOGGED_IN_ADMIN_KEY = LOGGED_IN_ADMIN_KEY;
 }

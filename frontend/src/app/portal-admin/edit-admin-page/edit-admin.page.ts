@@ -9,6 +9,7 @@ import { AdminActions } from '../+state/admin.action';
 import { selectAdminDetails } from '../+state/admin.selector';
 import { ADMIN_DETAILS_KEY } from '../+state/admin-details.reducer';
 import { AdminStatusEnum } from '../+state/enums/admin-status.enum';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-admin',
@@ -23,7 +24,7 @@ export class EditAdminPage implements OnInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-
+  private toastr = inject(ToastrService);
   public adminId = '';
   public editAdminId: string | null = null;
   public isEditMode = false;
@@ -95,14 +96,55 @@ export class EditAdminPage implements OnInit, OnDestroy {
           return;
         }
 
-        if (
-          adminDetails.status === AdminStatusEnum.createSuccess ||
-          adminDetails.status === AdminStatusEnum.updateSuccess
-        ) {
+        if (adminDetails.status === AdminStatusEnum.createSuccess) {
+          this.toastr.success(
+            'Admin created successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
           this.goToAdminsPage();
           return;
         }
 
+        if (adminDetails.status === AdminStatusEnum.updateSuccess) {
+          this.toastr.success(
+            'Admin updated successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          this.goToAdminsPage();
+          return;
+        }
+        if (
+          adminDetails.status === AdminStatusEnum.createFailure ||
+          adminDetails.status === AdminStatusEnum.updateFailure
+        ) {
+          this.toastr.error(
+            adminDetails.error?.message ||
+            'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
+
+          return;
+        }
         if (
           this.isEditMode &&
           adminDetails.status === AdminStatusEnum.loadDetailsSuccess
