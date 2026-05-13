@@ -5,9 +5,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ADMIN_DETAILS_KEY } from '../+state/faculty-details.reducer';
+import { ADMIN_DETAILS_KEY } from '../+state/admin-details.reducer';
 import { LetDirective } from '@ngrx/component';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { selectAdminDetails } from '../+state/admin.selector';
 import { AdminStatusEnum } from '../+state/enums/admin-status.enum';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +23,8 @@ import { passwordsMatchValidator } from '../../validators/passwordMatchValidator
     ReactiveFormsModule,
     FaIconComponent,
     LetDirective,
-    AsyncPipe
+    AsyncPipe,
+    DatePipe
   ],
   styleUrls: ['./account-settings.page.scss']
 })

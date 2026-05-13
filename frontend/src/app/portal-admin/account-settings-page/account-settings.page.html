@@ -70,9 +70,9 @@
 
           <div>
             <p class="security-item__title">Password Management</p>
-            @if (admin[ADMIN_DETAILS_KEY]?.lastLogin) {
+            @if (admin[ADMIN_DETAILS_KEY]?.lastPasswordUpdate) {
               <small class="security-item__desc">
-                Last changed {{ admin[ADMIN_DETAILS_KEY]?.lastLogin }}
+                Last changed {{ admin[ADMIN_DETAILS_KEY]?.lastPasswordUpdate | date :'medium' }}
               </small>
             }
           </div>

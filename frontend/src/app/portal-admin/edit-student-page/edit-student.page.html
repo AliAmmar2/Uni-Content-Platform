@@ -96,12 +96,13 @@
             </ng-container>
           </select>
         </div>
-
         <div class="form-group">
           <label>Major</label>
 
           <select formControlName="major">
-            <option value="">Select Major</option>
+            <option value="">
+              {{ studentForm.get('faculty')?.value ? 'Select Major' : 'Select Faculty First' }}
+            </option>
 
             <ng-container *ngrxLet="majors$ | async as majors">
               @for (major of majors[MAJOR_KEY]; track major.id) {
@@ -193,14 +194,6 @@
           <p>
             <strong>ID Integrity:</strong>
             University IDs are immutable once assigned to prevent academic record mismatch.
-          </p>
-        </li>
-
-        <li>
-          <span class="guidance-card__dot"></span>
-          <p>
-            <strong>Email Standards:</strong>
-            Ensure the email follows the @ul.edu.lb format for official portal access.
           </p>
         </li>
 

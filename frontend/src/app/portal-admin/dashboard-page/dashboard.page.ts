@@ -38,7 +38,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AdminActions } from '../+state/admin.action';
 import { selectAdminDetails } from '../+state/admin.selector';
 import { LetDirective } from '@ngrx/component';
-import { ADMIN_DETAILS_KEY } from '../+state/faculty-details.reducer';
+import { ADMIN_DETAILS_KEY } from '../+state/admin-details.reducer';
 import { DashboardUiService } from '../services/dashboard-ui.service';
 
 interface StatisticCard {

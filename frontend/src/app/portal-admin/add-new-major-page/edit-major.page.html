@@ -61,7 +61,14 @@
             formControlName="name"
             class="major-form__input"
             placeholder="e.g. Computer Science"/>
-
+          @if (
+            majorForm.controls['name'].hasError('required') &&
+            majorForm.controls['name'].touched
+            ) {
+            <span class="error-message">
+    Major name is required
+  </span>
+          }
         </div>
 
         <div class="major-form__row">
@@ -78,7 +85,14 @@
               formControlName="code"
               class="major-form__input"
               placeholder="e.g. CS-101"/>
-
+            @if (
+              majorForm.controls['code'].hasError('required') &&
+              majorForm.controls['code'].touched
+              ) {
+              <span class="error-message">
+    Major code is required
+  </span>
+            }
           </div>
 
 
@@ -95,6 +109,14 @@
               <option value="" disabled selected>
                 Select a Faculty
               </option>
+              @if (
+                majorForm.controls['faculty'].hasError('required') &&
+                majorForm.controls['faculty'].touched
+                ) {
+                <span class="error-message">
+    Faculty is required
+  </span>
+              }
 
               <ng-container *ngrxLet="facultiesListSelected$ as faculties">
 

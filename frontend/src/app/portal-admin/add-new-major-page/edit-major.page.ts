@@ -124,7 +124,10 @@ export class EditMajorPage implements OnInit, OnDestroy {
 
   public onSubmit() {
 
-    if (this.majorForm.invalid) return;
+    if (this.majorForm.invalid) {
+      this.majorForm.markAllAsTouched();
+      return;
+    }
 
     if (this.isEditMode && this.majorId) {
 

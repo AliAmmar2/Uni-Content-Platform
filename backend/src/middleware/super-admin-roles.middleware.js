@@ -1,12 +1,12 @@
 exports.requireSuperAdmin = (req, res, next) => {
 
-    if (!req.admin) {
+    if (!req.user) {
         return res.status(401).json({
             message: "Unauthorized"
         });
     }
 
-    if (req.admin.role !== "super_admin") {
+    if (req.user.role !== "super_admin") {
         return res.status(403).json({
             message: "Super admin only"
         });

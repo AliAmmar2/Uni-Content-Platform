@@ -10,6 +10,7 @@ import { FacultyStatusEnum } from '../../faculty/+state/enums/faculty-status.enu
 import { FacultyActions } from '../../faculty/+state/faculty.action';
 import { MAJOR_DETAILS_KEY } from '../../major/+state/major-details.reducer';
 import { FACULTY_DETAILS_KEY } from '../../faculty/+state/faculty-details.reducer';
+import { facultyCodeValidator } from '../../validators/faculty-code-validator';
 
 @Component({
   standalone: true,
@@ -33,7 +34,7 @@ export class EditFacultyPage implements OnInit, OnDestroy {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.facultyForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      code: new FormControl('', Validators.required),
+      code: new FormControl('',[ Validators.required, facultyCodeValidator()]),
       description: new FormControl(''),
     });
   }

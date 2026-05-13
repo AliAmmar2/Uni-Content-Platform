@@ -1,0 +1,185 @@
+<div class="admin-page">
+
+  <div class="admin-page__header">
+
+    <div>
+      <h1>Administrators</h1>
+    </div>
+
+    <button
+      class="admin-page__add-btn"
+      (click)="navigateToAddAdminPage()">
+
+      <fa-icon [icon]="['fas', 'user-shield']"></fa-icon>
+
+      Add New Admin
+
+    </button>
+
+  </div>
+
+  <ng-container *ngrxLet="adminsListSelected$ | async as adminState">
+
+    @if ((adminState?.[ADMIN_KEY]?.length ?? 0) === 0) {
+
+      <div class="admin-page__empty-state">
+
+        <div class="admin-page__empty-icon">
+          <fa-icon [icon]="['fas', 'user-shield']"></fa-icon>
+        </div>
+
+        <h3 class="admin-page__empty-title">
+          No administrators yet
+        </h3>
+
+        <p class="admin-page__empty-description">
+          There are no administrators in the system yet.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <div class="admin-page__toolbar">
+
+        <div class="search-box">
+
+          <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+          <input
+            type="text"
+            placeholder="Search by full name, email, or username..."
+            (input)="search$.next($any($event.target).value)"
+          />
+
+        </div>
+
+      </div>
+
+      <div class="table-container">
+
+        <table mat-table [dataSource]="dataSource" class="table-style">
+
+          <!-- FULL NAME -->
+          <ng-container matColumnDef="fullName">
+
+            <th mat-header-cell *matHeaderCellDef>
+              Full Name
+            </th>
+
+            <td mat-cell *matCellDef="let admin">
+
+              <div class="admin-name">
+
+                <div class="avatar">
+                  {{ admin.fullName?.charAt(0) }}
+                </div>
+
+                <div>
+
+                  <div class="name">
+                    {{ admin.fullName }}
+                  </div>
+
+                  <div class="email">
+                    {{ admin.email }}
+                  </div>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+          <!-- USERNAME -->
+          <ng-container matColumnDef="username">
+
+            <th mat-header-cell *matHeaderCellDef>
+              Username
+            </th>
+
+            <td mat-cell *matCellDef="let admin">
+              {{ admin.username }}
+            </td>
+
+          </ng-container>
+
+          <!-- ROLE -->
+          <ng-container matColumnDef="role">
+
+            <th mat-header-cell *matHeaderCellDef>
+              Role
+            </th>
+
+            <td mat-cell *matCellDef="let admin">
+
+    <span
+      class="badge"
+      [ngClass]="admin.role">
+
+      {{ admin.role === 'super_admin' ? 'Super Admin' : 'Admin' }}
+
+    </span>
+
+            </td>
+
+          </ng-container>
+          <!-- LAST LOGIN -->
+          <ng-container matColumnDef="lastLogin">
+
+            <th mat-header-cell *matHeaderCellDef>
+              Last Login
+            </th>
+
+            <td mat-cell *matCellDef="let admin">
+
+              @if (admin.lastLogin) {
+
+                {{ admin.lastLogin | date:'medium' }}
+
+              } @else {
+
+                Never logged in
+
+              }
+
+            </td>
+
+          </ng-container>
+
+          <!-- ACTIONS -->
+          <ng-container matColumnDef="moreInfo">
+
+            <th mat-header-cell *matHeaderCellDef></th>
+
+            <td mat-cell *matCellDef="let admin">
+
+              <fa-icon
+                [icon]="['fas', 'ellipsis-v']"
+                (click)="presentPopoverActions($event, admin)">
+              </fa-icon>
+
+            </td>
+
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+
+      </div>
+
+      <mat-paginator
+        [pageSize]="10"
+        showFirstLastButtons>
+      </mat-paginator>
+
+    }
+
+  </ng-container>
+
+</div>

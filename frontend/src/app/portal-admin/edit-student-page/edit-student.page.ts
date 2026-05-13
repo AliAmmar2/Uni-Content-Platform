@@ -5,7 +5,7 @@ import { AsyncPipe } from '@angular/common';
 import { LetDirective } from '@ngrx/component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Subscription } from 'rxjs';
 
 import { selectAllMajors } from '../../major/+state/major.selector';
 import { selectAllFaculties } from '../../faculty/+state/faculty.selector';
@@ -44,11 +44,35 @@ export class EditStudentPage implements OnInit, OnDestroy {
   public isEditMode = false;
   public showPassword = false;
 
+  private selectedFacultyId$ = new BehaviorSubject<string>('');
+
   public studentForm: FormGroup;
 
   public studentDetailsSelected$ = this.store.select(selectStudentDetails);
   public faculties$ = this.store.pipe(select(selectAllFaculties));
-  public majors$ = this.store.pipe(select(selectAllMajors));
+
+  public majors$ = combineLatest([
+    this.store.pipe(select(selectAllMajors)),
+    this.selectedFacultyId$
+  ]).pipe(
+    map(([majorsState, facultyId]) => {
+      const majors = majorsState?.[MAJOR_KEY] ?? [];
+
+      if (!facultyId) {
+        return {
+          ...majorsState,
+          [MAJOR_KEY]: []
+        };
+      }
+
+      return {
+        ...majorsState,
+        [MAJOR_KEY]: majors.filter((major) => {
+          return major.faculty.id === facultyId;
+        })
+      };
+    })
+  );
 
   private subscription$ = new Subscription();
 
@@ -114,6 +138,8 @@ export class EditStudentPage implements OnInit, OnDestroy {
 
     this.subscription$.add(
       facultyControl.valueChanges.subscribe((facultyId: string) => {
+        this.selectedFacultyId$.next(facultyId);
+
         this.studentForm.patchValue({
           major: ''
         }, { emitEvent: false });
@@ -149,6 +175,8 @@ export class EditStudentPage implements OnInit, OnDestroy {
           studentDetails.status === StudentDetailsStatusEnum.loadDetailsSuccess
         ) {
           const student = studentDetails[STUDENT_DETAILS_KEY];
+
+          this.selectedFacultyId$.next(student.facultyId);
 
           this.store.dispatch(MajorActions.loadMajorsByFaculty({
             facultyId: student.facultyId

@@ -4,20 +4,35 @@ const Admin = require("../models/Admin");
 
 exports.loginAdmin = async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const {username, password} = req.body;
 
-        // 👇 find by username (NOT email anymore)
-        const admin = await Admin.findOne({ username });
+        const admin = await Admin.findOne({username});
 
         if (!admin) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({
+                message: "Invalid credentials"
+            });
         }
 
-        const match = await bcrypt.compare(password, admin.passwordHash);
+        const match = await bcrypt.compare(
+            password,
+            admin.passwordHash
+        );
 
         if (!match) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            admin.loginAttempts += 1;
+            await admin.save();
+
+            return res.status(400).json({
+                message: "Invalid credentials"
+            });
         }
+
+        // successful login
+        admin.lastLogin = new Date();
+        admin.loginAttempts = 0;
+
+        await admin.save();
 
         const token = jwt.sign(
             {
@@ -26,7 +41,7 @@ exports.loginAdmin = async (req, res) => {
                 userType: "ADMIN"
             },
             process.env.JWT_SECRET,
-            { expiresIn: "7d" }
+            {expiresIn: "7d"}
         );
 
         res.json({
@@ -34,15 +49,17 @@ exports.loginAdmin = async (req, res) => {
             admin: {
                 id: admin._id,
                 username: admin.username,
-                role: admin.role
+                role: admin.role,
+                lastLogin: admin.lastLogin
             }
         });
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({
+            message: err.message
+        });
     }
 };
-
 exports.updatePassword = async (req, res) => {
     try {
 
@@ -88,10 +105,14 @@ exports.updatePassword = async (req, res) => {
 
         admin.passwordHash = hashedPassword;
 
+        // save password update time
+        admin.lastPasswordUpdate = new Date();
+
         await admin.save();
 
         res.status(200).json({
-            message: "Password updated successfully"
+            message: "Password updated successfully",
+            lastPasswordUpdate: admin.lastPasswordUpdate
         });
 
     } catch (err) {

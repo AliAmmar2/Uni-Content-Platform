@@ -34,6 +34,7 @@
         },
 
         lastLogin: Date,
+        lastPasswordUpdate: Date,
 
         loginAttempts: {
             type: Number,

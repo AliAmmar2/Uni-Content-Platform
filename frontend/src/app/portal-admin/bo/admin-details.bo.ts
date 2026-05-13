@@ -7,6 +7,7 @@ export class AdminDetailsBo {
   fullName: string;
   role: 'admin' | 'super_admin';
   lastLogin?: Date;
+  lastPasswordUpdate?: Date;
   loginAttempts?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -18,6 +19,7 @@ export class AdminDetailsBo {
     this.fullName = adminModel.fullName;
     this.role = adminModel.role;
     this.lastLogin = adminModel.lastLogin;
+    this.lastPasswordUpdate = adminModel.lastPasswordUpdate;
     this.loginAttempts = adminModel.loginAttempts;
     this.createdAt = adminModel.createdAt;
     this.updatedAt = adminModel.updatedAt;
