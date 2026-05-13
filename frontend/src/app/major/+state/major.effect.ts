@@ -26,7 +26,7 @@ export class MajorEffects {
             });
           }),
           catchError((error) => {
-            return of(MajorActions.loadMajorsFailure({ error }));
+            return of(MajorActions.loadMajorsFailure({ error: error.error }));
           })
         );
       })
@@ -46,7 +46,7 @@ export class MajorEffects {
           catchError((error) => {
             return of(
               MajorActions.loadMajorsByFacultyFailure({
-                error
+                error: error.error
               })
             );
           })
@@ -66,7 +66,7 @@ export class MajorEffects {
             });
           }),
           catchError((error) => {
-            return of(MajorActions.loadMajorDetailsFailure({ error }));
+            return of(MajorActions.loadMajorDetailsFailure({ error: error.error }));
           })
         );
       })
@@ -86,7 +86,7 @@ export class MajorEffects {
             ];
           }),
           catchError((error) => {
-            return of(MajorActions.createMajorFailure({ error }));
+            return of(MajorActions.createMajorFailure({ error: error.error }));
           })
         );
       })
@@ -106,7 +106,7 @@ export class MajorEffects {
             ];
           }),
           catchError((error) => {
-            return of(MajorActions.updateMajorFailure({ error }));
+            return of(MajorActions.updateMajorFailure({ error: error.error }));
           })
         );
       })
@@ -126,7 +126,7 @@ export class MajorEffects {
             ];
           }),
           catchError((error) => {
-            return of(MajorActions.deleteMajorFailure({ error }));
+            return of(MajorActions.deleteMajorFailure({ error: error.error }));
           })
         );
       })

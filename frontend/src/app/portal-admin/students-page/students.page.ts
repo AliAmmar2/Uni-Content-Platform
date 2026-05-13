@@ -22,7 +22,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { LetDirective } from '@ngrx/component';
 
 import { StudentActions } from '../../student/+state/student.action';
-import { selectAllStudents } from '../../student/+state/student.selector';
+import { selectAllStudents, selectStudentDetails } from '../../student/+state/student.selector';
 import { STUDENT_KEY } from '../../student/+state/student.reducer';
 import { StudentItemBo } from '../../student/bo/student-item.bo';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -33,6 +33,8 @@ import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-d
 import {
   MatMultiActionsInterface
 } from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
+import { ToastrService } from 'ngx-toastr';
+import { StudentDetailsStatusEnum } from '../../student/+state/enums/student-details-status.enum';
 
 @Component({
   standalone: true,
@@ -61,6 +63,7 @@ import {
 export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   public adminId: string;
   private router = inject(Router);
+  private toastr = inject(ToastrService);
   private activatedRoute = inject(ActivatedRoute);
   private store = inject(Store);
   protected popoverBoxService = inject(PopoverBoxService);
@@ -79,12 +82,13 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   public dataSource = new MatTableDataSource<StudentItemBo>();
-
+  public studentDetailsSelected$ = this.store.pipe(select(selectStudentDetails));
   public studentsListSelected$ = this.store.pipe(select(selectAllStudents));
 
   ngOnInit(): void {
     this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
     this.store.dispatch(StudentActions.loadStudents());
+    this.studentDetailsSubscription();
     this.subscription$.add(
       combineLatest([
         this.studentsListSelected$,
@@ -102,6 +106,49 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;
+        }
+      })
+    );
+  }
+
+  public studentDetailsSubscription() {
+    this.subscription$.add(
+      this.studentDetailsSelected$.subscribe((studentDetails) => {
+        if (!studentDetails) {
+          return;
+        }
+
+        if (
+          studentDetails.status === StudentDetailsStatusEnum.deleteSuccess
+        ) {
+          this.toastr.success(
+            'Student deleted successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          return;
+        }
+
+        if (
+          studentDetails.status === StudentDetailsStatusEnum.deleteFailure
+        ) {
+          this.toastr.error(
+            studentDetails.error?.message ||
+            'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
         }
       })
     );
@@ -193,6 +240,7 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.toastr.clear();
     this.subscription$.unsubscribe();
   }
 

@@ -63,11 +63,11 @@ export class AdminsPage implements OnInit, AfterViewInit, OnDestroy {
   public adminId: string | null = null;
 
   private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
   private store = inject(Store);
+  private toastr = inject(ToastrService);
+  private activatedRoute = inject(ActivatedRoute);
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
-  private toastr = inject(ToastrService);
   public adminDetailsSelected$ = this.store.pipe(
     select(selectAdminDetails)
   );

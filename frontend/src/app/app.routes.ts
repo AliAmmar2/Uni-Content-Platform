@@ -7,7 +7,7 @@ import { FacultyPage } from './portal-admin/faculty-page/faculty.page';
 import { EditFacultyPage } from './portal-admin/edit-faculty-page/edit-faculty.page';
 import { StudentsPage } from './portal-admin/students-page/students.page';
 import { MajorPage } from './portal-admin/majors-page/major.page';
-import { EditMajorPage } from './portal-admin/add-new-major-page/edit-major.page';
+import { EditMajorPage } from './portal-admin/edit-major-page/edit-major.page';
 import { MajorDetailsPage } from './portal-admin/major-details-page/major-details.page';
 import { CoursesPage } from './portal-admin/courses-page/courses.page';
 import { DashboardPage } from './portal-admin/dashboard-page/dashboard.page';

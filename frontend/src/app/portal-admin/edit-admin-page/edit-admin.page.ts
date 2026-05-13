@@ -23,8 +23,8 @@ import { ToastrService } from 'ngx-toastr';
 export class EditAdminPage implements OnInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
   private toastr = inject(ToastrService);
+  private activatedRoute = inject(ActivatedRoute);
   public adminId = '';
   public editAdminId: string | null = null;
   public isEditMode = false;

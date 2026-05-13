@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -6,9 +6,9 @@ import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LetDirective } from '@ngrx/component';
 
-import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Subscription } from 'rxjs';
 
-import { selectAllFaculties } from '../../faculty/+state/faculty.selector';
+import { selectAllFaculties, selectFacultyDetails } from '../../faculty/+state/faculty.selector';
 import { FacultyActions } from '../../faculty/+state/faculty.action';
 import { FACULTY_KEY } from '../../faculty/+state/faculty.reducer';
 import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
@@ -17,6 +17,8 @@ import {
 } from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
 import { FacultyItemBo } from '../../faculty/bo/faculty-item.bo';
 import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
+import { ToastrService } from 'ngx-toastr';
+import { FacultyStatusEnum } from '../../faculty/+state/enums/faculty-status.enum';
 
 @Component({
   standalone: true,
@@ -24,15 +26,21 @@ import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-d
   templateUrl: './faculty.page.html',
   styleUrl: './faculty.page.scss'
 })
-export class FacultyPage implements OnInit {
+export class FacultyPage implements OnInit, OnDestroy {
 
   private store = inject(Store);
   private router = inject(Router);
   public adminId: string;
   accessToken: string | null = null;
+  private toastr = inject(ToastrService);
+  private subscription$ = new Subscription();
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
+
   private activatedRoute = inject(ActivatedRoute);
+  public facultyDetailsSelected$ = this.store.pipe(
+    select(selectFacultyDetails)
+  );
   // SAFE observable (no binding issues)
   private faculties$ = this.store.pipe(
     select((state: any) => selectAllFaculties(state))
@@ -72,9 +80,52 @@ export class FacultyPage implements OnInit {
         void this.router.navigate(['/login']);
         return;
       }
+      this.facultyDetailsSubscription();
       this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
       this.store.dispatch(FacultyActions.loadFaculties());
     }
+  }
+
+  public facultyDetailsSubscription() {
+    this.subscription$.add(
+      this.facultyDetailsSelected$.subscribe((facultyDetailsState) => {
+        if (!facultyDetailsState) {
+          return;
+        }
+
+        if (facultyDetailsState.status === FacultyStatusEnum.deleteSuccess) {
+          this.toastr.clear();
+
+          this.toastr.success(
+            'Faculty deleted successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          return;
+        }
+
+        if (facultyDetailsState.status === FacultyStatusEnum.deleteFailure) {
+          this.toastr.clear();
+
+          this.toastr.error(
+            facultyDetailsState.error?.message || 'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
+        }
+      })
+    );
   }
 
   onSearch(event: Event): void {
@@ -142,4 +193,7 @@ export class FacultyPage implements OnInit {
     void this.router.navigate(['/admin', this.adminId, 'add-new-faculty']);
   }
 
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
+  }
 }

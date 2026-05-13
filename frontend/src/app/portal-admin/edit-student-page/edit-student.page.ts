@@ -22,6 +22,7 @@ import { MAJOR_KEY } from '../../major/+state/major.reducer';
 import { selectStudentDetails } from '../../student/+state/student.selector';
 import { StudentDetailsStatusEnum } from '../../student/+state/enums/student-details-status.enum';
 import { STUDENT_DETAILS_KEY } from '../../student/+state/student-details.reducer';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-new-student',
@@ -35,8 +36,9 @@ import { STUDENT_DETAILS_KEY } from '../../student/+state/student-details.reduce
   ]
 })
 export class EditStudentPage implements OnInit, OnDestroy {
-  private store = inject(Store);
   private router = inject(Router);
+  private store = inject(Store);
+  private toastr = inject(ToastrService);
   private activatedRoute = inject(ActivatedRoute);
 
   public adminId = '';
@@ -163,13 +165,59 @@ export class EditStudentPage implements OnInit, OnDestroy {
         }
 
         if (
-          studentDetails.status === StudentDetailsStatusEnum.createSuccess ||
-          studentDetails.status === StudentDetailsStatusEnum.updateSuccess
+          studentDetails.status === StudentDetailsStatusEnum.createSuccess
         ) {
+          this.toastr.success(
+            'Student created successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
           this.goToStudentsPage();
           return;
         }
 
+        if (
+          studentDetails.status === StudentDetailsStatusEnum.updateSuccess
+        ) {
+          this.toastr.success(
+            'Student updated successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          this.goToStudentsPage();
+          return;
+        }
+
+        if (
+          studentDetails.status === StudentDetailsStatusEnum.createFailure ||
+          studentDetails.status === StudentDetailsStatusEnum.updateFailure
+        ) {
+          this.toastr.error(
+            studentDetails.error?.message ||
+            'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
+
+          return;
+        }
 
         if (
           this.isEditMode &&
