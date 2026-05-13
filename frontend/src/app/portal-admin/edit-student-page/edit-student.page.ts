@@ -192,7 +192,7 @@ export class EditStudentPage implements OnInit, OnDestroy {
               positionClass: 'toast-top-right',
               progressBar: true,
               closeButton: true,
-              timeOut: 3000
+              timeOut: 4000
             }
           );
 

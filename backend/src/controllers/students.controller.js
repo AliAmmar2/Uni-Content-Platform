@@ -48,15 +48,49 @@ exports.createStudent = async (req, res) => {
             password
         } = req.body;
 
-        if (!password) {
-            return res.status(400).json({message: "Password is required"});
+        // required validation
+        if (
+            !universityId ||
+            !universityEmail ||
+            !name ||
+            !faculty ||
+            !major ||
+            !academicYear ||
+            !calendarYear ||
+            !password
+        ) {
+            return res.status(400).json({
+                message: "All required fields must be provided"
+            });
+        }
+
+        // unique university ID
+        const existingStudentByUniversityId = await UniStudent.findOne({
+            universityId
+        });
+
+        if (existingStudentByUniversityId) {
+            return res.status(409).json({
+                message: "University ID already exists"
+            });
+        }
+
+        // unique university email
+        const existingStudentByEmail = await UniStudent.findOne({
+            universityEmail: universityEmail.toLowerCase()
+        });
+
+        if (existingStudentByEmail) {
+            return res.status(409).json({
+                message: "University email already exists"
+            });
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
 
         const newStudent = new UniStudent({
             universityId,
-            universityEmail,
+            universityEmail: universityEmail.toLowerCase(),
             name,
             faculty,
             major,
@@ -69,21 +103,94 @@ exports.createStudent = async (req, res) => {
 
         const saved = await newStudent.save();
 
-        const studentResponse = saved.toObject();
+        const populatedStudent = await UniStudent.findById(saved._id)
+            .populate("faculty")
+            .populate("major");
+
+        const studentResponse = populatedStudent.toObject();
+
         delete studentResponse.passwordHash;
 
-        res.status(201).json(studentResponse);
+        return res.status(201).json(studentResponse);
+
     } catch (err) {
-        res.status(400).json({message: err.message});
+        console.error("CREATE STUDENT ERROR:", err);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
 
 // UPDATE
 exports.updateStudent = async (req, res) => {
     try {
+        const {id} = req.params;
+
+        const {
+            universityId,
+            universityEmail,
+            name,
+            faculty,
+            major,
+            academicYear,
+            calendarYear,
+            role,
+            status
+        } = req.body;
+
+        // required validation
+        if (
+            !universityId ||
+            !universityEmail ||
+            !name ||
+            !faculty ||
+            !major ||
+            !academicYear ||
+            !calendarYear
+        ) {
+            return res.status(400).json({
+                message: "All required fields must be provided"
+            });
+        }
+
+        // unique university ID
+        const existingStudentByUniversityId = await UniStudent.findOne({
+            universityId,
+            _id: {$ne: id}
+        });
+
+        if (existingStudentByUniversityId) {
+            return res.status(409).json({
+                message: "University ID already exists"
+            });
+        }
+
+        // unique university email
+        const existingStudentByEmail = await UniStudent.findOne({
+            universityEmail: universityEmail.toLowerCase(),
+            _id: {$ne: id}
+        });
+
+        if (existingStudentByEmail) {
+            return res.status(409).json({
+                message: "University email already exists"
+            });
+        }
+
         const updatedStudent = await UniStudent.findByIdAndUpdate(
-            req.params.id,
-            req.body,
+            id,
+            {
+                universityId,
+                universityEmail: universityEmail.toLowerCase(),
+                name,
+                faculty,
+                major,
+                academicYear,
+                calendarYear,
+                role,
+                status
+            },
             {
                 new: true,
                 runValidators: true
@@ -93,12 +200,23 @@ exports.updateStudent = async (req, res) => {
             .populate("major");
 
         if (!updatedStudent) {
-            return res.status(404).json({message: "Student not found"});
+            return res.status(404).json({
+                message: "Student not found"
+            });
         }
 
-        res.status(200).json(updatedStudent);
+        const studentResponse = updatedStudent.toObject();
+
+        delete studentResponse.passwordHash;
+
+        return res.status(200).json(studentResponse);
+
     } catch (err) {
-        res.status(400).json({message: err.message});
+        console.error("UPDATE STUDENT ERROR:", err);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
 // DELETE

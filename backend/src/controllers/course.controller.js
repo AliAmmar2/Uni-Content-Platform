@@ -16,7 +16,6 @@ exports.createCourse = async (req, res) => {
             semester
         } = req.body;
 
-        // 1. Validate required fields
         if (
             !name ||
             !code ||
@@ -31,7 +30,6 @@ exports.createCourse = async (req, res) => {
             });
         }
 
-        // 2. Check if major exists
         const majorExists = await Major.findById(major);
 
         if (!majorExists) {
@@ -40,20 +38,31 @@ exports.createCourse = async (req, res) => {
             });
         }
 
-        // 3. Prevent duplicate course code
-        const existingCourse = await Course.findOne({code});
+        const existingCourseByCode = await Course.findOne({
+            code
+        });
 
-        if (existingCourse) {
+        if (existingCourseByCode) {
             return res.status(409).json({
                 message: "Course code already exists"
             });
         }
 
-        // 4. Create course
+        const existingCourseByNameInMajor = await Course.findOne({
+            major,
+            name
+        });
+
+        if (existingCourseByNameInMajor) {
+            return res.status(409).json({
+                message: "Course name already exists in this major"
+            });
+        }
+
         const course = await Course.create({
             name,
             code,
-            description,
+            description: description || "",
             credits,
             major,
             academicYear,
@@ -61,9 +70,12 @@ exports.createCourse = async (req, res) => {
             semester
         });
 
+        const populatedCourse = await Course.findById(course._id)
+            .populate("major", "name code");
+
         return res.status(201).json({
             message: "Course created successfully",
-            course
+            course: populatedCourse
         });
 
     } catch (error) {
@@ -370,7 +382,6 @@ exports.updateCourse = async (req, res) => {
             semester
         } = req.body;
 
-        // 1. Check course exists
         const course = await Course.findById(courseId);
 
         if (!course) {
@@ -379,7 +390,6 @@ exports.updateCourse = async (req, res) => {
             });
         }
 
-        // 2. Validate required fields (FULL UPDATE)
         if (
             !name ||
             !code ||
@@ -394,7 +404,6 @@ exports.updateCourse = async (req, res) => {
             });
         }
 
-        // 3. Validate major exists
         const majorExists = await Major.findById(major);
 
         if (!majorExists) {
@@ -403,22 +412,32 @@ exports.updateCourse = async (req, res) => {
             });
         }
 
-        // 4. Prevent duplicate course code (exclude self)
-        const existingCourse = await Course.findOne({
+        const existingCourseByCode = await Course.findOne({
             code,
             _id: { $ne: courseId }
         });
 
-        if (existingCourse) {
+        if (existingCourseByCode) {
             return res.status(409).json({
                 message: "Course code already exists"
             });
         }
 
-        // 5. Update course
+        const existingCourseByNameInMajor = await Course.findOne({
+            major,
+            name,
+            _id: { $ne: courseId }
+        });
+
+        if (existingCourseByNameInMajor) {
+            return res.status(409).json({
+                message: "Course name already exists in this major"
+            });
+        }
+
         course.name = name;
         course.code = code;
-        course.description = description;
+        course.description = description || "";
         course.credits = credits;
         course.major = major;
         course.academicYear = academicYear;
@@ -427,9 +446,12 @@ exports.updateCourse = async (req, res) => {
 
         await course.save();
 
+        const populatedCourse = await Course.findById(course._id)
+            .populate("major", "name code");
+
         return res.json({
             message: "Course updated successfully",
-            course
+            course: populatedCourse
         });
 
     } catch (error) {

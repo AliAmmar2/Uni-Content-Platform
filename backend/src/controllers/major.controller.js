@@ -100,23 +100,33 @@ exports.getMajorsByFaculty = async (req, res) => {
 exports.createMajor = async (req, res) => {
     try {
         const {
-            name, code, faculty, description, totalCredits,
+            name,
+            code,
+            faculty,
+            description,
+            totalCredits,
             duration
         } = req.body;
 
         if (!name || !code || !faculty) {
             return res.status(400).json({
-                message: "name, code, faculty are required"
+                message: "Name, code, and faculty are required"
             });
         }
 
-        const exists = await Major.findOne({
-            $or: [{name}, {code}]
-        });
+        const existingMajorByName = await Major.findOne({ name });
 
-        if (exists) {
+        if (existingMajorByName) {
             return res.status(409).json({
-                message: "Major already exists"
+                message: "Major name already exists"
+            });
+        }
+
+        const existingMajorByCode = await Major.findOne({ code });
+
+        if (existingMajorByCode) {
+            return res.status(409).json({
+                message: "Major code already exists"
             });
         }
 
@@ -124,7 +134,7 @@ exports.createMajor = async (req, res) => {
             name,
             code,
             faculty,
-            description,
+            description: description || "",
             totalCredits,
             duration
         });
@@ -136,32 +146,86 @@ exports.createMajor = async (req, res) => {
 
     } catch (error) {
         console.error("CREATE MAJOR ERROR:", error);
-        return res.status(500).json({message: "Internal server error"});
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
-
 // =======================
 // UPDATE MAJOR
 // =======================
 exports.updateMajor = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
+
+        const {
+            name,
+            code,
+            faculty,
+            description,
+            totalCredits,
+            duration
+        } = req.body;
+
+        if (!name || !code || !faculty) {
+            return res.status(400).json({
+                message: "Name, code, and faculty are required"
+            });
+        }
+
+        const existingMajorByName = await Major.findOne({
+            name,
+            _id: { $ne: id }
+        });
+
+        if (existingMajorByName) {
+            return res.status(409).json({
+                message: "Major name already exists"
+            });
+        }
+
+        const existingMajorByCode = await Major.findOne({
+            code,
+            _id: { $ne: id }
+        });
+
+        if (existingMajorByCode) {
+            return res.status(409).json({
+                message: "Major code already exists"
+            });
+        }
 
         const major = await Major.findByIdAndUpdate(
             id,
-            req.body,
-            {new: true, runValidators: true}
+            {
+                name,
+                code,
+                faculty,
+                description: description || "",
+                totalCredits,
+                duration
+            },
+            {
+                new: true,
+                runValidators: true
+            }
         ).populate("faculty", "name code");
 
         if (!major) {
-            return res.status(404).json({message: "Major not found"});
+            return res.status(404).json({
+                message: "Major not found"
+            });
         }
 
         return res.json(major);
 
     } catch (error) {
         console.error("UPDATE MAJOR ERROR:", error);
-        return res.status(500).json({message: "Internal server error"});
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
 
@@ -170,12 +234,14 @@ exports.updateMajor = async (req, res) => {
 // =======================
 exports.deleteMajor = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
 
         const major = await Major.findById(id);
 
         if (!major) {
-            return res.status(404).json({message: "Major not found"});
+            return res.status(404).json({
+                message: "Major not found"
+            });
         }
 
         const studentsCount = await UniStudent.countDocuments({
@@ -188,12 +254,27 @@ exports.deleteMajor = async (req, res) => {
             });
         }
 
+        const coursesCount = await Course.countDocuments({
+            major: id
+        });
+
+        if (coursesCount > 0) {
+            return res.status(400).json({
+                message: "Cannot delete major with assigned courses"
+            });
+        }
+
         await Major.findByIdAndDelete(id);
 
-        return res.json({message: "Major deleted successfully"});
+        return res.json({
+            message: "Major deleted successfully"
+        });
 
     } catch (error) {
         console.error("DELETE MAJOR ERROR:", error);
-        return res.status(500).json({message: "Internal server error"});
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };

@@ -240,7 +240,6 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.toastr.clear();
     this.subscription$.unsubscribe();
   }
 
