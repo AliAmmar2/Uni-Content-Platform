@@ -1,5 +1,6 @@
 const Course = require("../models/Course");
 const Material = require("../models/Material");
+const Major = require("../models/Major");
 const UniStudent = require("../models/Student");
 
 // CREATE COURSE
@@ -339,18 +340,17 @@ exports.deleteCourse = async (req, res) => {
             });
         }
 
-        // // OPTIONAL: CHECK IF ANY STUDENT DEPENDS ON IT
-        // const studentUsingCourse = await UniStudent.exists({
-        //   major: course.major,
-        //   academicYear: course.academicYear,
-        //   calendarYear: course.calendarYear
-        // });
-        //
-        // if (studentUsingCourse) {
-        //   return res.status(400).json({
-        //     message: "Cannot delete course. It is currently assigned to students."
-        //   });
-        // }
+        const studentUsingCourse = await UniStudent.exists({
+            major: course.major,
+            academicYear: course.academicYear,
+            calendarYear: course.calendarYear
+        });
+
+        if (studentUsingCourse) {
+            return res.status(400).json({
+                message: "Cannot delete course. It is currently assigned to students."
+            });
+        }
 
         await Course.findByIdAndDelete(courseId);
 
@@ -414,7 +414,7 @@ exports.updateCourse = async (req, res) => {
 
         const existingCourseByCode = await Course.findOne({
             code,
-            _id: { $ne: courseId }
+            _id: {$ne: courseId}
         });
 
         if (existingCourseByCode) {
@@ -426,7 +426,7 @@ exports.updateCourse = async (req, res) => {
         const existingCourseByNameInMajor = await Course.findOne({
             major,
             name,
-            _id: { $ne: courseId }
+            _id: {$ne: courseId}
         });
 
         if (existingCourseByNameInMajor) {

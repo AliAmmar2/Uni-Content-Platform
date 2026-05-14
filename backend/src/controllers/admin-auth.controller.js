@@ -101,9 +101,7 @@ exports.updatePassword = async (req, res) => {
             });
         }
 
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        admin.passwordHash = hashedPassword;
+        admin.passwordHash = await bcrypt.hash(newPassword, 10);
 
         // save password update time
         admin.lastPasswordUpdate = new Date();

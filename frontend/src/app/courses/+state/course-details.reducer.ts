@@ -1,20 +1,20 @@
 import { Action, createReducer, on } from '@ngrx/store';
 
 import { CourseDetailsBo } from '../bo/course-details.bo';
-import { CoursesStatusEnum } from './enums/courses-status.enum';
+import { CourseStatusEnum } from './enums/course-status.enum';
 import { CourseActions } from './courses.action';
 
 export const COURSE_DETAILS_KEY = 'courseDetailsKey';
 
 export interface CourseDetailsState {
   readonly [COURSE_DETAILS_KEY]: CourseDetailsBo;
-  readonly status: CoursesStatusEnum;
+  readonly status: CourseStatusEnum;
   readonly error: Error;
 }
 
 const initialCourseDetailsState: CourseDetailsState = {
   [COURSE_DETAILS_KEY]: null,
-  status: CoursesStatusEnum.pending,
+  status: CourseStatusEnum.pending,
   error: null,
 };
 
@@ -24,20 +24,20 @@ export const courseDetailsReducers = createReducer<CourseDetailsState, Action>(
   on(CourseActions.loadCourseDetails, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.loading
+      status: CourseStatusEnum.loading
     };
   }),
   on(CourseActions.loadCourseDetailsSuccess, (state, { course }) => {
     return {
       ...state,
       [COURSE_DETAILS_KEY]: course,
-      status: CoursesStatusEnum.loadDetailsSuccess
+      status: CourseStatusEnum.loadDetailsSuccess
     };
   }),
   on(CourseActions.loadCourseDetailsFailure, (state, { error }) => {
     return {
       ...state,
-      status: CoursesStatusEnum.loading,
+      status: CourseStatusEnum.loading,
       error
     };
   }),
@@ -45,19 +45,19 @@ export const courseDetailsReducers = createReducer<CourseDetailsState, Action>(
   on(CourseActions.createCourse, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.loading
+      status: CourseStatusEnum.loading
     };
   }),
   on(CourseActions.createCourseSuccess, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.createSuccess
+      status: CourseStatusEnum.createSuccess
     };
   }),
   on(CourseActions.createCourseFailure, (state, { error }) => {
     return {
       ...state,
-      status: CoursesStatusEnum.createFailure,
+      status: CourseStatusEnum.createFailure,
       error
     };
   }),
@@ -65,19 +65,19 @@ export const courseDetailsReducers = createReducer<CourseDetailsState, Action>(
   on(CourseActions.updateCourse, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.loading
+      status: CourseStatusEnum.loading
     };
   }),
   on(CourseActions.updateCourseSuccess, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.updateSuccess
+      status: CourseStatusEnum.updateSuccess
     };
   }),
   on(CourseActions.updateCourseFailure, (state, { error }) => {
     return {
       ...state,
-      status: CoursesStatusEnum.updateFailure,
+      status: CourseStatusEnum.updateFailure,
       error
     };
   }),
@@ -85,20 +85,20 @@ export const courseDetailsReducers = createReducer<CourseDetailsState, Action>(
   on(CourseActions.deleteCourse, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.loading
+      status: CourseStatusEnum.loading
     };
   }),
   on(CourseActions.deleteCourseSuccess, (state) => {
     return {
       ...state,
-      status: CoursesStatusEnum.deleteSuccess,
+      status: CourseStatusEnum.deleteSuccess,
       [COURSE_DETAILS_KEY]: null
     };
   }),
   on(CourseActions.deleteCourseFailure, (state, { error }) => {
     return {
       ...state,
-      status: CoursesStatusEnum.deleteFailure,
+      status: CourseStatusEnum.deleteFailure,
       error
     };
   }),
@@ -107,7 +107,7 @@ export const courseDetailsReducers = createReducer<CourseDetailsState, Action>(
     return {
       ...state,
       [COURSE_DETAILS_KEY]: null,
-      status: CoursesStatusEnum.pending,
+      status: CourseStatusEnum.pending,
       error: null
     };
   })

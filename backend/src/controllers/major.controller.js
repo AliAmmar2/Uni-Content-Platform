@@ -10,7 +10,14 @@ exports.getMajorById = async (req, res) => {
             return res.status(404).json({message: "Major not found"});
         }
 
-        const courses = await Course.find({major: major._id});
+        const courses = await Course.find({
+            major: major._id
+        })
+            .sort({
+                academicYear: 1,
+                semester: 1,
+                name: 1
+            });
 
         // 👑 ADMIN
         if (req.user?.userType === "ADMIN") {

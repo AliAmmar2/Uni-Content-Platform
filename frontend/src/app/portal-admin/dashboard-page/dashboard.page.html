@@ -46,11 +46,11 @@
           <div class="account-card__header">
             <div class="account-card__profile">
               <div class="account-card__avatar account-card__avatar--initials">
-                {{ getInitials(admin[ADMIN_DETAILS_KEY]?.fullName) }}
+                {{ getInitials(admin[LOGGED_IN_ADMIN_KEY]?.fullName) }}
               </div>
               <div class="account-card__identity">
                 <h3 class="account-card__name">
-                  {{ admin[ADMIN_DETAILS_KEY]?.fullName }}
+                  {{ admin[LOGGED_IN_ADMIN_KEY]?.fullName }}
                 </h3>
               </div>
             </div>
@@ -64,7 +64,7 @@
             </span>
 
               <span class="account-field__value">
-                {{ admin[ADMIN_DETAILS_KEY]?.email }}
+                {{ admin[LOGGED_IN_ADMIN_KEY]?.email }}
             </span>
             </div>
 
@@ -73,7 +73,7 @@
               Username
             </span>
               <span class="account-field__value">
-              {{ admin[ADMIN_DETAILS_KEY]?.username }}
+              {{ admin[LOGGED_IN_ADMIN_KEY]?.username }}
             </span>
             </div>
           </div>

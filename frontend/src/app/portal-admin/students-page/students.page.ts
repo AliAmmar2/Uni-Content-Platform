@@ -100,9 +100,7 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
 
         const students = state?.[STUDENT_KEY] ?? [];
 
-        const filtered = this.filterStudents(students, search);
-
-        this.dataSource.data = filtered;
+        this.dataSource.data = this.filterStudents(students, search);
 
         if (this.paginator) {
           this.dataSource.paginator = this.paginator;

@@ -1,6 +1,6 @@
 <div class="major-details">
 
-  <ng-container *ngrxLet="majorDetailsSelected$ as major">
+  <ng-container *ngrxLet="filteredMajorDetails$ as major">
 
     <div class="major-details__breadcrumb">
 
@@ -26,6 +26,7 @@
         <div class="major-details__icon"></div>
 
         <div class="major-details__title-wrapper">
+
           <h1 class="major-details__title">
             {{ major[MAJOR_DETAILS_KEY]?.name }}
           </h1>
@@ -33,6 +34,7 @@
           <p class="major-details__faculty">
             {{ major[MAJOR_DETAILS_KEY]?.faculty?.name }}
           </p>
+
         </div>
 
         <span class="major-details__code">
@@ -105,23 +107,22 @@
 
         <div class="major-details__table-actions">
 
-          @if (major[MAJOR_DETAILS_KEY]?.courses?.length > 0) {
+          <div class="major-details__search-box">
 
-            <div class="major-details__search-box">
+            <fa-icon [icon]="['fas', 'search']"></fa-icon>
 
-              <fa-icon [icon]="['fas', 'search']"></fa-icon>
+            <input
+              type="text"
+              class="major-details__search-input"
+              placeholder="Search courses..."
+              [formControl]="searchControl"
+            />
 
-              <input
-                type="text"
-                class="major-details__search-input"
-                placeholder="Search courses..."
-              />
+          </div>
 
-            </div>
-
-          }
-
-          <button class="add-btn" type="button">
+          <button class="add-btn"
+                  (click)="navigateToAddCourse(major[MAJOR_DETAILS_KEY].id)"
+                  type="button">
             <fa-icon [icon]="['fas', 'plus']"></fa-icon>
           </button>
 
@@ -139,45 +140,96 @@
             class="major-details__table">
 
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Course Name</th>
+
+              <th mat-header-cell *matHeaderCellDef>
+                Course Name
+              </th>
+
               <td mat-cell *matCellDef="let c">
-                <div class="major-details__course-title">{{ c.name }}</div>
+                <div class="major-details__course-title">
+                  {{ c.name }}
+                </div>
               </td>
+
             </ng-container>
 
-
             <ng-container matColumnDef="code">
-              <th mat-header-cell *matHeaderCellDef>Code</th>
+
+              <th mat-header-cell *matHeaderCellDef>
+                Code
+              </th>
+
               <td mat-cell *matCellDef="let c">
-                <span class="major-details__course-code">{{ c.code }}</span>
+                <span class="major-details__course-code">
+                  {{ c.code }}
+                </span>
               </td>
+
+            </ng-container>
+
+            <ng-container matColumnDef="year">
+
+              <th mat-header-cell *matHeaderCellDef>
+                Year
+              </th>
+
+              <td mat-cell *matCellDef="let c">
+                <span class="major-details__course-year">
+                  {{ c.academicYear }}
+                </span>
+              </td>
+
             </ng-container>
 
             <ng-container matColumnDef="semester">
-              <th mat-header-cell *matHeaderCellDef>Semester</th>
+
+              <th mat-header-cell *matHeaderCellDef>
+                Semester
+              </th>
+
               <td mat-cell *matCellDef="let c">
                 {{ c.semester }}
               </td>
+
             </ng-container>
 
             <ng-container matColumnDef="credits">
-              <th mat-header-cell *matHeaderCellDef>Credits</th>
+
+              <th mat-header-cell *matHeaderCellDef>
+                Credits
+              </th>
+
               <td mat-cell *matCellDef="let c">
                 {{ c.credits }} ECTS
               </td>
+
             </ng-container>
 
             <ng-container matColumnDef="actions">
+
               <th mat-header-cell *matHeaderCellDef></th>
+
               <td mat-cell *matCellDef="let c">
-                <button class="major-details__icon-button">
+
+                <button
+                  class="major-details__icon-button"
+                  type="button"
+                  (click)="presentPopoverActions($event, c.id)">
+
                   <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+
                 </button>
+
               </td>
+
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns;">
+            </tr>
 
           </table>
 
@@ -190,14 +242,15 @@
             </div>
 
             <h3 class="major-details__empty-title">
-              No courses in this major
+              No courses found
             </h3>
 
             <p class="major-details__empty-description">
-              This major does not have any assigned courses yet.
+              No courses match your search.
             </p>
 
           </div>
+
         }
 
       </div>

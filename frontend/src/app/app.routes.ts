@@ -15,6 +15,7 @@ import { AccountSettingsPage } from './portal-admin/account-settings-page/accoun
 import { EditStudentPage } from './portal-admin/edit-student-page/edit-student.page';
 import { AdminsPage } from './portal-admin/admins-page/admins.page';
 import { EditAdminPage } from './portal-admin/edit-admin-page/edit-admin.page';
+import { EditCoursePage } from './portal-admin/edit-course-page/edit-course.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -81,6 +82,10 @@ export const routes: Routes = [
         component: EditAdminPage
       },
       {
+        path: 'add-new-course',
+        component: EditCoursePage
+      },
+      {
         path: ':facultyId/edit-faculty',
         component: EditFacultyPage
       }
@@ -91,6 +96,14 @@ export const routes: Routes = [
       {
         path: ':adminId/edit-admin',
         component: EditAdminPage
+      },
+      {
+        path: ':courseId/edit-course',
+        component: EditCoursePage
+      },
+      {
+        path: ':majorId/add-new-course',
+        component: EditCoursePage
       }
       ,
       {

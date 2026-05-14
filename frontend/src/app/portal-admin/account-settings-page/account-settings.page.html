@@ -1,6 +1,5 @@
 <ng-container *ngrxLet="this.adminDetailsSelected$ | async as admin">
   <section class="account">
-
     <!-- HEADER -->
     <div class="account__header">
       <h1 class="account__title">Account Settings</h1>
@@ -70,16 +69,16 @@
 
           <div>
             <p class="security-item__title">Password Management</p>
-            @if (admin[ADMIN_DETAILS_KEY]?.lastPasswordUpdate) {
+            @if (admin[LOGGED_IN_ADMIN_KEY]?.lastPasswordUpdate) {
               <small class="security-item__desc">
-                Last changed {{ admin[ADMIN_DETAILS_KEY]?.lastPasswordUpdate | date :'medium' }}
+                Last changed {{ admin[LOGGED_IN_ADMIN_KEY]?.lastPasswordUpdate | date :'medium' }}
               </small>
             }
           </div>
         </div>
 
         <button type="button"
-                (click)="presentUpdatePasswordModal(adminId)"
+                (click)="presentUpdatePasswordModal()"
                 class="btn btn--outline">
           Change Password
         </button>

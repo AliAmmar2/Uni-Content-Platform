@@ -5,15 +5,15 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { ADMIN_DETAILS_KEY } from '../+state/admin-details.reducer';
+import { ADMIN_DETAILS_KEY, LOGGED_IN_ADMIN_KEY } from '../+state/admin-details.reducer';
 import { LetDirective } from '@ngrx/component';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { selectAdminDetails } from '../+state/admin.selector';
 import { AdminStatusEnum } from '../+state/enums/admin-status.enum';
-import { MatDialog } from '@angular/material/dialog';
 import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
 import { LoginAdminService } from '../../login-page/service/login-admin.service';
 import { passwordsMatchValidator } from '../../validators/passwordMatchValidator';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-account-settings',
@@ -32,7 +32,7 @@ export class AccountSettingsPage implements OnInit {
   public store = inject(Store);
   public adminForm: FormGroup;
   public adminId: string;
-  private matDialog = inject(MatDialog);
+  private toastr = inject(ToastrService);
   private adminService = inject(LoginAdminService);
   private ngxMdDialogService = inject(NgxMdDialogService);
   private router = inject(Router);
@@ -57,9 +57,9 @@ export class AccountSettingsPage implements OnInit {
     this.adminDetailsSelected$.subscribe(adminDetails => {
       if (adminDetails) {
         this.adminForm.patchValue({
-          email: adminDetails[ADMIN_DETAILS_KEY]?.email,
-          fullName: adminDetails[ADMIN_DETAILS_KEY]?.fullName,
-          username: adminDetails[ADMIN_DETAILS_KEY]?.username,
+          email: adminDetails[LOGGED_IN_ADMIN_KEY]?.email,
+          fullName: adminDetails[LOGGED_IN_ADMIN_KEY]?.fullName,
+          username: adminDetails[LOGGED_IN_ADMIN_KEY]?.username,
         });
       }
       if (adminDetails.status === AdminStatusEnum.updateSuccess) {
@@ -76,7 +76,7 @@ export class AccountSettingsPage implements OnInit {
     }))
   }
 
-  public async presentUpdatePasswordModal(id: string) {
+  public async presentUpdatePasswordModal() {
     const dialogRef = this.ngxMdDialogService.openFormActionsDialog(
       {
         title: 'Update Password',
@@ -136,12 +136,47 @@ export class AccountSettingsPage implements OnInit {
           {
             label: 'Update',
             color: '#c4001a',
+            closeOnClick: false,
             disabledWhenInvalid: true,
             handler: (formValue) => {
               this.adminService.updatePassword({
                 oldPassword: formValue.oldPassword,
                 newPassword: formValue.newPassword
-              }).subscribe();
+              }).subscribe({
+                next: (response) => {
+                  this.toastr.clear();
+
+                  this.toastr.success(
+                    response?.message || 'Password updated successfully',
+                    'Success',
+                    {
+                      positionClass: 'toast-top-right',
+                      progressBar: true,
+                      closeButton: true,
+                      timeOut: 3000
+                    }
+                  );
+
+                  dialogRef.close();
+
+                  this.store.dispatch(AdminActions.loadMe());
+                },
+
+                error: (error) => {
+                  this.toastr.clear();
+
+                  this.toastr.error(
+                    error?.error?.message || 'Something went wrong',
+                    'Cannot update password',
+                    {
+                      positionClass: 'toast-top-right',
+                      progressBar: true,
+                      closeButton: true,
+                      timeOut: 4000
+                    }
+                  );
+                }
+              });
             }
           }
         ]
@@ -151,4 +186,5 @@ export class AccountSettingsPage implements OnInit {
   }
 
   protected readonly ADMIN_DETAILS_KEY = ADMIN_DETAILS_KEY;
+  protected readonly LOGGED_IN_ADMIN_KEY = LOGGED_IN_ADMIN_KEY;
 }

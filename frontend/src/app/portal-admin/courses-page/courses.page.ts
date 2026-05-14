@@ -32,6 +32,13 @@ import { CourseActions } from '../../courses/+state/courses.action';
 import { selectAllMajors } from '../../major/+state/major.selector';
 import { MajorActions } from '../../major/+state/major.action';
 import { MAJOR_KEY } from '../../major/+state/major.reducer';
+import {
+  MatMultiActionsInterface
+} from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
+import { CourseItemBo } from '../../courses/bo/course-item.bo';
+import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
+import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -59,10 +66,13 @@ import { MAJOR_KEY } from '../../major/+state/major.reducer';
 })
 export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
 
+  public adminId: string;
   private store = inject(Store);
-
+  private router = inject(Router);
   private subscription$ = new Subscription();
-
+  private activatedRoute = inject(ActivatedRoute);
+  protected popoverBoxService = inject(PopoverBoxService);
+  private ngxMdDialogService = inject(NgxMdDialogService);
   @ViewChild(MatPaginator)
   paginator!: MatPaginator;
 
@@ -88,7 +98,7 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
   public majorsListSelected$ = this.store.pipe(select(selectAllMajors));
 
   ngOnInit(): void {
-
+    this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
     this.store.dispatch(CourseActions.loadAllCourses());
     this.store.dispatch(MajorActions.loadMajors());
 
@@ -167,6 +177,64 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
         matchesSemester
       );
     });
+  }
+
+  public async presentPopoverActions($event: MouseEvent, course: CourseItemBo) {
+    this.popoverBoxService.openPanel($event, [
+      {
+        faIcon: ['fas', 'edit'],
+        visible: true,
+        label: 'Edit',
+        handler: () => {
+          this.navigateToEditCourse(course.id)
+        }
+      },
+      {
+        faIcon: ['fas', 'trash'],
+        visible: true,
+        label: 'Delete',
+        handler: () => {
+          this.presentDeleteAlert(course)
+
+        }
+      }
+    ]);
+  }
+
+  public navigateToAddNewCourse(): void {
+    void this.router.navigate(['/admin', this.adminId, 'add-new-course']);
+  }
+
+  public navigateToEditCourse(id: string): void {
+    void this.router.navigate(['/admin', this.adminId, id, 'edit-course']);
+  }
+
+  public presentDeleteAlert(course: CourseItemBo) {
+    const matYesNoDialogData: MatMultiActionsInterface = {
+      faIcon: ['fas', 'trash'],
+      title: 'Delete Course?',
+      message: course.name + ' will be permanently deleted!',
+      action: [
+        {
+          label: 'yes delete',
+          color: ' #d40000',
+          handler: () => {
+            this.deleteCourse(course.id);
+          }
+        },
+        {
+          label: 'cancel',
+          color: '#88a5db',
+          handler: () => {
+          }
+        }
+      ]
+    };
+    this.ngxMdDialogService.openMultiActionsDialog(matYesNoDialogData, { width: '400px' });
+  }
+
+  public deleteCourse(id: string): void {
+    this.store.dispatch(CourseActions.deleteCourse({ id }));
   }
 
   ngAfterViewInit(): void {

@@ -1,4 +1,4 @@
-export enum CoursesStatusEnum {
+export enum CourseStatusEnum {
   pending = 'pending',
   loading = 'loading',
   loadSuccess = 'loadSuccess',

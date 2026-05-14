@@ -1,4 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@use './app/sahred-scss/toastr';
+@use './app/sahred-scss/toastr' as customToastr;
 
-@import 'ngx-toastr/toastr';
+@use 'ngx-toastr/toastr' as ngxToastr;

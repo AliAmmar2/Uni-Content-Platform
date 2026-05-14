@@ -78,10 +78,10 @@ export class PortalAdminPage implements OnInit {
 
   public logout() {
     localStorage.removeItem('accessToken');
-    this.store.dispatch(AdminActions.resetAdminState());
-    this.store.dispatch(MajorActions.resetMajorState());
-    this.store.dispatch(FacultyActions.resetFacultyState());
-    this.store.dispatch(StudentActions.resetStudentState());
+    // this.store.dispatch(AdminActions.resetAdminState());
+    // this.store.dispatch(MajorActions.resetMajorState());
+    // this.store.dispatch(FacultyActions.resetFacultyState());
+    // this.store.dispatch(StudentActions.resetStudentState());
     this.subscription$.unsubscribe();
     this.dashboardUiService.clearMenu();
     void this.router.navigate(['/login']);
