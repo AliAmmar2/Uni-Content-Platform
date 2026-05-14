@@ -21,17 +21,17 @@ exports.login = async (req, res) => {
       });
     }
 
-    if (!validateUniversityEmail(universityEmail)) {
-      return res.status(400).json({ 
-        message: "Invalid university email format" 
-      });
-    }
+    // if (!validateUniversityEmail(universityEmail)) {
+    //   return res.status(400).json({
+    //     message: "Invalid university email format"
+    //   });
+    // }
 
-    if (!validateUniversityId(universityId)) {
-      return res.status(400).json({ 
-        message: "Invalid university ID format" 
-      });
-    }
+    // if (!validateUniversityId(universityId)) {
+    //   return res.status(400).json({
+    //     message: "Invalid university ID format"
+    //   });
+    // }
 
     const user = await UniStudent.findOne({ universityId })
       .populate('faculty', 'name')

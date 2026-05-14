@@ -27,7 +27,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { COURSE_KEY } from '../../courses/+state/course.reducer';
-import { selectAllCourses } from '../../courses/+state/courses.selector';
+import { selectAllCourses, selectCourseDetails } from '../../courses/+state/courses.selector';
 import { CourseActions } from '../../courses/+state/courses.action';
 import { selectAllMajors } from '../../major/+state/major.selector';
 import { MajorActions } from '../../major/+state/major.action';
@@ -39,6 +39,8 @@ import { CourseItemBo } from '../../courses/bo/course-item.bo';
 import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
 import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CourseStatusEnum } from '../../courses/+state/enums/course-status.enum';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
@@ -70,6 +72,7 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
   private subscription$ = new Subscription();
+  private toastr = inject(ToastrService);
   private activatedRoute = inject(ActivatedRoute);
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
@@ -96,14 +99,58 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
   /* STORE */
   public coursesListSelected$ = this.store.pipe(select(selectAllCourses));
   public majorsListSelected$ = this.store.pipe(select(selectAllMajors));
+  public courseDetailsSelected$ = this.store.pipe(select(selectCourseDetails));
 
   ngOnInit(): void {
     this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
-    this.store.dispatch(CourseActions.loadAllCourses());
-    this.store.dispatch(MajorActions.loadMajors());
-
     this.coursesSubscription();
+    this.courseDetailsSubscription();
+    this.store.dispatch(CourseActions.loadAllCourses());
+
+    this.store.dispatch(MajorActions.loadMajors());
   }
+  public courseDetailsSubscription(): void {
+    this.subscription$.add(
+      this.courseDetailsSelected$.subscribe((courseDetailsState) => {
+        if (!courseDetailsState?.status) {
+          return;
+        }
+
+        if (courseDetailsState.status === CourseStatusEnum.deleteSuccess) {
+          this.toastr.clear();
+
+          this.toastr.success(
+            'Course deleted successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          return;
+        }
+
+        if (courseDetailsState.status === CourseStatusEnum.deleteFailure) {
+          this.toastr.clear();
+
+          this.toastr.error(
+            courseDetailsState.error?.message || 'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
+        }
+      })
+    );
+  }
+
 
   public coursesSubscription(): void {
     this.subscription$.add(

@@ -1,4 +1,5 @@
 const UniStudent = require("../models/Student");
+const Admin = require("../models/Admin");
 const bcrypt = require("bcrypt");
 // GET ALL
 exports.getStudents = async (req, res) => {
@@ -233,5 +234,90 @@ exports.deleteStudent = async (req, res) => {
         });
     } catch (err) {
         res.status(500).json({message: err.message});
+    }
+};
+
+exports.updatePasswordBySuperAdmin = async (req, res) => {
+    try {
+
+        const {id} = req.params;
+
+        const {
+            superAdminPassword,
+            newPassword
+        } = req.body;
+
+        if (!superAdminPassword || !newPassword) {
+            return res.status(400).json({
+                message: "Super admin password and new password are required"
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                message: "New password must be at least 8 characters"
+            });
+        }
+
+        // logged in admin
+        const admin = await Admin.findById(req.user.id);
+
+        if (!admin) {
+            return res.status(404).json({
+                message: "Admin not found"
+            });
+        }
+
+        // only super admin allowed
+        if (admin.role !== "super_admin") {
+            return res.status(403).json({
+                message: "Only super admin can update student password"
+            });
+        }
+
+        // verify super admin password
+        const isPasswordValid = await bcrypt.compare(
+            superAdminPassword,
+            admin.passwordHash
+        );
+
+        if (!isPasswordValid) {
+            return res.status(400).json({
+                message: "Super admin password is incorrect"
+            });
+        }
+
+        // find student
+        const student = await UniStudent.findById(id);
+
+        if (!student) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
+
+        // update password
+        student.passwordHash = await bcrypt.hash(newPassword, 10);
+
+        // reset lock/login attempts
+        student.loginAttempts = 0;
+        student.lockUntil = undefined;
+
+        await student.save();
+
+        return res.status(200).json({
+            message: "Student password updated successfully"
+        });
+
+    } catch (error) {
+
+        console.error(
+            "UPDATE STUDENT PASSWORD BY SUPER ADMIN ERROR:",
+            error
+        );
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
