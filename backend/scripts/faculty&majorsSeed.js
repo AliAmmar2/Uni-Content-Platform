@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bcrypt   = require("bcrypt");
 
 // adjust paths to match your structure
-const Student = require("../src/models/");
+const Student = require("../src/models/Student");
 const Faculty    = require("../src/models/Faculty");
 const Major      = require("../src/models/Major");
 

@@ -1,10 +1,10 @@
-const UniStudent = require("../models/Student");
+const Student = require("../models/Student");
 const Admin = require("../models/Admin");
 const bcrypt = require("bcrypt");
 // GET ALL
 exports.getStudents = async (req, res) => {
     try {
-        const students = await UniStudent.find()
+        const students = await Student.find()
             .populate("faculty")
             .populate("major");
 
@@ -17,7 +17,7 @@ exports.getStudents = async (req, res) => {
 // GET BY ID
 exports.getStudentById = async (req, res) => {
     try {
-        const student = await UniStudent.findById(req.params.id)
+        const student = await Student.findById(req.params.id)
             .select("-passwordHash")
             .populate("faculty")
             .populate("major");
@@ -66,7 +66,7 @@ exports.createStudent = async (req, res) => {
         }
 
         // unique university ID
-        const existingStudentByUniversityId = await UniStudent.findOne({
+        const existingStudentByUniversityId = await Student.findOne({
             universityId
         });
 
@@ -77,7 +77,7 @@ exports.createStudent = async (req, res) => {
         }
 
         // unique university email
-        const existingStudentByEmail = await UniStudent.findOne({
+        const existingStudentByEmail = await Student.findOne({
             universityEmail: universityEmail.toLowerCase()
         });
 
@@ -89,7 +89,7 @@ exports.createStudent = async (req, res) => {
 
         const passwordHash = await bcrypt.hash(password, 10);
 
-        const newStudent = new UniStudent({
+        const newStudent = new Student({
             universityId,
             universityEmail: universityEmail.toLowerCase(),
             name,
@@ -104,7 +104,7 @@ exports.createStudent = async (req, res) => {
 
         const saved = await newStudent.save();
 
-        const populatedStudent = await UniStudent.findById(saved._id)
+        const populatedStudent = await Student.findById(saved._id)
             .populate("faculty")
             .populate("major");
 
@@ -156,7 +156,7 @@ exports.updateStudent = async (req, res) => {
         }
 
         // unique university ID
-        const existingStudentByUniversityId = await UniStudent.findOne({
+        const existingStudentByUniversityId = await Student.findOne({
             universityId,
             _id: {$ne: id}
         });
@@ -168,7 +168,7 @@ exports.updateStudent = async (req, res) => {
         }
 
         // unique university email
-        const existingStudentByEmail = await UniStudent.findOne({
+        const existingStudentByEmail = await Student.findOne({
             universityEmail: universityEmail.toLowerCase(),
             _id: {$ne: id}
         });
@@ -179,7 +179,7 @@ exports.updateStudent = async (req, res) => {
             });
         }
 
-        const updatedStudent = await UniStudent.findByIdAndUpdate(
+        const updatedStudent = await Student.findByIdAndUpdate(
             id,
             {
                 universityId,
@@ -220,10 +220,14 @@ exports.updateStudent = async (req, res) => {
         });
     }
 };
+
 // DELETE
 exports.deleteStudent = async (req, res) => {
     try {
-        const deletedStudent = await UniStudent.findByIdAndDelete(req.params.id);
+        const deletedStudent = await Student.findByIdAndDelete(req.params.id);
+        const deleted = await Student.findOneAndDelete({
+            universityId: req.params.id
+        });
 
         if (!deletedStudent) {
             return res.status(404).json({message: "Student not found"});
@@ -288,7 +292,7 @@ exports.updatePasswordBySuperAdmin = async (req, res) => {
         }
 
         // find student
-        const student = await UniStudent.findById(id);
+        const student = await Student.findById(id);
 
         if (!student) {
             return res.status(404).json({

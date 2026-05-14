@@ -1,9 +1,9 @@
-const UniStudent = require("../models/Student");
+const Student = require("../models/Student");
 const Course = require("../models/Course");
 
 exports.getDashboard = async (req, res) => {
   try {
-    const student = await UniStudent.findById(req.user.id)
+    const student = await Student.findById(req.user.id)
       .populate("faculty", "name code")
       .populate("major", "name code")
       .select("-passwordHash -loginAttempts -lockUntil");

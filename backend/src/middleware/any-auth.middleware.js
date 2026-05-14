@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const UniStudent = require("../models/Student");
+const Student = require("../models/Student");
 const Admin = require("../models/Admin");
 
 const anyAuth = async (req, res, next) => {
@@ -25,7 +25,7 @@ const anyAuth = async (req, res, next) => {
         const userId = decoded.id;
 
         // STUDENT
-        const student = await UniStudent.findById(userId);
+        const student = await Student.findById(userId);
 
         if (student) {
             req.user = {
