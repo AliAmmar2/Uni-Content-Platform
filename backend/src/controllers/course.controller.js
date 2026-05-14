@@ -1,6 +1,6 @@
 const Course = require("../models/Course");
 const Material = require("../models/Material");
-const UniStudent = require("../models/Student");
+const Student = require("../models/Student");
 
 // CREATE COURSE
 exports.createCourse = async (req, res) => {
@@ -328,7 +328,7 @@ exports.deleteCourse = async (req, res) => {
         }
 
         // // OPTIONAL: CHECK IF ANY STUDENT DEPENDS ON IT
-        // const studentUsingCourse = await UniStudent.exists({
+        // const studentUsingCourse = await Student.exists({
         //   major: course.major,
         //   academicYear: course.academicYear,
         //   calendarYear: course.calendarYear

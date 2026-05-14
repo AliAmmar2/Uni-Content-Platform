@@ -1,5 +1,5 @@
 const Material = require("../models/Material");
-const UniStudent = require("../models/Users");
+const Student = require("../models/Users");
 const Course = require("../models/Course");
 
 // Upload material
@@ -11,7 +11,7 @@ exports.uploadMaterial = async (req, res) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const student = await UniStudent.findById(req.user.id);
+    const student = await Student.findById(req.user.id);
     if (!student) return res.status(404).json({ message: "User not found" });
 
     const course = await Course.findById(courseId);
@@ -50,7 +50,7 @@ exports.uploadMaterial = async (req, res) => {
 // Get approved materials
 exports.getApprovedMaterialsByCourse = async (req, res) => {
   try {
-    const student = await UniStudent.findById(req.user.id);
+    const student = await Student.findById(req.user.id);
     if (!student) return res.status(404).json({ message: "User not found" });
 
     const course = await Course.findById(req.params.courseId);

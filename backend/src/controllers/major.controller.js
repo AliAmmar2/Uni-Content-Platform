@@ -1,5 +1,5 @@
 const Major = require("../models/Major");
-const UniStudent = require("../models/Student");
+const Student = require("../models/Student");
 const Course = require("../models/Course");
 exports.getMajorById = async (req, res) => {
     try {
@@ -22,7 +22,7 @@ exports.getMajorById = async (req, res) => {
 
         // 🎓 STUDENT
         if (req.user?.userType === "STUDENT") {
-            const student = await UniStudent.findById(req.user.id);
+            const student = await Student.findById(req.user.id);
 
             if (!student) {
                 return res.status(404).json({message: "Student not found"});
@@ -158,7 +158,7 @@ exports.deleteMajor = async (req, res) => {
             return res.status(404).json({message: "Major not found"});
         }
 
-        const studentsCount = await UniStudent.countDocuments({
+        const studentsCount = await Student.countDocuments({
             major: id
         });
 

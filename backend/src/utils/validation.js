@@ -1,21 +1,19 @@
-const validateUniversityEmail = (email) => {
-  const domain = process.env.UNIVERSITY_EMAIL_DOMAIN || "@ul.edu.lb";
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return email.toLowerCase().endsWith(domain.toLowerCase()) && emailRegex.test(email);
+exports.validateUniversityEmail = (email) => {
+
+  if (!email) return false;
+
+  const normalizedEmail =
+    email.toLowerCase().trim();
+
+  // simple email format validation
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  return regex.test(normalizedEmail);
 };
 
-const validateUniversityId = (id) => {
-  return /^\d{5,7}$/.test(id);
-};
+exports.validateUniversityId = (universityId) => {
+  if (!universityId) return false;
 
-// const validatePassword = (password) => {
-//   return password.length >= 8 && 
-//          /[A-Z]/.test(password) && 
-//          /[a-z]/.test(password) && 
-//          /[0-9]/.test(password);
-// };
-
-module.exports = {
-  validateUniversityEmail,
-  validateUniversityId,
+  const regex = /^[A-Za-z0-9]{1,12}$/;
+  return regex.test(universityId);
 };

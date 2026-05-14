@@ -1,9 +1,9 @@
-const UniStudent = require("../models/Student");
+const Student = require("../models/Student");
 
 // GET ALL
 exports.getStudents = async (req, res) => {
     try {
-        const students = await UniStudent.find()
+        const students = await Student.find()
             .populate("faculty")
             .populate("major");
 
@@ -16,7 +16,7 @@ exports.getStudents = async (req, res) => {
 // GET BY ID
 exports.getStudentById = async (req, res) => {
     try {
-        const student = await UniStudent.findOne({
+        const student = await Student.findOne({
             universityId: req.params.id
         })
             .populate("faculty")
@@ -35,7 +35,7 @@ exports.getStudentById = async (req, res) => {
 // CREATE
 exports.createStudent = async (req, res) => {
     try {
-        const newStudent = new UniStudent(req.body);
+        const newStudent = new Student(req.body);
         const saved = await newStudent.save();
 
         res.status(201).json(saved);
@@ -47,7 +47,7 @@ exports.createStudent = async (req, res) => {
 // UPDATE
 exports.updateStudent = async (req, res) => {
     try {
-        const updated = await UniStudent.findOneAndUpdate(
+        const updated = await Student.findOneAndUpdate(
             { universityId: req.params.id },
             req.body,
             { new: true }
@@ -66,7 +66,7 @@ exports.updateStudent = async (req, res) => {
 // DELETE
 exports.deleteStudent = async (req, res) => {
     try {
-        const deleted = await UniStudent.findOneAndDelete({
+        const deleted = await Student.findOneAndDelete({
             universityId: req.params.id
         });
 

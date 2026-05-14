@@ -1,7 +1,7 @@
 
 const mongoose = require("mongoose");
 
-const UniStudentSchema = new mongoose.Schema({
+const StudentSchema = new mongoose.Schema({
   universityId: { 
     type: String, 
     required: true, 
@@ -75,16 +75,16 @@ const UniStudentSchema = new mongoose.Schema({
   timestamps: true 
 });
 
-UniStudentSchema.index({ major: 1, academicYear: 1, calendarYear: 1 });
-UniStudentSchema.index({ status: 1, major: 1 });
+StudentSchema.index({ major: 1, academicYear: 1, calendarYear: 1 });
+StudentSchema.index({ status: 1, major: 1 });
 
 // Virtual for account lock status
-UniStudentSchema.virtual('isLocked').get(function() {
+StudentSchema.virtual('isLocked').get(function() {
   return !!(this.lockUntil && this.lockUntil > Date.now());
 });
 
 // Method to increment login attempts
-UniStudentSchema.methods.incLoginAttempts = function() {
+StudentSchema.methods.incLoginAttempts = function() {
   if (this.lockUntil && this.lockUntil < Date.now()) {
     return this.updateOne({
       $set: { loginAttempts: 1 },
@@ -103,11 +103,11 @@ UniStudentSchema.methods.incLoginAttempts = function() {
   return this.updateOne(updates);
 };
 
-UniStudentSchema.methods.resetLoginAttempts = function() {
+StudentSchema.methods.resetLoginAttempts = function() {
   return this.updateOne({
     $set: { loginAttempts: 0, lastLogin: Date.now() },
     $unset: { lockUntil: 1 }
   });
 };
 
-module.exports = mongoose.model("UniStudents", UniStudentSchema);
+module.exports = mongoose.model("Students", StudentSchema);

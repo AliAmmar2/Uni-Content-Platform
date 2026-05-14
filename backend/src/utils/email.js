@@ -1,20 +1,22 @@
-// src/utils/email.js
-const sendMagicLinkEmail = async (email, magicLink) => {
-  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
-    // In development/test, just log the magic link
-    console.log('\n========================================');
-    console.log('MAGIC LINK EMAIL (DEV MODE)');
-    console.log(`To: ${email}`);
-    console.log(`Link: ${magicLink}`);
-    console.log('========================================\n');
-    return { success: true };
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
+});
 
-  // In production, integrate with actual email service
-  // e.g., SendGrid, AWS SES, Nodemailer
-  return { success: true };
-};
-
-module.exports = {
-  sendMagicLinkEmail
+exports.sendVerificationEmail = async (email, link) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Verify your university account",
+    html: `
+      <h2>Email Verification</h2>
+      <p>Click below to verify your account:</p>
+      <a href="${link}">${link}</a>
+    `
+  });
 };

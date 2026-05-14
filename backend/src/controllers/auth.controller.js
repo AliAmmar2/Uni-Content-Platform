@@ -1,385 +1,228 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UniStudent = require("../models/Student");
-const Faculty = require('../models/Faculty');
-const Major = require("../models/Major");
-const { validateUniversityEmail, validateUniversityId } = require("../utils/validation");
-const { sendMagicLinkEmail } = require("../utils/email");
 
-// password login
-exports.login = async (req, res) => {
+const Student = require("../models/Student");
+const OfficialStudent = require("../models/OfficialStudent");
+
+const {
+  generateAccessToken,
+  generateRefreshToken,
+  generateEmailVerificationToken
+} = require("../utils/jwt");
+
+const { sendVerificationEmail } = require("../utils/email");
+
+const {
+  validateUniversityEmail,
+  validateUniversityId
+} = require("../utils/validation");
+
+
+// REGISTER
+exports.register = async (req, res) => {
   try {
-    const { universityEmail, universityId, password } = req.body;
-    if (!universityEmail || !universityId || !password) {
-      return res.status(400).json({ 
-        message: "Missing required fields",
-        errors: {
-          universityEmail: !universityEmail ? "University email is required" : null,
-          universityId: !universityId ? "University ID is required" : null,
-          password: !password ? "Password is required" : null
-        }
-      });
+    const {
+      universityEmail,
+      universityId,
+      password,
+      confirmPassword
+    } = req.body;
+
+    if (!universityEmail || !universityId || !password || !confirmPassword) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (!validateUniversityEmail(universityEmail)) {
-      return res.status(400).json({ 
-        message: "Invalid university email format" 
-      });
+    const email = universityEmail.toLowerCase().trim();
+
+    if (!validateUniversityEmail(email)) {
+      return res.status(400).json({ message: "Invalid university email" });
     }
 
     if (!validateUniversityId(universityId)) {
-      return res.status(400).json({ 
-        message: "Invalid university ID format" 
-      });
+      return res.status(400).json({ message: "Invalid university ID" });
     }
 
-    const user = await UniStudent.findOne({ universityId })
-      .populate('faculty', 'name')
-      .populate('major', 'name');
-
-    if (!user || user.universityEmail.toLowerCase() !== universityEmail.toLowerCase()) {
-      return res.status(401).json({ 
-        message: "user Invalid credentials"
-      });
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    if (user.isLocked) {
-      const lockTimeRemaining = Math.ceil((user.lockUntil - Date.now()) / 1000 / 60);
-      return res.status(423).json({ 
-        message: `Account is temporarily locked. Please try again in ${lockTimeRemaining} minutes.` 
-      });
+    if (password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
     }
 
-    if (user.status !== "ACTIVE") {
-      return res.status(403).json({ 
-        message: "Account is suspended. Please contact administration." 
-      });
-    }
+    const existingUser = await Student.findOne({
+      $or: [
+        { universityEmail: email },
+        { universityId }
+      ]
+    });
 
-    if (!user.passwordHash) {
-      return res.status(401).json({ 
-        message: "Invalid credentials (passwordHash)"
-      });
-    }
-
-    const validPassword = await bcrypt.compare(password, user.passwordHash);
-    if (!validPassword) {
-      await user.incLoginAttempts();
-      return res.status(401).json({ 
-        message: "Invalid credentials (password)"
-      });
-    }
-
-    // reset login attempts on successful login
-    await user.resetLoginAttempts();
-
-    if (!process.env.JWT_SECRET) {
-      console.error("CRITICAL: JWT_SECRET is not defined");
-      return res.status(500).json({ 
-        message: "Server configuration error" 
-      });
-    }
-
-    // generate tokens
-    const accessToken = jwt.sign(
-      { 
-        id: user._id.toString(),
-        universityId: user.universityId,
-        userType: "STUDENT",
-        role: user.role
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
-    const refreshToken = jwt.sign(
-      { 
-        id: user._id.toString(),
-        type: 'refresh'
-      },
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    // Return user data
-    res.json({
-      accessToken,
-      refreshToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        universityEmail: user.universityEmail,
-        universityId: user.universityId,
-        faculty: user.faculty,
-        major: user.major,
-        academicYear: user.academicYear,
-        calendarYear: user.calendarYear,
-        role: user.role
+    if (existingUser) {
+      if (!existingUser.emailVerified) {
+        return res.status(200).json({
+          message: "Account exists but not verified. Please check your email."
+        });
       }
+
+      return res.status(409).json({
+        message: "Account already exists"
+      });
+    }
+
+    const officialStudent = await OfficialStudent.findOne({
+      universityEmail: email,
+      universityId
+    });
+
+    if (!officialStudent) {
+      return res.status(403).json({
+        message: "Registration not allowed"
+      });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
+
+    let user;
+
+    try {
+      user = await Student.create({
+        universityId: officialStudent.universityId,
+        universityEmail: officialStudent.universityEmail,
+        name: officialStudent.name,
+        faculty: officialStudent.faculty,
+        major: officialStudent.major,
+        academicYear: officialStudent.academicYear,
+        calendarYear: officialStudent.calendarYear,
+        passwordHash
+      });
+    } catch (err) {
+      if (err.code === 11000) {
+        return res.status(409).json({
+          message: "Account already exists"
+        });
+      }
+      throw err;
+    }
+
+    const verificationToken = generateEmailVerificationToken(user);
+
+    const verificationLink =
+      `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+      console.log("VERIFY LINK:", verificationLink);
+    await sendVerificationEmail(user.universityEmail, verificationLink);
+
+    return res.status(201).json({
+      message: "Registration successful. Please verify your email."
     });
 
   } catch (error) {
-    console.error("LOGIN ERROR:", error);
-    res.status(500).json({ 
-      message: "An error occurred during login. Please try again." 
-    });
+    console.error("REGISTER ERROR:", error);
+
+  return res.status(500).json({
+    message: "Internal server error",
+    error: error.message
+  });
   }
 };
 
-// Request magic link (if passwordless)
-exports.requestMagicLink = async (req, res) => {
-  try {
-    const { universityEmail, universityId } = req.body;
 
-    if (!universityEmail || !universityId) {
-      return res.status(400).json({ 
-        message: "Missing required fields" 
-      });
-    }
-
-    if (!validateUniversityEmail(universityEmail)) {
-      return res.status(400).json({ 
-        message: "Invalid university email format" 
-      });
-    }
-
-    if (!validateUniversityId(universityId)) {
-      return res.status(400).json({ 
-        message: "Invalid university ID format" 
-      });
-    }
-
-    const user = await UniStudent.findOne({ universityId });
-
-    // always return success to prevent account enumeration
-    if (!user || user.universityEmail.toLowerCase() !== universityEmail.toLowerCase()) {
-      return res.json({ 
-        message: "If the credentials are valid, a login link has been sent to your email." 
-      });
-    }
-
-    if (user.status !== "ACTIVE") {
-      return res.json({ 
-        message: "If the credentials are valid, a login link has been sent to your email." 
-      });
-    }
-
-    // Generate magic link token
-    const magicToken = jwt.sign(
-      { 
-        id: user._id.toString(),
-        universityId: user.universityId,
-        type: 'magic-link',
-        role: user.role,
-        userType: "STUDENT"
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: '15m' }
-    );
-
-    const magicLink = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/auth/verify?token=${magicToken}`;
-
-    // Send email
-    await sendMagicLinkEmail(user.universityEmail, magicLink);
-
-    res.json({ 
-      message: "If the credentials are valid, a login link has been sent to your email.",
-      // In dev mode, include the token for testing
-      ...(process.env.NODE_ENV === 'development' && { devToken: magicToken })
-    });
-
-  } catch (error) {
-    console.error("MAGIC LINK ERROR:", error);
-    res.status(500).json({ 
-      message: "An error occurred. Please try again." 
-    });
-  }
-};
-
-// Verify magic link token
-exports.verifyMagicLink = async (req, res) => {
+// VERIFY EMAIL
+exports.verifyEmail = async (req, res) => {
   try {
     const { token } = req.body;
 
     if (!token) {
-      return res.status(400).json({ 
-        message: "Token is required" 
-      });
+      return res.status(400).json({ message: "Token is required" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_EMAIL_SECRET);
 
-    if (decoded.type !== 'magic-link') {
-      return res.status(403).json({ 
-        message: "Invalid token type" 
-      });
+    if (decoded.type !== "email-verification") {
+      return res.status(403).json({ message: "Invalid token type" });
     }
 
-    if (decoded.userType !== "STUDENT") {
-      return res.status(403).json({ message: "Wrong user type" });
-    }
-
-    const user = await UniStudent.findById(decoded.id)
-      .populate('faculty', 'name code')
-      .populate('major', 'name code');
+    const user = await Student.findById(decoded.id);
 
     if (!user) {
-      return res.status(404).json({ 
-        message: "User not found" 
-      });
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.emailVerified = true;
+    user.status = "ACTIVE";
+    await user.save();
+
+    return res.json({ message: "Email verified successfully" });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+// LOGIN
+exports.login = async (req, res) => {
+  try {
+    const { universityEmail, password } = req.body;
+
+    if (!universityEmail || !password) {
+      return res.status(400).json({ message: "Missing credentials" });
+    }
+
+    const email = universityEmail.toLowerCase().trim();
+
+    const user = await Student.findOne({ universityEmail: email })
+      .populate("faculty", "name")
+      .populate("major", "name");
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    if (user.isLocked) {
+      return res.status(423).json({ message: "Account locked" });
+    }
+
+    if (!user.emailVerified) {
+      return res.status(403).json({ message: "Please verify your email" });
     }
 
     if (user.status !== "ACTIVE") {
-      return res.status(403).json({ 
-        message: "Account is not active" 
-      });
+      return res.status(403).json({ message: "Account inactive" });
     }
 
-    // update last login
-    user.lastLogin = Date.now();
+    const validPassword = await bcrypt.compare(password, user.passwordHash);
+
+    if (!validPassword) {
+      user.loginAttempts += 1;
+
+      if (user.loginAttempts >= 5) {
+        user.lockUntil = Date.now() + 15 * 60 * 1000;
+      }
+
+      await user.save();
+
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    user.loginAttempts = 0;
+    user.lockUntil = undefined;
     await user.save();
 
-    // Generate new access and refresh tokens
-    const accessToken = jwt.sign(
-      { 
-        id: user._id.toString(),
-        universityId: user.universityId,
-        role: user.role,
-        userType: "STUDENT"
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
 
-    const refreshToken = jwt.sign(
-      { 
-        id: user._id.toString(),
-        type: 'refresh'
-      },
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.json({
+    return res.json({
       accessToken,
       refreshToken,
-      user: {
-        id: user._id,
-        name: user.name,
-        universityEmail: user.universityEmail,
-        universityId: user.universityId,
-        faculty: user.faculty,
-        major: user.major,
-        academicYear: user.academicYear,
-        calendarYear: user.calendarYear,
-        role: user.role
-      }
+      user
     });
 
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ 
-        message: "Magic link has expired. Please request a new one." 
-      });
-    }
-    
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(403).json({ 
-        message: "Invalid magic link" 
-      });
-    }
+    console.error("LOGIN ERROR:", error);
 
-    console.error("VERIFY MAGIC LINK ERROR:", error);
-    res.status(500).json({ 
-      message: "An error occurred. Please try again." 
-    });
-  }
-};
-
-// refresh access token
-exports.refreshToken = async (req, res) => {
-  try {
-    const { refreshToken } = req.body;
-
-    if (!refreshToken) {
-      return res.status(400).json({ 
-        message: "Refresh token is required" 
-      });
-    }
-
-    // verify refresh token
-    const decoded = jwt.verify(
-      refreshToken, 
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET
-    );
-
-    if (decoded.type !== 'refresh') {
-      return res.status(403).json({ 
-        message: "Invalid token type" 
-      });
-    }
-
-    const user = await UniStudent.findById(decoded.id);
-
-    if (!user || user.status !== "ACTIVE") {
-      return res.status(403).json({ 
-        message: "Invalid refresh token" 
-      });
-    }
-
-    // Generate new access token
-    const accessToken = jwt.sign(
-      { 
-        id: user._id.toString(),
-        universityId: user.universityId,
-        role: user.role,
-        userType: "STUDENT"
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
-    res.json({ accessToken });
-
-  } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ 
-        message: "Refresh token expired. Please login again." 
-      });
-    }
-    
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(403).json({ 
-        message: "Invalid refresh token" 
-      });
-    }
-
-    console.error("REFRESH TOKEN ERROR:", error);
-    res.status(500).json({ 
-      message: "An error occurred. Please try again." 
-    });
-  }
-};
-
-exports.me = async (req, res) => {
-  try {
-    const user = await UniStudent.findById(req.user.id)
-      .select('-passwordHash -loginAttempts -lockUntil')
-      .populate('faculty', 'name code')
-      .populate('major', 'name code');
-
-    if (!user) {
-      return res.status(404).json({ 
-        message: "User not found" 
-      });
-    }
-
-    res.json({ user });
-
-  } catch (error) {
-    console.error("GET ME ERROR:", error);
-    res.status(500).json({ 
-      message: "An error occurred. Please try again." 
-    });
+  res.status(500).json({
+    message: "Internal server error",
+    error: error.message
+  });
   }
 };

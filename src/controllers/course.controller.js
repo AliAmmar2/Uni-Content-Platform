@@ -1,6 +1,6 @@
 const Course = require("../models/Course");
 const Material = require("../models/Material");
-const UniStudent = require("../models/Users");
+const Student = require("../models/Users");
 
 // CREATE COURSE
 exports.createCourse = async (req, res) => {
@@ -70,7 +70,7 @@ exports.getCourseById = async (req, res) => {
 // GET COURSE MATERIALS (student restricted)
 exports.getCourseMaterials = async (req, res) => {
   try {
-    const student = await UniStudent.findById(req.user.id);
+    const student = await Student.findById(req.user.id);
     if (!student) return res.status(404).json({ message: "Student not found" });
 
     const course = await Course.findById(req.params.id);

@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const UniStudent = require("../models/UniStudents");
+const Student = require("../models/Students");
 const Faculty = require('../models/Faculty');
 const Major = require("../models/Major");
 const { validateUniversityEmail, validateUniversityId } = require("../utils/validation");
@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    const user = await UniStudent.findOne({ universityId })
+    const user = await Student.findOne({ universityId })
       .populate('faculty', 'name')
       .populate('major', 'name');
 
@@ -148,7 +148,7 @@ exports.requestMagicLink = async (req, res) => {
       });
     }
 
-    const user = await UniStudent.findOne({ universityId });
+    const user = await Student.findOne({ universityId });
 
     // always return success to prevent account enumeration
     if (!user || user.universityEmail.toLowerCase() !== universityEmail.toLowerCase()) {
@@ -213,7 +213,7 @@ exports.verifyMagicLink = async (req, res) => {
       });
     }
 
-    const user = await UniStudent.findById(decoded.id)
+    const user = await Student.findById(decoded.id)
       .populate('faculty', 'name code')
       .populate('major', 'name code');
 
@@ -312,7 +312,7 @@ exports.refreshToken = async (req, res) => {
       });
     }
 
-    const user = await UniStudent.findById(decoded.id);
+    const user = await Student.findById(decoded.id);
 
     if (!user || user.status !== "ACTIVE") {
       return res.status(403).json({ 
@@ -355,7 +355,7 @@ exports.refreshToken = async (req, res) => {
 
 exports.me = async (req, res) => {
   try {
-    const user = await UniStudent.findById(req.user.id)
+    const user = await Student.findById(req.user.id)
       .select('-passwordHash -loginAttempts -lockUntil')
       .populate('faculty', 'name code')
       .populate('major', 'name code');
