@@ -1,136 +1,115 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="brand-section">
-      <div class="logo">
-        <h1 class="brand-title">Welcome To Lebanese University </h1>
-        <p class="brand-subtitle">Create your account</p>
+<section class="register">
+
+  <div class="register-card">
+
+    <div class="register-card__header">
+      <div class="register-card__icon">
+        <fa-icon [icon]="['fas', 'graduation-cap']"></fa-icon>
       </div>
 
-      <form class="login-form" [formGroup]="registerForm" (ngSubmit)="register()">
-        <div class="form-group">
-          <label for="fullName" class="form-label">Full Name</label>
-          <div class="input-container">
-            <input
-              id="fullName"
-              type="text"
-              class="form-input"
-              placeholder="Enter your full name"
-              formControlName="fullName"
-            />
-          </div>
-          <div class="error-message"
-               *ngIf="registerForm.get('fullName')?.errors && registerForm.get('fullName')?.touched">
-            <span *ngIf="registerForm.get('fullName')?.errors?.['required']">Name is required</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="email" class="form-label">Email</label>
-          <div class="input-container">
-            <input
-              id="email"
-              type="email"
-              class="form-input"
-              placeholder="Enter your email"
-              autocomplete="email"
-              formControlName="email"
-            />
-          </div>
-          <div class="error-message" *ngIf="registerForm.get('email')?.errors && registerForm.get('email')?.touched">
-            <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
-            <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="universityId" class="form-label">Id</label>
-          <div class="input-container">
-            <input
-              id="universityId"
-              class="form-input"
-              placeholder="Enter your id"
-              formControlName="universityId"
-            />
-          </div>
-          <div class="error-message" *ngIf="registerForm.get('email')?.errors && registerForm.get('email')?.touched">
-            @if (registerForm.get('email')?.errors?.['required']) {
-              <span> Email is required </span>
-            }
-            @if (registerForm.get('email')?.errors?.['email']) {
-              <span> Please enter a valid email </span>
-            }
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="password" class="form-label">Password</label>
-          <div class="input-container">
-            <input
-              id="password"
-              [type]="hideInputPassword ? 'password' : 'text'"
-              class="form-input"
-              placeholder="Enter your password"
-              autocomplete="current-password"
-              formControlName="password"
-            />
-            <button
-              type="button"
-              class="password-toggle"
-              (click)="hideInputPassword = !hideInputPassword"
-              tabindex="-1"
-            >
-            </button>
-          </div>
-          <div class="error-message">
-            @if (registerForm.get('password')?.errors && registerForm.get('password')?.touched) {
-              @if (registerForm.get('password')?.errors?.['required']) {
-                <span>Password is required</span>
-              }
-            }
-          </div>
-
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword" class="form-label">Password</label>
-          <div class="input-container">
-            <input
-              id="confirmPassword"
-              [type]="hideInputPassword ? 'password' : 'text'"
-              class="form-input"
-              placeholder="Enter your password"
-              formControlName="confirmPassword"
-            />
-            <button
-              type="button"
-              class="password-toggle"
-              (click)="hideInputPassword = !hideInputPassword"
-              tabindex="-1"
-            >
-            </button>
-          </div>
-          @if (registerForm.get('confirmPassword')?.errors && registerForm.get('confirmPassword')?.touched) {
-            <div class="error-message">
-              @if (registerForm.get('confirmPassword')?.errors?.['required']) {
-                <span>Password is required</span>
-              }
-              @if (registerForm.get('confirmPassword')?.errors?.['passwordMismatch']) {
-                <span> Passwords do not match </span>
-              }
-            </div>
-          }
-        </div>
-        <button type="submit" class="login-button" [disabled]="registerForm.invalid">
-          Sign Up
-        </button>
-      </form>
-
-
-      <div class="login-footer">
-        <p>
-          Already have an account?
-          <a routerLink="/login" class="register-link">Login</a>
-        </p>
-      </div>
+      <h1>Student Registration</h1>
     </div>
+
+    <form
+      class="register-card__form"
+      [formGroup]="registerForm"
+      (ngSubmit)="onRegister()"
+    >
+
+      <div class="form-group">
+        <label>University Email</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['far', 'envelope']"></fa-icon>
+
+          <input
+            type="email"
+            placeholder="student@ul.edu.lb"
+            formControlName="universityEmail"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>University ID Number</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['far', 'id-badge']"></fa-icon>
+
+          <input
+            type="text"
+            placeholder="e.g. 2024123456"
+            formControlName="universityId"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Create Password</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="••••••••"
+            formControlName="password"
+            autocomplete="new-password"
+          />
+
+          <button
+            type="button"
+            class="input-wrapper__button"
+            (click)="togglePassword()"
+          >
+            <fa-icon [icon]="['far', showPassword ? 'eye-slash' : 'eye']"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+
+          <input
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            placeholder="••••••••"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+          />
+
+          <button
+            type="button"
+            class="input-wrapper__button"
+            (click)="toggleConfirmPassword()"
+          >
+            <fa-icon [icon]="['far', showConfirmPassword ? 'eye-slash' : 'eye']"></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <p class="register-card__terms">
+        By signing up, you agree to the University’s electronic
+        communication and data processing guidelines.
+      </p>
+
+      <button
+        type="submit"
+        class="register-card__submit"
+        [disabled]="registerForm.invalid"
+      >
+        Sign Up
+      </button>
+
+      <p class="register-card__signin">
+        Already have an account?
+        <button type="button" (click)="navigateToLogin()">Sign In</button>
+      </p>
+
+    </form>
+
   </div>
-</div>
+
+</section>

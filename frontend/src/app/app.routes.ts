@@ -16,6 +16,8 @@ import { EditStudentPage } from './portal-admin/edit-student-page/edit-student.p
 import { AdminsPage } from './portal-admin/admins-page/admins.page';
 import { EditAdminPage } from './portal-admin/edit-admin-page/edit-admin.page';
 import { EditCoursePage } from './portal-admin/edit-course-page/edit-course.page';
+import { VerifyEmailPage } from './reigister-page/verify-email-page/verify-email.page';
+import { CheckEmailPage } from './reigister-page/check-email-page/check-email.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,6 +28,14 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterPage
+  },
+  {
+    path: 'check-email',
+    component: CheckEmailPage
+  },
+  {
+    path: 'verify-email',
+    component: VerifyEmailPage
   },
   {
     path: 'students/:universityId',

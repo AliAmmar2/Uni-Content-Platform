@@ -1,7 +1,6 @@
-export interface RegisterFormInterface {
-  universityEmail: string;
+export interface RegisterAdminFormInterface {
   universityId: string;
+  universityEmail: string;
   password: string;
   confirmPassword: string;
 }
-

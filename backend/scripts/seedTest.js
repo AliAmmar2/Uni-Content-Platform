@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 require("dotenv").config({ path: require("path").resolve(__dirname, "../.env") });
 const Faculty = require("../src/models/Faculty");
 const Major = require("../src/models/Major");
 const Course = require("../src/models/Course");
-const UniStudents = require("../src/models/Student");
+const Students = require("../src/models/Student");
 
 async function seedUniversity() {
   try {
@@ -14,8 +15,12 @@ async function seedUniversity() {
     await Faculty.deleteMany();
     await Major.deleteMany();
     await Course.deleteMany();
-    await UniStudents.deleteMany();
+    await Students.deleteMany();
 
+    // DEFAULT PASSWORD
+    const defaultPasswordHash = await bcrypt.hash("Student@123", 10);
+
+    // =========================================================
     // 1. FACULTIES
     const faculties = await Faculty.insertMany([
       {
@@ -234,11 +239,12 @@ async function seedUniversity() {
     ]);
 
     // 4. STUDENTS CONNECTED TO FACULTY AND MAJOR
-    await UniStudents.insertMany([
+    await Students.insertMany([
       {
         universityId: "20260001",
-        universityEmail: "rawan.cheaito@university.com",
+        universityEmail: "rawancheaito1@hotmail.com",
         name: "Rawan Cheaito",
+        passwordHash: defaultPasswordHash,
         faculty: computerScience._id,
         major: software._id,
         academicYear: 1,
@@ -250,6 +256,7 @@ async function seedUniversity() {
         universityId: "20260002",
         universityEmail: "ali.hassan@university.com",
         name: "Ali Hassan",
+        passwordHash: defaultPasswordHash,
         faculty: engineering._id,
         major: civil._id,
         academicYear: 1,
@@ -261,6 +268,7 @@ async function seedUniversity() {
         universityId: "20260003",
         universityEmail: "sara.ahmad@university.com",
         name: "Sara Ahmad",
+        passwordHash: defaultPasswordHash,
         faculty: business._id,
         major: businessAdmin._id,
         academicYear: 2,
@@ -272,6 +280,7 @@ async function seedUniversity() {
         universityId: "20260004",
         universityEmail: "mohammad.khaled@university.com",
         name: "Mohammad Khaled",
+        passwordHash: defaultPasswordHash,
         faculty: computerScience._id,
         major: cs._id,
         academicYear: 1,
@@ -283,6 +292,7 @@ async function seedUniversity() {
         universityId: "20260005",
         universityEmail: "nour.fares@university.com",
         name: "Nour Fares",
+        passwordHash: defaultPasswordHash,
         faculty: engineering._id,
         major: mechanical._id,
         academicYear: 3,
@@ -294,6 +304,7 @@ async function seedUniversity() {
         universityId: "20260006",
         universityEmail: "maya.saad@university.com",
         name: "Maya Saad",
+        passwordHash: defaultPasswordHash,
         faculty: business._id,
         major: accounting._id,
         academicYear: 2,

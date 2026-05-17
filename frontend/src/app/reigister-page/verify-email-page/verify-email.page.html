@@ -1,0 +1,61 @@
+<section class="verify-email">
+
+  <div class="verify-email__card">
+
+    <ng-container *ngIf="isLoading">
+
+      <div class="verify-email__icon verify-email__icon--loading">
+        <fa-icon [icon]="['fas', 'envelope-open-text']"></fa-icon>
+      </div>
+
+      <h1>Verifying Email</h1>
+
+      <p>{{ message }}</p>
+
+      <div class="verify-email__loader"></div>
+
+    </ng-container>
+
+    <ng-container *ngIf="isVerified && !isLoading">
+
+      <div class="verify-email__icon verify-email__icon--success">
+        <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
+      </div>
+
+      <h1>Email Verified</h1>
+
+      <p>{{ message }}</p>
+
+      <button
+        type="button"
+        class="verify-email__button"
+        (click)="navigateToLogin()"
+      >
+        Go to Login
+      </button>
+
+    </ng-container>
+
+    <ng-container *ngIf="hasError && !isLoading">
+
+      <div class="verify-email__icon verify-email__icon--error">
+        <fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon>
+      </div>
+
+      <h1>Verification Failed</h1>
+
+      <p>{{ message }}</p>
+
+      <button
+        type="button"
+        class="verify-email__button"
+        (click)="navigateToLogin()"
+      >
+        Back to Login
+      </button>
+
+    </ng-container>
+
+  </div>
+
+</section>
