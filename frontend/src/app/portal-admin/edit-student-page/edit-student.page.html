@@ -1,0 +1,452 @@
+<section class="add-student">
+
+  <div class="add-student__header">
+    <div>
+
+      <div class="add-student__breadcrumb">
+
+        <button
+          type="button"
+          class="add-student__breadcrumb-link"
+          (click)="goToStudentsPage()">
+
+          Students
+
+        </button>
+
+        <span class="add-student__breadcrumb-separator">
+          ›
+        </span>
+
+        <span class="add-student__breadcrumb-current">
+          {{ isEditMode ? 'Edit Student' : 'Add New Student' }}
+        </span>
+
+      </div>
+
+      <h1 class="add-student__title">
+        Student Registration
+      </h1>
+
+      <p class="add-student__subtitle">
+        Enroll a new student into the university administrative system.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="add-student__content">
+
+    <form
+      class="student-form"
+      [formGroup]="studentForm"
+      (ngSubmit)="onSubmit()">
+
+      <!-- FULL NAME + UNIVERSITY ID -->
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            Full Name
+          </label>
+
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="e.g. Jean Doe"/>
+
+          @if (studentForm.controls['name'].hasError('required') &&
+          studentForm.controls['name'].touched) {
+            <span class="error-message">
+              Full name is required
+            </span>
+          }
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            University ID
+          </label>
+
+          <input
+            type="text"
+            formControlName="universityId"
+            placeholder="XXXXXX"/>
+
+          @if (studentForm.controls['universityId'].hasError('required') &&
+          studentForm.controls['universityId'].touched) {
+            <span class="error-message">
+              University ID is required
+            </span>
+          }
+
+        </div>
+
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group form-group--full">
+
+        <label>
+          University Email
+        </label>
+
+        <input
+          type="email"
+          formControlName="universityEmail"
+          placeholder="student@ul.edu.lb"/>
+
+        @if (studentForm.controls['universityEmail'].hasError('required') &&
+        studentForm.controls['universityEmail'].touched) {
+          <span class="error-message">
+            University email is required
+          </span>
+        } @else if (studentForm.controls['universityEmail'].hasError('email') &&
+        studentForm.controls['universityEmail'].touched) {
+          <span class="error-message">
+            Enter a valid email
+          </span>
+        } @else if (studentForm.controls['universityEmail'].hasError('email') &&
+        studentForm.controls['universityEmail'].touched) {
+          <span class="error-message">
+    Enter a valid email address
+  </span>
+        }
+
+      </div>
+
+      <!-- PASSWORD -->
+      @if (!isEditMode) {
+
+        <div class="form-group form-group--full">
+
+          <label>
+            Password
+          </label>
+
+          <div class="password-field">
+
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter student password"/>
+
+            <button
+              type="button"
+              class="password-field__toggle"
+              (click)="togglePasswordVisibility()">
+
+              <fa-icon
+                [icon]="showPassword ? ['fas', 'eye-slash'] : ['fas', 'eye']">
+              </fa-icon>
+
+            </button>
+
+          </div>
+
+          @if (studentForm.controls['password'].hasError('required') &&
+          studentForm.controls['password'].touched) {
+            <span class="error-message">
+              Password is required
+            </span>
+          } @else if (studentForm.controls['password'].hasError('minlength') &&
+          studentForm.controls['password'].touched) {
+            <span class="error-message">
+              Password must be at least 8 characters
+            </span>
+          }
+
+        </div>
+
+      }
+
+      <!-- FACULTY + MAJOR -->
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            Faculty
+          </label>
+
+          <select formControlName="faculty">
+
+            <option value="">
+              Select Faculty
+            </option>
+
+            <ng-container *ngrxLet="faculties$ | async as faculties">
+
+              @for (faculty of faculties[FACULTY_KEY]; track faculty.id) {
+
+                <option [value]="faculty.id">
+                  {{ faculty.name }}
+                </option>
+
+              }
+
+            </ng-container>
+
+          </select>
+
+          @if (studentForm.controls['faculty'].hasError('required') &&
+          studentForm.controls['faculty'].touched) {
+            <span class="error-message">
+              Faculty is required
+            </span>
+          }
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Major
+          </label>
+
+          <select formControlName="major">
+
+            <option value="">
+              {{
+                studentForm.get('faculty')?.value
+                  ? 'Select Major'
+                  : 'Select Faculty First'
+              }}
+            </option>
+
+            <ng-container *ngrxLet="majors$ | async as majors">
+
+              @for (major of majors[MAJOR_KEY]; track major.id) {
+
+                <option [value]="major.id">
+                  {{ major.name }}
+                </option>
+
+              }
+
+            </ng-container>
+
+          </select>
+
+          @if (studentForm.controls['major'].hasError('required') &&
+          studentForm.controls['major'].touched) {
+            <span class="error-message">
+              Major is required
+            </span>
+          }
+
+        </div>
+
+      </div>
+
+      <!-- YEAR -->
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            Academic Year
+          </label>
+
+          <select formControlName="academicYear">
+
+            <option value="">
+              Select Year
+            </option>
+
+            <option value="1">Year 1</option>
+            <option value="2">Year 2</option>
+            <option value="3">Year 3</option>
+            <option value="4">Year 4</option>
+            <option value="5">Year 5</option>
+
+          </select>
+
+          @if (studentForm.controls['academicYear'].hasError('required') &&
+          studentForm.controls['academicYear'].touched) {
+            <span class="error-message">
+              Academic year is required
+            </span>
+          }
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Calendar Year
+          </label>
+
+          <input
+            type="number"
+            formControlName="calendarYear"
+            placeholder="2024"/>
+
+          @if (studentForm.controls['calendarYear'].hasError('required') &&
+          studentForm.controls['calendarYear'].touched) {
+            <span class="error-message">
+              Calendar year is required
+            </span>
+          } @else if (studentForm.controls['calendarYear'].hasError('pattern') &&
+          studentForm.controls['calendarYear'].touched) {
+            <span class="error-message">
+      Calendar year must contain exactly 4 digits
+    </span>
+          }
+
+        </div>
+
+      </div>
+
+      <!-- ROLE + STATUS -->
+      <div class="form-row">
+
+        <div class="form-group">
+
+          <label>
+            Role
+          </label>
+
+          <select formControlName="role">
+
+            <option value="STUDENT">
+              STUDENT
+            </option>
+
+            <option value="MODERATOR">
+              MODERATOR
+            </option>
+
+          </select>
+
+          @if (studentForm.controls['role'].hasError('required') &&
+          studentForm.controls['role'].touched) {
+            <span class="error-message">
+              Role is required
+            </span>
+          }
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Status
+          </label>
+
+          <select formControlName="status">
+
+            <option value="ACTIVE">
+              ACTIVE
+            </option>
+
+            <option value="SUSPENDED">
+              SUSPENDED
+            </option>
+
+            <option value="GRADUATED">
+              GRADUATED
+            </option>
+
+          </select>
+
+          @if (studentForm.controls['status'].hasError('required') &&
+          studentForm.controls['status'].touched) {
+            <span class="error-message">
+              Status is required
+            </span>
+          }
+
+        </div>
+
+      </div>
+
+      <div class="student-form__divider"></div>
+
+      <!-- ACTIONS -->
+      <div class="student-form__actions">
+
+        <button
+          type="button"
+          class="btn btn--outline"
+          (click)="onCancel()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [disabled]="studentForm.invalid">
+
+          <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+
+          <span>
+            {{ isEditMode ? 'Update Student' : 'Create Student' }}
+          </span>
+
+        </button>
+
+      </div>
+
+    </form>
+
+    <!-- SIDEBAR -->
+    <aside class="guidance-card">
+
+      <div class="guidance-card__header">
+
+        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+
+        <h3>
+          Admin Guidance
+        </h3>
+
+      </div>
+
+      <ul class="guidance-card__list">
+
+        <li>
+
+          <span class="guidance-card__dot"></span>
+
+          <p>
+            <strong>ID Integrity:</strong>
+            University IDs are immutable once assigned to prevent academic record mismatch.
+          </p>
+
+        </li>
+
+        <li>
+
+          <span class="guidance-card__dot"></span>
+
+          <p>
+            <strong>Major Validity:</strong>
+            Changing a major may affect the student's credit requirements.
+          </p>
+
+        </li>
+
+        <li>
+
+          <span class="guidance-card__dot"></span>
+
+          <p>
+            <strong>Status Change:</strong>
+            Setting status to 'SUSPENDED' will immediately revoke campus facility and LMS access.
+          </p>
+
+        </li>
+
+      </ul>
+
+    </aside>
+
+  </div>
+
+</section>

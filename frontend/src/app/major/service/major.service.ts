@@ -18,6 +18,17 @@ export class MajorService {
   constructor(private majorClient: MajorClient) {
   }
 
+  // GET MAJORS BY FACULTY
+  getMajorsByFaculty(
+    facultyId: string
+  ): Observable<Array<MajorItemBo>> {
+    return this.majorClient.getMajorsByFaculty(facultyId).pipe(
+      map((majors: Array<MajorModel>) =>
+        _.map(majors, major => new MajorItemBo(major))
+      )
+    );
+  }
+
   // GET ALL
   getMajors(): Observable<Array<MajorItemBo>> {
     return this.majorClient.getMajors().pipe(

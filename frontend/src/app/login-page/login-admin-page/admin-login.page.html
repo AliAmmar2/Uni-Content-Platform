@@ -1,0 +1,83 @@
+<section class="admin-login">
+
+  <div class="admin-login__card">
+
+    <div class="admin-login__logo">
+      <img
+        src="../assets/imgs/logo.png"
+        alt="Lebanese University"
+      />
+
+      <h2>Lebanese University</h2>
+    </div>
+
+    <div class="admin-login__badge">
+      <fa-icon [icon]="['fas', 'user-shield']"></fa-icon>
+      <span>Admin Access</span>
+    </div>
+
+    <h1>Admin Portal</h1>
+
+    <p class="admin-login__subtitle">
+      Sign in to manage university content and system settings.
+    </p>
+
+    <form
+      class="admin-login__form"
+      [formGroup]="loginAdminForm"
+      (ngSubmit)="loginAdmin()"
+    >
+
+      <div class="form-group">
+        <label>Username</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'user-shield']"></fa-icon>
+
+          <input
+            type="text"
+            placeholder="Enter username"
+            formControlName="username"
+            autocomplete="username"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+
+          <input
+            [type]="hideInputPassword ? 'password' : 'text'"
+            placeholder="••••••••"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePassword()"
+          >
+            <fa-icon
+              [icon]="['far', hideInputPassword ? 'eye' : 'eye-slash']"
+            ></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="admin-login__button"
+        [disabled]="loginAdminForm.invalid || loginAdminForm.disabled"
+      >
+        Sign In as Admin
+      </button>
+
+    </form>
+
+  </div>
+
+</section>

@@ -8,16 +8,17 @@ import { Subject, Subscription } from 'rxjs';
 import { selectFacultyDetails } from '../../faculty/+state/faculty.selector';
 import { FacultyStatusEnum } from '../../faculty/+state/enums/faculty-status.enum';
 import { FacultyActions } from '../../faculty/+state/faculty.action';
-import { MAJOR_DETAILS_KEY } from '../../major/+state/major-details.reducer';
 import { FACULTY_DETAILS_KEY } from '../../faculty/+state/faculty-details.reducer';
+import { facultyCodeValidator } from '../../validators/faculty-code-validator';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FontAwesomeModule],
-  templateUrl: './edit-new-faculty.page.html',
-  styleUrl: './edit-new-faculty.page.scss'
+  templateUrl: './edit-faculty.page.html',
+  styleUrl: './edit-faculty.page.scss'
 })
-export class EditNewFacultyPage implements OnInit, OnDestroy {
+export class EditFacultyPage implements OnInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
   public facultyForm: FormGroup;
@@ -25,6 +26,7 @@ export class EditNewFacultyPage implements OnInit, OnDestroy {
   public facultyId: string | null = null;
   public isEditMode: boolean = false;
   accessToken: string | null = null;
+  private toastr = inject(ToastrService);
   private destroy$ = new Subject<void>();
   facultyDetailsSelected$ = this.store.select(selectFacultyDetails);
   protected subscription$ = new Subscription();
@@ -33,7 +35,7 @@ export class EditNewFacultyPage implements OnInit, OnDestroy {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     this.facultyForm = new FormGroup({
       name: new FormControl('', Validators.required),
-      code: new FormControl('', Validators.required),
+      code: new FormControl('', [Validators.required, facultyCodeValidator()]),
       description: new FormControl(''),
     });
   }
@@ -59,19 +61,67 @@ export class EditNewFacultyPage implements OnInit, OnDestroy {
     }
   }
 
-  public facultySubscription() {
+  public facultySubscription(): void {
     this.subscription$.add(
       this.facultyDetailsSelected$.subscribe({
         next: (facultyDetailsState) => {
-          if (facultyDetailsState?.status === FacultyStatusEnum.createSuccess) {
-            this.goToFacultiesPage();
+          if (!facultyDetailsState) {
+            return;
           }
 
-          if (this.isEditMode &&
-            facultyDetailsState.status === FacultyStatusEnum.updateSuccess
-          ) {
+          if (facultyDetailsState.status === FacultyStatusEnum.createSuccess) {
+            this.toastr.clear();
+            this.toastr.success(
+              'Faculty created successfully',
+              'Success',
+              {
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                closeButton: true,
+                timeOut: 3000
+              }
+            );
+
             this.goToFacultiesPage();
+            return;
           }
+
+          if (facultyDetailsState.status === FacultyStatusEnum.updateSuccess) {
+            this.toastr.clear();
+            this.toastr.success(
+              'Faculty updated successfully',
+              'Success',
+              {
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                closeButton: true,
+                timeOut: 3000
+              }
+            );
+
+            this.goToFacultiesPage();
+            return;
+          }
+
+          if (
+            facultyDetailsState.status === FacultyStatusEnum.createFailure ||
+            facultyDetailsState.status === FacultyStatusEnum.updateFailure
+          ) {
+            this.toastr.clear();
+            this.toastr.error(
+              facultyDetailsState.error?.message || 'Something went wrong',
+              'Error',
+              {
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                closeButton: true,
+                timeOut: 4000
+              }
+            );
+
+            return;
+          }
+
           if (
             this.isEditMode &&
             facultyDetailsState.status === FacultyStatusEnum.loadDetailsSuccess
@@ -85,14 +135,6 @@ export class EditNewFacultyPage implements OnInit, OnDestroy {
         }
       })
     );
-  }
-
-  public onCreate() {
-    if (this.facultyForm.valid) {
-      this.store.dispatch(FacultyActions.createFaculty({
-        faculty: this.facultyForm.value
-      }))
-    }
   }
 
   public onSubmit() {

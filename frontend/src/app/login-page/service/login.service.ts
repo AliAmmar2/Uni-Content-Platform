@@ -17,9 +17,18 @@ export class LoginService {
     return this.loginClient.login(loginDto.toJSON());
   }
 
+
   public register(registerFormValue: RegisterFormInterface) {
     const registerDto = new RegisterDto(registerFormValue);
-    return this.loginClient.register(registerDto.toJSON());
+    return this.loginClient.register(
+      registerDto.toJSON()
+    );
+  }
+
+  public verifyEmail(token: string) {
+    return this.loginClient.verifyEmail(
+      token
+    );
   }
 }
 

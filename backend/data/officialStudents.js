@@ -9,6 +9,15 @@ module.exports = [
     "calendarYear": 2025
   },
   {
+    "universityId": "96096",
+    "universityEmail": "rawancheaito1@hotmail.com",
+    "name": "Rawan Cheaito",
+    "faculty": "Engineering",
+    "major": "Computer Engineering",
+    "academicYear": 3,
+    "calendarYear": 2025
+  },
+  {
     "universityId": "210002",
     "universityEmail": "karim.nasser@ul.edu.lb",
     "name": "Karim Nasser",

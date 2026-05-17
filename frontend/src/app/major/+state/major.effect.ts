@@ -26,7 +26,29 @@ export class MajorEffects {
             });
           }),
           catchError((error) => {
-            return of(MajorActions.loadMajorsFailure({ error }));
+            return of(MajorActions.loadMajorsFailure({ error: error.error }));
+          })
+        );
+      })
+    )
+  );
+
+  public loadMajorsByFaculty$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MajorActions.loadMajorsByFaculty),
+      switchMap((action) => {
+        return this.majorService.getMajorsByFaculty(action.facultyId).pipe(
+          map((majors: Array<MajorItemBo>) => {
+            return MajorActions.loadMajorsByFacultySuccess({
+              majors
+            });
+          }),
+          catchError((error) => {
+            return of(
+              MajorActions.loadMajorsByFacultyFailure({
+                error: error.error
+              })
+            );
           })
         );
       })
@@ -44,7 +66,7 @@ export class MajorEffects {
             });
           }),
           catchError((error) => {
-            return of(MajorActions.loadMajorDetailsFailure({ error }));
+            return of(MajorActions.loadMajorDetailsFailure({ error: error.error }));
           })
         );
       })
@@ -64,7 +86,7 @@ export class MajorEffects {
             ];
           }),
           catchError((error) => {
-            return of(MajorActions.createMajorFailure({ error }));
+            return of(MajorActions.createMajorFailure({ error: error.error }));
           })
         );
       })
@@ -84,7 +106,7 @@ export class MajorEffects {
             ];
           }),
           catchError((error) => {
-            return of(MajorActions.updateMajorFailure({ error }));
+            return of(MajorActions.updateMajorFailure({ error: error.error }));
           })
         );
       })
@@ -104,7 +126,7 @@ export class MajorEffects {
             ];
           }),
           catchError((error) => {
-            return of(MajorActions.deleteMajorFailure({ error }));
+            return of(MajorActions.deleteMajorFailure({ error: error.error }));
           })
         );
       })

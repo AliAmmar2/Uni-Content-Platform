@@ -1,62 +1,94 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ToastrService } from 'ngx-toastr';
+
+import { LoginService } from '../login-page/service/login.service';
 
 @Component({
+  selector: 'app-register',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
-    RouterLink
+    FontAwesomeModule
   ],
   templateUrl: './register.page.html',
-  styleUrl: './register.page.scss'
+  styleUrls: ['./register.page.scss']
 })
-export class RegisterPage implements OnInit {
-  public registerForm: FormGroup;
-  public hideInputPassword = true;
 
-  constructor() {
-    this.registerForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      fullName: new FormControl('', [Validators.required]),
-      universityId: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-      confirmPassword: new FormControl('', [Validators.required]),
-      role: new FormControl('STUDENT')
-    },
-      { validators: this.passwordMatchValidator } );
+export class RegisterPage {
+
+  private readonly router = inject(Router);
+  private readonly toastrService = inject(ToastrService);
+  private readonly loginService = inject(LoginService);
+
+  public showPassword = false;
+  public showConfirmPassword = false;
+
+  public registerForm = new FormGroup({
+    universityEmail: new FormControl('', [
+      Validators.required,
+      Validators.email
+    ]),
+    universityId: new FormControl('', [
+      Validators.required
+    ]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8)
+    ]),
+    confirmPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8)
+    ])
+  });
+
+  public togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
-
-  ngOnInit(): void {
-
+  public toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  passwordMatchValidator(form: AbstractControl) {
-    const password = form.get('password')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-
-    if (password !== confirmPassword) {
-      form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
-    } else {
-      form.get('confirmPassword')?.setErrors(null);
+  public onRegister(): void {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
     }
 
-    return null;
+    const formValue = this.registerForm.getRawValue();
+
+    if (formValue.password !== formValue.confirmPassword) {
+      this.toastrService.error('Passwords do not match');
+      return;
+    }
+
+    this.loginService.register({
+      universityEmail: formValue.universityEmail ?? '',
+      universityId: formValue.universityId ?? '',
+      password: formValue.password ?? '',
+      confirmPassword: formValue.confirmPassword ?? ''
+    }).subscribe({
+      next: (res) => {
+        this.toastrService.success(
+          res.message || 'Registration successful. Please verify your email.'
+        );
+
+        void this.router.navigate(['/check-email']);
+      },
+
+      error: (err) => {
+        this.toastrService.error(
+          err.error?.message || 'Registration failed'
+        );
+      }
+    });
   }
 
-
-  public async register() {
-    // this.registerForm.disable();
-    // try {
-    //   const token = await firstValueFrom(this.loginService.register(this.registerForm.value));
-    // } catch (err: unknown) {
-    //   console.error(err);
-    //   if (err && typeof err === 'object' && 'status' in err) {
-    //   }
-    // }
-    // this.registerForm.enable();
+  public navigateToLogin(): void {
+    void this.router.navigate(['/login']);
   }
+
 }

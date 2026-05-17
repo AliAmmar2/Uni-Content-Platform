@@ -9,7 +9,8 @@ export class MajorClient {
 
   private readonly API_URL = 'http://localhost:5000/majors';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   private getAuthOptions() {
     const token = localStorage.getItem('accessToken');
@@ -20,6 +21,14 @@ export class MajorClient {
       })
     };
   }
+
+  public getMajorsByFaculty(facultyId: string): Observable<MajorModel[]> {
+    return this.http.get<MajorModel[]>(
+      `${this.API_URL}/faculty/${facultyId}`,
+      this.getAuthOptions()
+    );
+  }
+
 
   public getMajors(): Observable<MajorModel[]> {
     return this.http.get<MajorModel[]>(

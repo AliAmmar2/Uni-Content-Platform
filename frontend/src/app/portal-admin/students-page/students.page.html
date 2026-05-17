@@ -6,111 +6,127 @@
       <h1>Student Directory</h1>
     </div>
 
-    <button class="student-page__add-btn">
+    <button
+      class="student-page__add-btn"
+      (click)="navigateToAddStudentsPage()">
       <fa-icon [icon]="['fas', 'user-plus']"></fa-icon>
       Add New Student
     </button>
 
   </div>
 
-  <!-- SEARCH + ACTIONS -->
-  <div class="student-page__toolbar">
+  <ng-container *ngrxLet="studentsListSelected$ | async as studentState">
 
-    <div class="search-box">
-      <fa-icon [icon]="['fas', 'search']"></fa-icon>
+    @if ((studentState?.[STUDENT_KEY]?.length ?? 0) === 0) {
 
-      <input
-        type="text"
-        placeholder="Search by name, ID, or major..."
-        (input)="search$.next($any($event.target).value)"
-      />
+      <div class="student-page__empty-state">
 
-    </div>
+        <div class="student-page__empty-icon">
+          <fa-icon [icon]="['fas', 'user-graduate']"></fa-icon>
+        </div>
 
-  </div>
+        <h3 class="student-page__empty-title">
+          No students yet
+        </h3>
 
-  <!-- TABLE -->
-  <div class="table-container">
+        <p class="student-page__empty-description">
+          There are no students in the directory yet. Click the button above to add your first student.
+        </p>
+      </div>
 
-    <ng-container *ngrxLet="studentsListSelected$ | async as studentState">
+    } @else {
 
-      <table mat-table [dataSource]="dataSource" class="table-style">
+      <div class="student-page__toolbar">
 
-        <!-- NAME -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let student">
-            <div class="student-name">
-              <div class="avatar">
-                {{ student.name?.charAt(0) }}
+        <div class="search-box">
+          <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+          <input
+            type="text"
+            placeholder="Search by name, ID, or major..."
+            (input)="search$.next($any($event.target).value)"
+          />
+        </div>
+
+      </div>
+
+      <div class="table-container">
+
+        <table mat-table [dataSource]="dataSource" class="table-style">
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let student">
+              <div class="student-name">
+                <div class="avatar">
+                  {{ student.name?.charAt(0) }}
+                </div>
+
+                <div>
+                  <div class="name">{{ student.name }}</div>
+                  <div class="email">{{ student.universityEmail }}</div>
+                </div>
               </div>
+            </td>
+          </ng-container>
 
-              <div>
-                <div class="name">{{ student.name }}</div>
-                <div class="email">{{ student.universityEmail }}</div>
-              </div>
-            </div>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="universityID">
+            <th mat-header-cell *matHeaderCellDef>University ID</th>
+            <td mat-cell *matCellDef="let student">
+              {{ student.universityId }}
+            </td>
+          </ng-container>
 
-        <!-- UNIVERSITY ID -->
-        <ng-container matColumnDef="universityID">
-          <th mat-header-cell *matHeaderCellDef>University ID</th>
-          <td mat-cell *matCellDef="let student">
-            {{ student.universityId }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="facultyAndMajor">
+            <th mat-header-cell *matHeaderCellDef>Faculty & Major</th>
+            <td mat-cell *matCellDef="let student">
+              <div class="faculty">{{ student.faculty }}</div>
+              <div class="major">{{ student.major }}</div>
+            </td>
+          </ng-container>
 
-        <!-- FACULTY & MAJOR -->
-        <ng-container matColumnDef="facultyAndMajor">
-          <th mat-header-cell *matHeaderCellDef>Faculty & Major</th>
-          <td mat-cell *matCellDef="let student">
-            <div class="faculty">{{ student.faculty }}</div>
-            <div class="major">{{ student.major }}</div>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let student">
+              <span class="badge" [ngClass]="student.role?.toLowerCase()">
+                {{ student.role }}
+              </span>
+            </td>
+          </ng-container>
 
-        <!-- ROLE -->
-        <ng-container matColumnDef="role">
-          <th mat-header-cell *matHeaderCellDef>Role</th>
-          <td mat-cell *matCellDef="let student">
-            <span class="badge" [ngClass]="student.role?.toLowerCase()">
-              {{ student.role }}
-            </span>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let student">
+              <span class="status" [ngClass]="student.status?.toLowerCase()">
+                ● {{ student.status }}
+              </span>
+            </td>
+          </ng-container>
 
-        <!-- STATUS -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let student">
-            <span class="status" [ngClass]="student.status?.toLowerCase()">
-              ● {{ student.status }}
-            </span>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="moreInfo">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let student">
+              <fa-icon
+                [icon]="['fas', 'ellipsis-v']"
+                (click)="presentPopoverActions($event, student)">
+              </fa-icon>
+            </td>
+          </ng-container>
 
-        <!-- MORE -->
-        <ng-container matColumnDef="moreInfo">
-          <th mat-header-cell *matHeaderCellDef></th>
-          <td mat-cell *matCellDef="let student">
-            <fa-icon [icon]="['fas', 'ellipsis-h']"></fa-icon>
-          </td>
-        </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
 
-      </table>
+      </div>
 
-    </ng-container>
+      <mat-paginator
+        [pageSize]="10"
+        showFirstLastButtons>
+      </mat-paginator>
 
-  </div>
+    }
 
-  <!-- PAGINATOR -->
-  <mat-paginator
-    [pageSize]="10"
-    showFirstLastButtons>
-  </mat-paginator>
+  </ng-container>
 
 </div>

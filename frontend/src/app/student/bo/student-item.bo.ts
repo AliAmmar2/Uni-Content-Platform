@@ -1,5 +1,7 @@
 import { StudentModel } from '../../_clients/student/models/student.model';
+
 export class StudentItemBo {
+  id: string;
   universityId: string;
   universityEmail: string;
   name: string;
@@ -10,6 +12,7 @@ export class StudentItemBo {
   status: string;
 
   constructor(studentModel: StudentModel) {
+    this.id = studentModel._id;
     this.universityEmail = studentModel.universityEmail;
     this.universityId = studentModel.universityId;
     this.faculty = studentModel?.faculty?.name ?? '';

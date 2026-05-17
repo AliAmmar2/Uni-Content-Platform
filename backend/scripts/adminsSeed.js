@@ -30,7 +30,7 @@ async function seedAdmins() {
                 passwordHash
             },
             {
-                username: "admin1",
+                username: "admin12",
                 email: "admin1@university.com",
                 fullName: "First Admin",
                 role: "admin",
