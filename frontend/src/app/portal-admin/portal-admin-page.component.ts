@@ -10,9 +10,6 @@ import { selectAdminDetails } from './+state/admin.selector';
 import { AdminActions } from './+state/admin.action';
 import { LetDirective } from '@ngrx/component';
 import { ADMIN_DETAILS_KEY, LOGGED_IN_ADMIN_KEY } from './+state/admin-details.reducer';
-import { MajorActions } from '../major/+state/major.action';
-import { FacultyActions } from '../faculty/+state/faculty.action';
-import { StudentActions } from '../student/+state/student.action';
 
 @Component({
   standalone: true,
@@ -84,7 +81,7 @@ export class PortalAdminPage implements OnInit {
     // this.store.dispatch(StudentActions.resetStudentState());
     this.subscription$.unsubscribe();
     this.dashboardUiService.clearMenu();
-    void this.router.navigate(['/login']);
+    void this.router.navigate(['/admin-@-access']);
   }
 
   protected readonly ADMIN_DETAILS_KEY = ADMIN_DETAILS_KEY;

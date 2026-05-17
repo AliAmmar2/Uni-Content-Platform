@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginPage } from './login-page/login.page';
 import { RegisterPage } from './reigister-page/register.page';
 import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
 import { PortalAdminPage } from './portal-admin/portal-admin-page.component';
@@ -18,12 +17,18 @@ import { EditAdminPage } from './portal-admin/edit-admin-page/edit-admin.page';
 import { EditCoursePage } from './portal-admin/edit-course-page/edit-course.page';
 import { VerifyEmailPage } from './reigister-page/verify-email-page/verify-email.page';
 import { CheckEmailPage } from './reigister-page/check-email-page/check-email.page';
+import { StudentLoginPage } from './login-page/login-student-page/student-login.page';
+import { AdminLoginPage } from './login-page/login-admin-page/admin-login.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
-    component: LoginPage
+    component: StudentLoginPage
+  },
+  {
+    path: 'admin-@-access',
+    component: AdminLoginPage
   },
   {
     path: 'register',
