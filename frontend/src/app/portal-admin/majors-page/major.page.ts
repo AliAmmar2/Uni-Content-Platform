@@ -1,13 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LetDirective } from '@ngrx/component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
-import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Subscription } from 'rxjs';
 
-import { selectAllMajors } from '../../major/+state/major.selector';
+import { selectAllMajors, selectMajorDetails } from '../../major/+state/major.selector';
 import { MajorActions } from '../../major/+state/major.action';
 import { MAJOR_KEY } from '../../major/+state/major.reducer';
 import { PopoverBoxService } from '../../components/mat-pop-over-box/src';
@@ -16,6 +16,8 @@ import {
   MatMultiActionsInterface
 } from '../../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
 import { MajorItemBo } from '../../major/bo/major-item.bo';
+import { ToastrService } from 'ngx-toastr';
+import { MajorStatusEnum } from '../../major/+state/enums/major-status.enum';
 
 @Component({
   imports: [CommonModule, LetDirective, FaIconComponent],
@@ -23,15 +25,20 @@ import { MajorItemBo } from '../../major/bo/major-item.bo';
   templateUrl: './major.page.html',
   styleUrls: ['./major.page.scss']
 })
-export class MajorPage implements OnInit {
+export class MajorPage implements OnInit, OnDestroy {
   public adminId: string;
   private store = inject(Store);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
   protected popoverBoxService = inject(PopoverBoxService);
   private ngxMdDialogService = inject(NgxMdDialogService);
   private majors$ = this.store.select(selectAllMajors);
   private search$ = new BehaviorSubject<string>('');
   private activatedRoute = inject(ActivatedRoute);
+  private subscription$ = new Subscription();
+  public majorDetailsSelected$ = this.store.pipe(
+    select(selectMajorDetails)
+  );
   majorsListSelected$ = combineLatest([
     this.majors$,
     this.search$
@@ -52,20 +59,59 @@ export class MajorPage implements OnInit {
   );
 
   ngOnInit(): void {
+    this.majorDetailsSubscription();
     this.store.dispatch(MajorActions.loadMajors());
     this.adminId = this.activatedRoute.parent?.snapshot.paramMap.get('id');
   }
 
-  onSearch(event: Event): void {
+  public majorDetailsSubscription() {
+    this.subscription$.add(
+      this.majorDetailsSelected$.subscribe((majorDetailsState) => {
+        if (!majorDetailsState) {
+          return;
+        }
+
+        if (majorDetailsState.status === MajorStatusEnum.deleteSuccess) {
+          this.toastr.clear();
+
+          this.toastr.success(
+            'Major deleted successfully',
+            'Success',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 3000
+            }
+          );
+
+          return;
+        }
+
+        if (majorDetailsState.status === MajorStatusEnum.deleteFailure) {
+          this.toastr.clear();
+
+          this.toastr.error(
+            majorDetailsState.error?.message || 'Something went wrong',
+            'Error',
+            {
+              positionClass: 'toast-top-right',
+              progressBar: true,
+              closeButton: true,
+              timeOut: 4000
+            }
+          );
+        }
+      })
+    );
+  }
+
+  public onSearch(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.search$.next(value);
   }
 
-  openMajorDetails(id: string): void {
-    this.router.navigate(['/admin/majors', id]);
-  }
-
-  navigateToAddNewMajor(): void {
+  public navigateToAddNewMajor(): void {
     void this.router.navigate(['/admin', this.adminId, 'add-new-major']);
   }
 
@@ -92,8 +138,9 @@ export class MajorPage implements OnInit {
   }
 
   public navigateToEditMajor(id: string): void {
-    void this.router.navigate(['/admin', this.adminId, id, 'edit']);
+    void this.router.navigate(['/admin', this.adminId, id, 'edit-major']);
   }
+
   public navigateToMajorDetails(id: string): void {
     void this.router.navigate(['/admin', this.adminId, id, 'details']);
   }
@@ -122,9 +169,11 @@ export class MajorPage implements OnInit {
     this.ngxMdDialogService.openMultiActionsDialog(matYesNoDialogData, { width: '400px' });
   }
 
-  deleteMajor(id: string): void {
+  public deleteMajor(id: string): void {
     this.store.dispatch(MajorActions.deleteMajor({ id }));
   }
 
-  protected readonly MAJOR_KEY = MAJOR_KEY;
+  ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
+  }
 }

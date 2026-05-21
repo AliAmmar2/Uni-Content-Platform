@@ -17,6 +17,7 @@ import { FacultyActions } from '../../faculty/+state/faculty.action';
 import { LetDirective } from '@ngrx/component';
 import { FACULTY_KEY } from '../../faculty/+state/faculty.reducer';
 import { MAJOR_DETAILS_KEY } from '../../major/+state/major-details.reducer';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   standalone: true,
@@ -32,6 +33,7 @@ import { MAJOR_DETAILS_KEY } from '../../major/+state/major-details.reducer';
 export class EditMajorPage implements OnInit, OnDestroy {
   private store = inject(Store);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
   private activatedRoute = inject(ActivatedRoute);
 
   public majorForm: FormGroup;
@@ -85,25 +87,65 @@ export class EditMajorPage implements OnInit, OnDestroy {
     }
   }
 
-  public majorSubscription() {
+  public majorSubscription(): void {
     this.subscription$.add(
       this.majorDetailsSelected$.subscribe({
         next: (majorDetailsState) => {
+          if (!majorDetailsState?.status) {
+            return;
+          }
 
-          if (!majorDetailsState?.status) return;
+          if (majorDetailsState.status === MajorStatusEnum.createSuccess) {
+            this.toastr.clear();
+            this.toastr.success(
+              'Major created successfully',
+              'Success',
+              {
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                closeButton: true,
+                timeOut: 3000
+              }
+            );
 
-          if (
-            !this.isEditMode &&
-            majorDetailsState.status === MajorStatusEnum.createSuccess
-          ) {
             this.goToMajorsPage();
+            return;
+          }
+
+          if (majorDetailsState.status === MajorStatusEnum.updateSuccess) {
+            this.toastr.clear();
+            this.toastr.success(
+              'Major updated successfully',
+              'Success',
+              {
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                closeButton: true,
+                timeOut: 3000
+              }
+            );
+
+            this.goToMajorsPage();
+            return;
           }
 
           if (
-            this.isEditMode &&
-            majorDetailsState.status === MajorStatusEnum.updateSuccess
+            majorDetailsState.status === MajorStatusEnum.createFailure ||
+            majorDetailsState.status === MajorStatusEnum.updateFailure
           ) {
-            this.goToMajorsPage();
+            this.toastr.clear();
+            this.toastr.error(
+              majorDetailsState.error?.message || 'Something went wrong',
+              'Error',
+              {
+                positionClass: 'toast-top-right',
+                progressBar: true,
+                closeButton: true,
+                timeOut: 4000
+              }
+            );
+
+            return;
           }
 
           if (
@@ -113,10 +155,11 @@ export class EditMajorPage implements OnInit, OnDestroy {
             this.majorForm.patchValue({
               name: majorDetailsState[MAJOR_DETAILS_KEY].name,
               code: majorDetailsState[MAJOR_DETAILS_KEY].code,
-              faculty: majorDetailsState[MAJOR_DETAILS_KEY].faculty?.id || majorDetailsState[MAJOR_DETAILS_KEY].faculty
+              faculty:
+                majorDetailsState[MAJOR_DETAILS_KEY].faculty?.id ||
+                majorDetailsState[MAJOR_DETAILS_KEY].faculty
             });
           }
-
         }
       })
     );
@@ -124,7 +167,10 @@ export class EditMajorPage implements OnInit, OnDestroy {
 
   public onSubmit() {
 
-    if (this.majorForm.invalid) return;
+    if (this.majorForm.invalid) {
+      this.majorForm.markAllAsTouched();
+      return;
+    }
 
     if (this.isEditMode && this.majorId) {
 
@@ -163,12 +209,6 @@ export class EditMajorPage implements OnInit, OnDestroy {
       this.adminId,
       'faculties'
     ]);
-  }
-
-  public onFacultySelect(faculty: any): void {
-    this.majorForm.patchValue({
-      faculty: faculty.id
-    });
   }
 
   ngOnDestroy(): void {

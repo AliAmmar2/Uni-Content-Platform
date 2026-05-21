@@ -43,4 +43,11 @@ export const adminReducer = createReducer<AdminState, Action>(
       error
     };
   }),
+
+  on(AdminActions.resetAdminState, (state) => {
+    return {
+      ...state,
+      status: AdminStatusEnum.pending
+    };
+  })
 );

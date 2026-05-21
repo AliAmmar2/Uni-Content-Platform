@@ -97,4 +97,17 @@ export class StudentClient {
       this.getAuthOptions()
     );
   }
+
+  public updatePasswordBySuperAdmin(id: string,
+                                    payload: {
+      superAdminPassword: string;
+      newPassword: string;
+    }
+  ): Observable<any> {
+    return this.http.put(
+      `${this.API_URL}/${id}/password-by-super-admin`,
+      payload,
+      this.getAuthOptions()
+    );
+  }
 }

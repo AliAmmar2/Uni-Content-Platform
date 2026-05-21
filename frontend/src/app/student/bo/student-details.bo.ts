@@ -5,7 +5,9 @@ export class StudentDetailsBo {
 	universityEmail: string;
 	name: string;
 	faculty: string;
+  facultyId: string;
 	major: string;
+  majorId: string;
 	calendarYear: number;
 	academicYear: number;
 	role: string;
@@ -15,7 +17,9 @@ export class StudentDetailsBo {
 		this.universityEmail = studentModel.universityEmail;
 		this.universityId = studentModel.universityId;
 		this.faculty = studentModel.faculty.name;
+    this.facultyId=studentModel.faculty._id;
 		this.major = studentModel.major.name;
+    this.majorId=studentModel.major._id;
 		this.name = studentModel.name;
 		this.calendarYear = studentModel.calendarYear ?? 2025;
 		this.academicYear = studentModel.academicYear;

@@ -1,0 +1,202 @@
+<section class="add-admin">
+
+  <div class="add-admin__header">
+    <div>
+      <div class="add-admin__breadcrumb">
+        <button
+          type="button"
+          class="add-admin__breadcrumb-link"
+          (click)="goToAdminsPage()">
+          Admins
+        </button>
+
+        <span class="add-admin__breadcrumb-separator">›</span>
+
+        <span class="add-admin__breadcrumb-current">
+          {{ isEditMode ? 'Edit Admin' : 'Add New Admin' }}
+        </span>
+      </div>
+
+      <h1 class="add-admin__title">
+        Admin Registration
+      </h1>
+
+      <p class="add-admin__subtitle">
+        Create and manage administrator accounts for the university system.
+      </p>
+    </div>
+  </div>
+
+  <div class="add-admin__content">
+
+    <form
+      class="admin-form"
+      [formGroup]="adminForm"
+      (ngSubmit)="onSubmit()">
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input
+            type="text"
+            formControlName="fullName"
+            placeholder="e.g. System Admin"/>
+
+          @if (
+            adminForm.controls['fullName'].hasError('required') &&
+            adminForm.controls['fullName'].touched
+            ) {
+            <span class="error-message">Full name is required</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Username</label>
+          <input
+            type="text"
+            formControlName="username"
+            placeholder="e.g. admin01"/>
+
+          @if (
+            adminForm.controls['username'].hasError('required') &&
+            adminForm.controls['username'].touched
+            ) {
+            <span class="error-message">Username is required</span>
+          }
+        </div>
+
+      </div>
+
+      <div class="form-group form-group--full">
+        <label>Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="admin@university.com"/>
+
+        @if (
+          adminForm.controls['email'].hasError('required') &&
+          adminForm.controls['email'].touched
+          ) {
+          <span class="error-message">Email is required</span>
+        }
+
+        @else if (
+          adminForm.controls['email'].hasError('email') &&
+          adminForm.controls['email'].touched
+          ) {
+          <span class="error-message">Enter a valid email</span>
+        }
+      </div>
+
+      @if (!isEditMode) {
+        <div class="form-group form-group--full">
+          <label>Password</label>
+
+          <div class="password-field">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="Enter admin password"/>
+
+            <button
+              type="button"
+              class="password-field__toggle"
+              (click)="togglePasswordVisibility()">
+              <fa-icon [icon]="showPassword ? ['fas', 'eye-slash'] : ['fas', 'eye']"></fa-icon>
+            </button>
+          </div>
+
+          @if (
+            adminForm.controls['password'].hasError('required') &&
+            adminForm.controls['password'].touched
+            ) {
+            <span class="error-message">Password is required</span>
+          }
+
+          @else if (
+            adminForm.controls['password'].hasError('minlength') &&
+            adminForm.controls['password'].touched
+            ) {
+            <span class="error-message">Password must be at least 8 characters</span>
+          }
+        </div>
+      }
+
+      <div class="form-row">
+
+        <div class="form-group">
+          <label>Role</label>
+
+          <select formControlName="role">
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+          </select>
+
+          @if (
+            adminForm.controls['role'].hasError('required') &&
+            adminForm.controls['role'].touched
+            ) {
+            <span class="error-message">Role is required</span>
+          }
+        </div>
+
+      </div>
+
+      <div class="admin-form__divider"></div>
+
+      <div class="admin-form__actions">
+
+        <button
+          type="button"
+          class="btn btn--outline"
+          (click)="onCancel()">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn--primary"
+          [disabled]="adminForm.invalid">
+          <fa-icon [icon]="['fas', 'check-circle']"></fa-icon>
+          <span>
+            {{ isEditMode ? 'Update Admin' : 'Create Admin' }}
+          </span>
+        </button>
+
+      </div>
+
+    </form>
+
+    <aside class="guidance-card">
+
+      <div class="guidance-card__header">
+        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+        <h3>Admin Guidance</h3>
+      </div>
+
+      <ul class="guidance-card__list">
+
+        <li>
+          <span class="guidance-card__dot"></span>
+          <p>
+            <strong>Role Control:</strong>
+            Super admins can manage other administrators and access sensitive system settings.
+          </p>
+        </li>
+
+        <li>
+          <span class="guidance-card__dot"></span>
+          <p>
+            <strong>Email Integrity:</strong>
+            Use a valid institutional email for official communication and account recovery.
+          </p>
+        </li>
+      </ul>
+
+    </aside>
+
+  </div>
+
+</section>

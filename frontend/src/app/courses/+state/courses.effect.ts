@@ -22,7 +22,7 @@ export class CourseEffects {
             CourseActions.loadAllCoursesSuccess({ courses })
           ),
           catchError((error) =>
-            of(CourseActions.loadAllCoursesFailure({ error }))
+            of(CourseActions.loadAllCoursesFailure({ error: error.error }))
           )
         );
       })
@@ -38,7 +38,7 @@ export class CourseEffects {
             CourseActions.loadFilteredCoursesSuccess({ courses })
           ),
           catchError((error) =>
-            of(CourseActions.loadFilteredCoursesFailure({ error }))
+            of(CourseActions.loadFilteredCoursesFailure({ error: error.error }))
           )
         );
       })
@@ -54,7 +54,7 @@ export class CourseEffects {
             CourseActions.loadMyMajorCoursesSuccess({ courses })
           ),
           catchError((error) =>
-            of(CourseActions.loadMyMajorCoursesFailure({ error }))
+            of(CourseActions.loadMyMajorCoursesFailure({ error: error.error }))
           )
         );
       })
@@ -70,7 +70,7 @@ export class CourseEffects {
             CourseActions.loadCourseDetailsSuccess({ course })
           ),
           catchError((error) =>
-            of(CourseActions.loadCourseDetailsFailure({ error }))
+            of(CourseActions.loadCourseDetailsFailure({ error: error.error }))
           )
         );
       })
@@ -88,7 +88,7 @@ export class CourseEffects {
             CourseActions.resetCourseState()
           ]),
           catchError((error) =>
-            of(CourseActions.createCourseFailure({ error }))
+            of(CourseActions.createCourseFailure({ error: error.error }))
           )
         );
       })
@@ -106,7 +106,7 @@ export class CourseEffects {
             CourseActions.resetCourseState()
           ]),
           catchError((error) =>
-            of(CourseActions.updateCourseFailure({ error }))
+            of(CourseActions.updateCourseFailure({ error: error.error }))
           )
         );
       })
@@ -124,7 +124,7 @@ export class CourseEffects {
             CourseActions.resetCourseState()
           ]),
           catchError((error) =>
-            of(CourseActions.deleteCourseFailure({ error }))
+            of(CourseActions.deleteCourseFailure({ error: error.error }))
           )
         );
       })

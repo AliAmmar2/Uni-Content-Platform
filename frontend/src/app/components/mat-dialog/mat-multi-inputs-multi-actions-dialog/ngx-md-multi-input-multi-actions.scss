@@ -1,0 +1,142 @@
+.form-dialog {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+
+  &__details {
+    padding: 20px;
+  }
+
+  &__message {
+    margin: 0 0 18px;
+    color: #64748b;
+    font-size: 14px;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 18px;
+  background: #c4001a;
+  color: #ffffff;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  &__close-icon {
+    font-size: 22px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #3f1f1f;
+  }
+
+  input {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    box-sizing: border-box;
+
+    border: 1px solid #efbebe;
+    border-radius: 8px;
+
+    background: #f8fafc;
+    color: #111827;
+
+    font-size: 15px;
+    outline: none;
+
+    &:focus {
+      border-color: #c4001a;
+      box-shadow: 0 0 0 3px rgba(196, 0, 26, 0.12);
+    }
+  }
+
+  .password-field {
+    position: relative;
+    width: 100%;
+
+    input {
+      padding-right: 48px !important;
+    }
+
+    &__toggle {
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: #64748b;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 0;
+      font-size: 16px;
+      transition: 0.2s ease;
+
+      &:hover {
+        color: #c4001a;
+      }
+    }
+  }
+}
+.error-message {
+  font-size: 12px;
+  color: #c4001a;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+
+  padding: 20px 0 0 !important;
+
+  .dialog-action-btn {
+    min-width: 120px;
+    height: 40px;
+
+    border-radius: 8px;
+    color: #ffffff;
+
+    font-weight: 700;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}

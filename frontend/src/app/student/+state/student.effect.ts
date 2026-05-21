@@ -26,7 +26,7 @@ export class StudentEffect {
                 return StudentActions.loadStudentsSuccess({ students: studentsList });
               }),
               catchError((error) => {
-                return of(StudentActions.loadStudentsFailure({ error }));
+                return of(StudentActions.loadStudentsFailure({ error: error.error }));
               })
             );
         })
@@ -50,7 +50,7 @@ export class StudentEffect {
                 });
               }),
               catchError((error) => {
-                return of(StudentActions.loadStudentDetailsFailure({ error }));
+                return of(StudentActions.loadStudentDetailsFailure({ error: error.error }));
               })
             );
         })
@@ -76,7 +76,7 @@ export class StudentEffect {
                 ];
               }),
               catchError((error) => {
-                return of(StudentActions.createStudentFailure({ error }));
+                return of(StudentActions.createStudentFailure({ error: error.error }));
               })
             );
         })
@@ -102,7 +102,7 @@ export class StudentEffect {
                 ];
               }),
               catchError((error) => {
-                return of(StudentActions.updateStudentFailure({ error }));
+                return of(StudentActions.updateStudentFailure({ error: error.error }));
               })
             );
         })
@@ -128,7 +128,7 @@ export class StudentEffect {
                 ];
               }),
               catchError((error) => {
-                return of(StudentActions.deleteStudentFailure({ error }));
+                return of(StudentActions.deleteStudentFailure({ error: error.error }));
               })
             );
         })

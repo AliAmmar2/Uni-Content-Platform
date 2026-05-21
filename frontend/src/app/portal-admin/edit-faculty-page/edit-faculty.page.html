@@ -59,10 +59,19 @@
             formControlName="name"
             class="faculty-form__input"
             placeholder="e.g. Faculty of Sciences"/>
+
+          @if (facultyForm.controls['name'].hasError('required') &&
+          facultyForm.controls['name'].touched) {
+
+            <span class="error-message">
+      Faculty name is required
+    </span>
+          }
         </div>
 
         <!-- Faculty Code -->
         <div class="faculty-form__group">
+
           <label class="faculty-form__label">
             Faculty Code
           </label>
@@ -72,6 +81,23 @@
             formControlName="code"
             class="faculty-form__input"
             placeholder="e.g. FS-01"/>
+
+          @if (facultyForm.controls['code'].hasError('required') &&
+          facultyForm.controls['code'].touched) {
+
+            <span class="error-message">
+             Faculty code is required
+             </span>
+
+          } @else if (facultyForm.controls['code'].hasError('invalidFacultyCode')
+          && facultyForm.controls['code'].touched) {
+
+            <span class="error-message">
+      Use format like FS-01
+    </span>
+
+          }
+
         </div>
 
         <!-- Description -->
@@ -138,6 +164,7 @@
             <p>
               Use the standardized two-letter prefix followed by a numeric
               identifier (e.g., FS-01 for Faculty of Sciences).
+              The letters for the name and number is for the branch.
             </p>
           </div>
 

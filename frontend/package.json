@@ -38,6 +38,7 @@
     "@ngrx/component": "^21.0.1",
     "@ngrx/effects": "^21.0.1",
     "@ngrx/store": "^21.0.1",
+    "@ngrx/store-devtools": "^21.1.0",
     "@ngx-translate/core": "^17.0.0",
     "angular2-uuid": "^1.1.1",
     "lodash": "^4.18.1",

@@ -3,10 +3,16 @@ const router = express.Router();
 
 const adminAuthMiddleware = require("../middleware/admin-auth.middleware");
 const studentController = require("../controllers/students.controller");
+const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middleware-auth");
+
 
 router.use(adminAuthMiddleware);
 
-// CRUD
+router.put(
+    "/:id/password-by-super-admin",
+    allowStudentOrAdminRole([], ["super_admin"]),
+    studentController.updatePasswordBySuperAdmin
+);
 router.get("/", studentController.getStudents);
 router.get("/:id", studentController.getStudentById);
 router.post("/", studentController.createStudent);

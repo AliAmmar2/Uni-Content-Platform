@@ -4,15 +4,18 @@ import { AdminActions } from './admin.action';
 import { AdminDetailsBo } from '../bo/admin-details.bo';
 
 export const ADMIN_DETAILS_KEY = 'adminDetailsKey';
+export const LOGGED_IN_ADMIN_KEY = 'loggedInAdminKey';
 
 export interface AdminDetailsState {
   readonly [ADMIN_DETAILS_KEY]: AdminDetailsBo;
+  readonly [LOGGED_IN_ADMIN_KEY]: AdminDetailsBo | null;
   readonly status: AdminStatusEnum;
   readonly error: Error;
 }
 
 const initialAdminDetailsState: AdminDetailsState = {
   [ADMIN_DETAILS_KEY]: null,
+  [LOGGED_IN_ADMIN_KEY]: null,
   status: AdminStatusEnum.pending,
   error: null
 };
@@ -49,7 +52,7 @@ export const adminDetailsReducers = createReducer<AdminDetailsState, Action>(
   on(AdminActions.loadMeSuccess, (state, { admin }) => {
     return {
       ...state,
-      [ADMIN_DETAILS_KEY]: admin,
+      [LOGGED_IN_ADMIN_KEY]: admin,
       status: AdminStatusEnum.loadDetailsSuccess
     };
   }),

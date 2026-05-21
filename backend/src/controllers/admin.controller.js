@@ -6,14 +6,14 @@ const Admin = require("../models/Admin");
  */
 exports.createAdmin = async (req, res) => {
     try {
-        const { username, email, fullName, password, role } = req.body;
+        const {username, email, fullName, password, role} = req.body;
 
         const existing = await Admin.findOne({
-            $or: [{ email }, { username }]
+            $or: [{email}, {username}]
         });
 
         if (existing) {
-            return res.status(400).json({ message: "Admin already exists" });
+            return res.status(400).json({message: "Admin already exists"});
         }
 
         const passwordHash = await bcrypt.hash(password, 10);
@@ -26,13 +26,25 @@ exports.createAdmin = async (req, res) => {
             role: role || "admin"
         });
 
-        res.status(201).json({
+        const safeAdmin = {
+            id: admin._id,
+            username: admin.username,
+            email: admin.email,
+            fullName: admin.fullName,
+            role: admin.role,
+            lastLogin: admin.lastLogin,
+            lastPasswordUpdate: admin.lastPasswordUpdate,
+            createdAt: admin.createdAt,
+            updatedAt: admin.updatedAt
+        };
+
+        return res.status(201).json({
             message: "Admin created successfully",
-            admin
+            admin: safeAdmin
         });
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
@@ -46,7 +58,7 @@ exports.getAllAdmins = async (req, res) => {
 
         res.json(admins);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
@@ -60,13 +72,13 @@ exports.getMe = async (req, res) => {
             .select("-passwordHash");
 
         if (!admin) {
-            return res.status(404).json({ message: "Admin not found" });
+            return res.status(404).json({message: "Admin not found"});
         }
 
         res.json(admin);
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
@@ -78,48 +90,100 @@ exports.getAdminById = async (req, res) => {
         const admin = await Admin.findById(req.params.id).select("-passwordHash");
 
         if (!admin) {
-            return res.status(404).json({ message: "Admin not found" });
+            return res.status(404).json({message: "Admin not found"});
         }
 
         res.json(admin);
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({message: err.message});
     }
 };
 
 
 /**
  * UPDATE ADMIN
- */
-exports.updateAdmin = async (req, res) => {
+ */exports.updateAdmin = async (req, res) => {
     try {
-        const { username, email, fullName, role } = req.body;
+
+        const {
+            username,
+            email,
+            fullName,
+            role
+        } = req.body;
 
         const targetAdminId = req.params.id;
+
         const requester = req.user;
 
         const isSelf = requester.id === targetAdminId;
+
         const isSuperAdmin = requester.role === "super_admin";
 
+        /**
+         * Normal admin can update only himself
+         * Super admin can update everyone
+         */
         if (!isSelf && !isSuperAdmin) {
             return res.status(403).json({
                 message: "You are not allowed to update this admin"
             });
         }
 
-        // build safe update object (NO undefined overwrite)
+        const adminToUpdate = await Admin.findById(targetAdminId);
+
+        if (!adminToUpdate) {
+            return res.status(404).json({
+                message: "Admin not found"
+            });
+        }
+
+        /**
+         * Role protection
+         */
+        if (role !== undefined) {
+
+            /**
+             * Only super admin can change roles
+             */
+            if (!isSuperAdmin) {
+                return res.status(403).json({
+                    message: "Only super admin can change roles"
+                });
+            }
+
+            /**
+             * Super admin cannot change his own role
+             */
+            if (
+                isSelf &&
+                adminToUpdate.role !== role
+            ) {
+                return res.status(403).json({
+                    message: "You cannot change your own role"
+                });
+            }
+        }
+
         const updateData = {};
 
-        if (username !== undefined) updateData.username = username;
-        if (email !== undefined) updateData.email = email;
-        if (fullName !== undefined) updateData.fullName = fullName;
+        if (username !== undefined) {
+            updateData.username = username;
+        }
 
-        // only super admin can change role
-        if (isSuperAdmin && role) {
+        if (email !== undefined) {
+            updateData.email = email;
+        }
+
+        if (fullName !== undefined) {
+            updateData.fullName = fullName;
+        }
+
+        if (role !== undefined) {
             updateData.role = role;
         }
 
-        const admin = await Admin.findByIdAndUpdate(
+        const updatedAdmin = await Admin.findByIdAndUpdate(
             targetAdminId,
             updateData,
             {
@@ -128,17 +192,16 @@ exports.updateAdmin = async (req, res) => {
             }
         ).select("-passwordHash");
 
-        if (!admin) {
-            return res.status(404).json({ message: "Admin not found" });
-        }
-
-        res.json({
+        return res.status(200).json({
             message: "Admin updated successfully",
-            admin
+            admin: updatedAdmin
         });
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+
+        return res.status(500).json({
+            message: err.message
+        });
     }
 };
 /**
@@ -146,8 +209,16 @@ exports.updateAdmin = async (req, res) => {
  */
 exports.deleteAdmin = async (req, res) => {
     try {
+        if (!req.user?.id) {
+            return res.status(401).json({
+                message: "Unauthorized"
+            });
+        }
 
-        const admin = await Admin.findById(req.params.id);
+        const adminIdToDelete = req.params.id;
+        const currentAdminId = req.user.id;
+
+        const admin = await Admin.findById(adminIdToDelete);
 
         if (!admin) {
             return res.status(404).json({
@@ -155,26 +226,22 @@ exports.deleteAdmin = async (req, res) => {
             });
         }
 
-        /**
-         * Prevent self delete
-         */
-        if (admin._id.toString() === req.admin.id) {
-            return res.status(400).json({
+        if (admin._id.toString() === currentAdminId) {
+            return res.status(403).json({
                 message: "You cannot delete yourself"
             });
         }
 
-        await Admin.findByIdAndDelete(req.params.id);
+        await Admin.findByIdAndDelete(adminIdToDelete);
 
-        res.json({
+        return res.status(200).json({
             message: "Admin deleted successfully"
         });
 
     } catch (err) {
-
         console.error("DELETE ADMIN ERROR:", err);
 
-        res.status(500).json({
+        return res.status(500).json({
             message: err.message
         });
     }

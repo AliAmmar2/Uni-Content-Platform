@@ -5,6 +5,8 @@ import { MatMultiActionsInterface } from '../mat-mutli-actions-dialog/mat-multi-
 import { NgxMdDialogInput } from '../mat-input-dialog/ngx-md-dialog-input';
 import { MatInputDialogInterface } from '../mat-input-dialog/matInput-dialog.interface';
 import { NgxMdImagePicker } from '../mat-image-picker/ngx-md-image-picker';
+import { MatFormActionsDialogInterface } from '../mat-multi-inputs-multi-actions-dialog/matInput-dialog.interface';
+import { NgxMdMultiInputMultiActions } from '../mat-multi-inputs-multi-actions-dialog/ngx-md-multi-input-multi-actions';
 
 
 @Injectable({ providedIn: 'root' })
@@ -48,5 +50,17 @@ export class NgxMdDialogService {
         width: dialogSize?.width,
         disableClose: dialogSize?.disableClose || true
       });
+  }
+
+  public openFormActionsDialog(
+    data: MatFormActionsDialogInterface,
+    dialogSize?: { height?: string; width: string; disableClose?: boolean }
+  ) {
+    return this.dialog.open(NgxMdMultiInputMultiActions, {
+      data,
+      height: dialogSize?.height,
+      width: dialogSize?.width,
+      disableClose: dialogSize?.disableClose ?? true
+    });
   }
 }

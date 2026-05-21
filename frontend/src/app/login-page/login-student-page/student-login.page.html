@@ -1,0 +1,104 @@
+<section class="login">
+
+  <div class="login-card">
+
+    <div class="login-card__logo">
+      <img
+        src="../assets/imgs/logo.png"
+        alt="Lebanese University"
+      />
+
+      <h2>Lebanese University</h2>
+    </div>
+
+    <h1>Student Portal</h1>
+
+    <p class="login-card__subtitle">
+      Sign in using your university credentials
+    </p>
+
+    <form
+      class="login-form"
+      [formGroup]="loginStudentForm"
+      (ngSubmit)="loginStudent()"
+    >
+
+      <div class="form-group">
+        <label>University Email</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+
+          <input
+            type="email"
+            placeholder="name@ul.edu.lb"
+            formControlName="universityEmail"
+            autocomplete="email"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>University ID</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'id-card']"></fa-icon>
+
+          <input
+            type="text"
+            placeholder="Enter your university ID"
+            formControlName="universityId"
+            autocomplete="username"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+
+        <div class="input-wrapper">
+          <fa-icon [icon]="['fas', 'lock']"></fa-icon>
+
+          <input
+            [type]="hideInputPassword ? 'password' : 'text'"
+            placeholder="••••••••"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePassword()"
+          >
+            <fa-icon
+              [icon]="['far', hideInputPassword ? 'eye' : 'eye-slash']"
+            ></fa-icon>
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="login-button"
+        [disabled]="loginStudentForm.invalid || loginStudentForm.disabled"
+      >
+        Sign In
+      </button>
+
+      <p class="signup-text">
+        Don’t have an account?
+
+        <button
+          type="button"
+          (click)="navigateToRegister()"
+        >
+          Sign Up
+        </button>
+      </p>
+
+    </form>
+
+  </div>
+
+</section>

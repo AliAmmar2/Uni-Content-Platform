@@ -15,6 +15,10 @@ import { UpdateStudentFormGroupInterface } from '../interfaces/update-student-fo
 
 import { StudentForCreationDto } from '../dtos/student-for-creation.dto';
 import { StudentForUpdateDto } from '../dtos/student-for-update.dto';
+import { UpdatePasswordBySuperadminDto } from '../dtos/update-password-by-superadmin.dto';
+import {
+  UpdatePasswordBySuperadminFormGroupInterface
+} from '../interfaces/update-password-by-superadmin-form-group.interface';
 
 @Injectable({ providedIn: 'root' })
 export class StudentService {
@@ -73,5 +77,17 @@ export class StudentService {
 
   public deleteStudent(studentId: string): Observable<any> {
     return this.studentClient.deleteStudent(studentId);
+  }
+
+  public updatePasswordBySuperAdmin(
+    studentId: string,
+    formValue: UpdatePasswordBySuperadminFormGroupInterface
+  ): Observable<any> {
+    const updatePasswordDto = new UpdatePasswordBySuperadminDto(formValue);
+
+    return this.studentClient.updatePasswordBySuperAdmin(
+      studentId,
+      updatePasswordDto
+    );
   }
 }

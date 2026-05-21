@@ -8,7 +8,7 @@ export interface MajorRef {
   _id: string;
   name?: string;
   code?: string;
-  faculty?: string;
+  faculty?: FacultyRef | string;
 }
 
 export interface StudentModel {

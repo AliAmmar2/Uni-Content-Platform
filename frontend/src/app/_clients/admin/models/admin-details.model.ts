@@ -7,6 +7,7 @@ export interface AdminDetailsModel {
   role: 'admin' | 'super_admin';
 
   lastLogin?: Date;
+  lastPasswordUpdate?: Date;
   loginAttempts?: number;
 
   createdAt?: Date;

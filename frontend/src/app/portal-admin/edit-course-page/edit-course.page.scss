@@ -1,0 +1,301 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+.course-page {
+  padding: 2rem;
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    margin-bottom: 1.25rem;
+
+    font-size: 0.9rem;
+  }
+
+  &__breadcrumb-link {
+    border: none;
+    background: transparent;
+
+    padding: 0;
+
+    color: #6b7280;
+    font-size: 0.9rem;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+
+    &:hover {
+      color: #b00020;
+    }
+  }
+
+  &__breadcrumb-separator {
+    color: #9ca3af;
+  }
+
+  &__breadcrumb-current {
+    color: #111827;
+    font-weight: 600;
+  }
+
+  &__top {
+    margin-bottom: 1.5rem;
+  }
+
+  &__header {
+
+    h1 {
+      margin: 0;
+
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    p {
+      margin-top: 0.5rem;
+
+      max-width: 700px;
+
+      color: #6b7280;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+  }
+
+  &__content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  &__form-card {
+    background: #ffffff;
+
+    border: 1px solid #e7caca;
+    border-radius: 12px;
+
+    padding: 2rem;
+  }
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.course-form {
+  .error-message {
+    display: block;
+    margin-top: 0.45rem;
+    color: #c40010;
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 1.5rem;
+  }
+
+  &__label {
+    margin-bottom: 0.5rem;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  &__input,
+  &__select {
+    height: 52px;
+
+    padding: 0 1rem;
+
+    border: 1px solid #d8bcbc;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    font-size: 0.95rem;
+    color: #111827;
+
+    transition: 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #b00020;
+      box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.08);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  &__select {
+    cursor: pointer;
+  }
+
+  &__divider {
+    height: 1px;
+    background: #ececec;
+
+    margin: 1.5rem 0;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__submit-button,
+  &__cancel-button {
+    height: 44px;
+    padding: 0 1.5rem;
+
+    border-radius: 8px;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+  }
+
+  &__submit-button {
+    border: none;
+
+    background: #b00020;
+    color: #ffffff;
+
+    &:hover:not(:disabled) {
+      background: #95001b;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__cancel-button {
+    border: none;
+
+    background: transparent;
+    color: #b00020;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.sidebar-card {
+  background: #ffffff;
+
+  border: 1px solid #e7caca;
+  border-radius: 12px;
+
+  padding: 1.5rem;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    margin-bottom: 1.25rem;
+
+    color: #b00020;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.sidebar-action {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  width: 100%;
+
+  border: none;
+  background: transparent;
+
+  padding: 0.8rem;
+  border-radius: 8px;
+
+  font-size: 0.95rem;
+  color: #374151;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+  &:hover {
+    background: #f9fafb;
+    color: #b00020;
+  }
+}
+
+@media (max-width: 1000px) {
+
+  .course-page {
+
+    &__content {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+
+  .course-page {
+    padding: 1rem;
+  }
+
+  .course-form {
+
+    &__row {
+      grid-template-columns: 1fr;
+    }
+
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__submit-button,
+    &__cancel-button {
+      width: 100%;
+    }
+  }
+}

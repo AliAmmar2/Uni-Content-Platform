@@ -1,0 +1,30 @@
+<section class="check-email">
+
+  <div class="check-email__card">
+
+    <div class="check-email__icon">
+      <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+    </div>
+
+    <h1>Check Your Email</h1>
+
+    <p>
+      We have sent a verification link to your university email address.
+    </p>
+
+    <p class="check-email__subtext">
+      Please open your inbox and click the verification link
+      to activate your account.
+    </p>
+
+    <button
+      type="button"
+      class="check-email__button"
+      (click)="navigateToLogin()"
+    >
+      Back to Login
+    </button>
+
+  </div>
+
+</section>

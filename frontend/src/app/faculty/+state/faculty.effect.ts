@@ -4,8 +4,6 @@ import { catchError, map, of, switchMap } from 'rxjs';
 import { FacultyItemBo } from '../bo/faculty-item.bo';
 import { FacultyActions } from './faculty.action';
 import { FacultyService } from '../service/faculty.service';
-import { MajorActions } from '../../major/+state/major.action';
-import { MajorDetailsBo } from '../../major/bo/major-details.bo';
 import { FacultyDetailsBo } from '../bo/faculty-details.bo';
 
 @Injectable()
@@ -26,7 +24,7 @@ export class FacultyEffect {
                 });
               }),
               catchError((error) => {
-                return of(FacultyActions.loadFacultiesFailure({ error }));
+                return of(FacultyActions.loadFacultiesFailure({ error: error.error }));
               })
             );
         })
@@ -44,7 +42,7 @@ export class FacultyEffect {
             });
           }),
           catchError((error) => {
-            return of(FacultyActions.loadFacultyDetailsFailure({ error }));
+            return of(FacultyActions.loadFacultyDetailsFailure({ error: error.error }));
           })
         );
       })
@@ -68,7 +66,7 @@ export class FacultyEffect {
                 ];
               }),
               catchError((error) => {
-                return of(FacultyActions.updateFacultyFailure({ error }));
+                return of(FacultyActions.updateFacultyFailure({ error: error.error }));
               })
             );
         })
@@ -91,7 +89,7 @@ export class FacultyEffect {
                 ];
               }),
               catchError((error) => {
-                return of(FacultyActions.createFacultyFailure({ error }));
+                return of(FacultyActions.createFacultyFailure({ error: error.error }));
               })
             );
         })
@@ -114,7 +112,7 @@ export class FacultyEffect {
                 ];
               }),
               catchError((error) => {
-                return of(FacultyActions.deleteFacultyFailure({ error }));
+                return of(FacultyActions.deleteFacultyFailure({ error: error.error }));
               })
             );
         })

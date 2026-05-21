@@ -102,6 +102,17 @@
 .faculty-form {
   padding: 2rem;
 
+  .error-message {
+    display: block;
+    margin-top: 0.45rem;
+
+    color: #c40010;
+    font-size: 0.82rem;
+    font-weight: 500;
+
+    line-height: 1.4;
+  }
+
   &__group {
     display: flex;
     flex-direction: column;

@@ -1,16 +1,26 @@
-const allowStudentOrAdminRole = (studentRoles = [], adminRoles = []) => {
+const allowStudentOrAdminRole = (
+    studentRoles = [],
+    adminRoles = []
+) => {
+
     return (req, res, next) => {
 
-        //  STUDENT SYSTEM
+        /**
+         * STUDENT SYSTEM
+         */
         if (req.user?.userType === "STUDENT") {
+
             if (studentRoles.includes(req.user.role)) {
                 return next();
             }
         }
 
-        //  ADMIN SYSTEM
-        if (req.admin?.userType === "ADMIN") {
-            if (adminRoles.includes(req.admin.role)) {
+        /**
+         * ADMIN SYSTEM
+         */
+        if (req.user?.userType === "ADMIN") {
+
+            if (adminRoles.includes(req.user.role)) {
                 return next();
             }
         }
@@ -21,4 +31,6 @@ const allowStudentOrAdminRole = (studentRoles = [], adminRoles = []) => {
     };
 };
 
-module.exports = { allowStudentOrAdminRole };
+module.exports = {
+    allowStudentOrAdminRole
+};

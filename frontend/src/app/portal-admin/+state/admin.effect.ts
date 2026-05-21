@@ -23,7 +23,7 @@ export class AdminEffects {
             AdminActions.loadAdminsSuccess({ admins })
           ),
           catchError((error) =>
-            of(AdminActions.loadAdminsFailure({ error }))
+            of(AdminActions.loadAdminsFailure({ error: error.error }))
           )
         )
       )
@@ -39,7 +39,7 @@ export class AdminEffects {
             AdminActions.loadAdminDetailsSuccess({ admin })
           ),
           catchError((error) =>
-            of(AdminActions.loadAdminDetailsFailure({ error }))
+            of(AdminActions.loadAdminDetailsFailure({ error: error.error }))
           )
         )
       )
@@ -55,7 +55,7 @@ export class AdminEffects {
             AdminActions.loadMeSuccess({ admin })
           ),
           catchError((error) =>
-            of(AdminActions.loadMeFailure({ error }))
+            of(AdminActions.loadMeFailure({ error: error.error }))
           )
         )
       )
@@ -73,7 +73,7 @@ export class AdminEffects {
             AdminActions.resetAdminState()
           ]),
           catchError((error) =>
-            of(AdminActions.createAdminFailure({ error }))
+            of(AdminActions.createAdminFailure({ error: error.error }))
           )
         )
       )
@@ -87,12 +87,10 @@ export class AdminEffects {
         this.adminService.updateAdmin(action.id, action.admin).pipe(
           switchMap(() => [
             AdminActions.updateAdminSuccess(),
-            AdminActions.loadMe(),
-            AdminActions.loadAdmins(),
             AdminActions.resetAdminState()
           ]),
           catchError((error) =>
-            of(AdminActions.updateAdminFailure({ error }))
+            of(AdminActions.updateAdminFailure({ error: error.error }))
           )
         )
       )
@@ -110,7 +108,7 @@ export class AdminEffects {
             AdminActions.resetAdminState()
           ]),
           catchError((error) =>
-            of(AdminActions.deleteAdminFailure({ error }))
+            of(AdminActions.deleteAdminFailure({ error: error.error }))
           )
         )
       )

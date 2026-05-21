@@ -10,7 +10,7 @@ import { STUDENT_DETAILS_KEY } from '../+state/student-details.reducer';
 import { LetDirective } from '@ngrx/component';
 import { StudentActions } from '../+state/student.action';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { CoursesStatusEnum } from '../../courses/+state/enums/courses-status.enum';
+import { CourseStatusEnum } from '../../courses/+state/enums/course-status.enum';
 import { selectAllCourses } from '../../courses/+state/courses.selector';
 import { CourseActions } from '../../courses/+state/courses.action';
 import { COURSE_KEY } from '../../courses/+state/course.reducer';
@@ -81,6 +81,6 @@ export class StudentDashboardPage implements OnInit, OnDestroy {
     this.store.dispatch(CourseActions.loadMyMajorCourses())
   }
 
-  protected readonly CoursesStatusEnum = CoursesStatusEnum;
+  protected readonly CoursesStatusEnum = CourseStatusEnum;
   protected readonly COURSES_KEY = COURSE_KEY;
 }
