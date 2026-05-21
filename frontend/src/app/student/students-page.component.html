@@ -27,7 +27,7 @@
       <div class="items">
 
         <div class="item"
-             [routerLink]="['/student', studentId, 'dashboard']"
+             [routerLink]="['/students', studentId, 'dashboard']"
              (click)="setActiveMenu('dashboard'); toggleSidebar()"
              [ngClass]="{ 'active': (activeMenu$ | async) === 'dashboard' }">
 
@@ -37,7 +37,7 @@
         </div>
 
         <div class="item"
-             [routerLink]="['/student', studentId, 'courses']"
+             [routerLink]="['/students', studentId, 'courses']"
              (click)="setActiveMenu('courses'); toggleSidebar()"
              [ngClass]="{ 'active': (activeMenu$ | async) === 'courses' }">
 
@@ -47,17 +47,17 @@
         </div>
 
         <div class="item"
-             [routerLink]="['/student', studentId, 'announcements']"
+             [routerLink]="['/students', studentId, 'announcements']"
              (click)="setActiveMenu('announcements'); toggleSidebar()"
              [ngClass]="{ 'active': (activeMenu$ | async) === 'announcements' }">
 
           <fa-icon [icon]="['fas','bell']"></fa-icon>
-          <span>Courses</span>
+          <span>Announcements</span>
 
         </div>
 
         <div class="item"
-             [routerLink]="['/student', studentId, 'account-settings']"
+             [routerLink]="['/students', studentId, 'account-settings']"
              (click)="setActiveMenu('account-settings'); toggleSidebar()"
              [ngClass]="{ 'active': (activeMenu$ | async) === 'account-settings' }">
 

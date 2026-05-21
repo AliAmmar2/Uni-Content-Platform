@@ -44,7 +44,7 @@ export class StudentsPageComponent implements OnInit {
       return;
     }
 
-    this.studentId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.studentId = this.activatedRoute.snapshot.paramMap.get('universityId');
 
     this.store.dispatch(StudentActions.loadMe());
 

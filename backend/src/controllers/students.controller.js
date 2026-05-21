@@ -34,17 +34,26 @@ exports.getStudentById = async (req, res) => {
 
 exports.getMe = async (req, res) => {
     try {
+
         const student = await Student.findById(req.user.id)
-            .select("-passwordHash");
+            .populate('faculty', 'name code')
+            .populate('major', 'name code')
+            .select('-passwordHash');
 
         if (!student) {
-            return res.status(404).json({message: "Student not found"});
+            return res.status(404).json({
+                message: 'Student not found'
+            });
         }
 
         res.json(student);
 
     } catch (err) {
-        res.status(500).json({message: err.message});
+
+        res.status(500).json({
+            message: err.message
+        });
+
     }
 };
 // CREATE

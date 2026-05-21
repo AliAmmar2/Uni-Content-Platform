@@ -177,24 +177,36 @@ exports.getAllCoursesFiltered = async (req, res) => {
 
 exports.getMyMajorCourses = async (req, res) => {
     try {
-        const student = req.user.data;
+        const student = await Student.findById(req.user.id)
+            .select('major academicYear calendarYear');
+
+        if (!student) {
+            return res.status(404).json({
+                message: 'Student not found'
+            });
+        }
+
+        if (!student.major) {
+            return res.status(400).json({
+                message: 'Student major not found'
+            });
+        }
 
         const courses = await Course.find({
-            major: student.major
+            major: student.major,
+            academicYear: student.academicYear,
+            calendarYear: student.calendarYear
         })
-            .populate("major", "name code")
-            .sort({
-                academicYear: 1,
-                semester: 1,
-                name: 1
-            });
+            .populate('major', 'name code')
+            .sort({ semester: 1, code: 1 });
 
-        return res.json(courses);
+        res.json(courses);
 
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({
-            message: "Internal server error"
+    } catch (err) {
+        console.error(err);
+
+        res.status(500).json({
+            message: err.message
         });
     }
 };

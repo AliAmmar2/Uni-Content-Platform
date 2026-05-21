@@ -64,13 +64,13 @@ export const studentDetailsReducers = createReducer<StudentDetailsState, Action>
     return {
       ...state,
       [LOGGED_IN_STUDENT_KEY]: student,
-      status: StudentDetailsStatusEnum.loadDetailsSuccess
+      status: StudentDetailsStatusEnum.loadMeSuccess
     };
   }),
   on(StudentActions.loadMeFailure, (state, { error }) => {
     return {
       ...state,
-      status: StudentDetailsStatusEnum.loadFailure,
+      status: StudentDetailsStatusEnum.loadMeFailure,
       error
     };
   }),

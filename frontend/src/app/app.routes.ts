@@ -20,6 +20,7 @@ import { CheckEmailPage } from './reigister-page/check-email-page/check-email.pa
 import { StudentLoginPage } from './login-page/login-student-page/student-login.page';
 import { AdminLoginPage } from './login-page/login-admin-page/admin-login.page';
 import { StudentsPageComponent } from './student/students-page.component';
+import { StudentCoursesPage } from './student/courses/student-courses.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -45,7 +46,14 @@ export const routes: Routes = [
   },
   {
     path: 'students/:universityId',
-    component: StudentsPageComponent
+    component: StudentsPageComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'courses',
+        component: StudentCoursesPage
+      }
+    ],
   },
   {
     path: 'students/:universityId/announcements',
