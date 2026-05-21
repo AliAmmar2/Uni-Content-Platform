@@ -19,6 +19,7 @@ import { VerifyEmailPage } from './reigister-page/verify-email-page/verify-email
 import { CheckEmailPage } from './reigister-page/check-email-page/check-email.page';
 import { StudentLoginPage } from './login-page/login-student-page/student-login.page';
 import { AdminLoginPage } from './login-page/login-admin-page/admin-login.page';
+import { StudentsPageComponent } from './student/students-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -44,7 +45,7 @@ export const routes: Routes = [
   },
   {
     path: 'students/:universityId',
-    component: StudentDashboardPage
+    component: StudentsPageComponent
   },
   {
     path: 'students/:universityId/announcements',

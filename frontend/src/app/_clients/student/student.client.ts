@@ -58,6 +58,13 @@ export class StudentClient {
     };
   }
 
+  public getMe(): Observable<StudentModel> {
+    return this.http.get<StudentModel>(
+      `${this.API_URL}/me`,
+      this.getAuthOptions()
+    );
+  }
+
   public getStudents(): Observable<Array<StudentModel>> {
     return this.http.get<Array<StudentModel>>(
       this.API_URL,
@@ -100,9 +107,9 @@ export class StudentClient {
 
   public updatePasswordBySuperAdmin(id: string,
                                     payload: {
-      superAdminPassword: string;
-      newPassword: string;
-    }
+                                      superAdminPassword: string;
+                                      newPassword: string;
+                                    }
   ): Observable<any> {
     return this.http.put(
       `${this.API_URL}/${id}/password-by-super-admin`,

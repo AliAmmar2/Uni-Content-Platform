@@ -4,7 +4,10 @@ const router = express.Router();
 const adminAuthMiddleware = require("../middleware/admin-auth.middleware");
 const studentController = require("../controllers/students.controller");
 const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middleware-auth");
+const adminController = require("../controllers/admin.controller");
+const auth = require("../middleware/student-auth.middleware");
 
+router.get("/me", auth, studentController.getMe);
 
 router.use(adminAuthMiddleware);
 

@@ -18,6 +18,10 @@ export const StudentActions = createActionGroup({
     'load Student Details Success': props<{ student: StudentDetailsBo }>(),
     'load Student Details Failure': props<{ error: Error }>(),
 
+    'load Me': emptyProps(),
+    'load Me Success': props<{ student: StudentDetailsBo }>(),
+    'load Me Failure': props<{ error: Error }>(),
+
     'create Student': props<{ student: CreateStudentFormGroupInterface }>(),
     'create Student Success': emptyProps(),
     'create Student Failure': props<{ error: Error }>(),
