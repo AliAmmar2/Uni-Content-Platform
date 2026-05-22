@@ -2,7 +2,8 @@
 
   <div class="verify-email__card">
 
-    <ng-container *ngIf="isLoading">
+    @if(isLoading){
+    <ng-container>
 
       <div class="verify-email__icon verify-email__icon--loading">
         <fa-icon [icon]="['fas', 'envelope-open-text']"></fa-icon>
@@ -15,8 +16,10 @@
       <div class="verify-email__loader"></div>
 
     </ng-container>
+    }
 
-    <ng-container *ngIf="isVerified && !isLoading">
+    @if(isVerified && !isLoading){
+    <ng-container>
 
       <div class="verify-email__icon verify-email__icon--success">
         <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
@@ -35,8 +38,10 @@
       </button>
 
     </ng-container>
+    }
 
-    <ng-container *ngIf="hasError && !isLoading">
+    @if(hasError && !isLoading){
+    <ng-container>
 
       <div class="verify-email__icon verify-email__icon--error">
         <fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon>
@@ -55,6 +60,7 @@
       </button>
 
     </ng-container>
+    }
 
   </div>
 
