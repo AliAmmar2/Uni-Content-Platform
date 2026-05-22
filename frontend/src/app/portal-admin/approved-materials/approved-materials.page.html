@@ -1,0 +1,210 @@
+<section class="materials-page">
+
+  <main class="materials-page__content">
+
+    <div class="materials-page__breadcrumb">
+
+      <button
+        type="button"
+        class="materials-page__breadcrumb-link"
+        (click)="navigateBackToCourses()"
+      >
+        Courses
+      </button>
+
+      <span class="materials-page__breadcrumb-separator">
+        ›
+      </span>
+
+      <span class="materials-page__breadcrumb-current">
+        Approved Materials
+      </span>
+
+    </div>
+
+    <div class="materials-page__header">
+
+      <div>
+
+        <h2>
+          Approved Materials
+        </h2>
+
+        <p>
+          Browse approved educational resources.
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="materials-page__upload-button"
+        (click)="navigateToUploadMaterial()"
+      >
+
+        <fa-icon [icon]="['fas', 'upload']"></fa-icon>
+
+        Upload New Material
+
+      </button>
+
+    </div>
+
+    <div class="materials-page__actions">
+
+      <div class="materials-page__tabs">
+
+        <button
+          type="button"
+          class="materials-page__tab materials-page__tab--active"
+        >
+          Approved
+        </button>
+
+        <button
+          type="button"
+          class="materials-page__tab"
+          (click)="navigateToPendingMaterials()"
+        >
+          Pending Requests
+        </button>
+
+      </div>
+
+      <div class="materials-page__search">
+
+        <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+        <input
+          type="text"
+          placeholder="Search approved materials..."
+          (input)="search$.next($any($event.target).value)"
+        />
+
+      </div>
+
+    </div>
+
+    <ng-container *ngrxLet="filteredMaterials$ as materials">
+
+      @if (!materials?.length) {
+
+        <div class="materials-page__empty">
+
+          <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+
+          <h3>
+            No approved materials found
+          </h3>
+
+          <p>
+            Approved materials will appear here once they are available.
+          </p>
+
+        </div>
+
+      } @else {
+
+        <div class="materials-grid">
+
+          @for (material of materials; track material.id) {
+
+            <article class="material-card">
+
+              <div class="material-card__preview">
+
+                <span class="material-card__type">
+
+                  <fa-icon [icon]="['far', 'file']"></fa-icon>
+
+                  {{ getFileType(material) }}
+
+                </span>
+
+                <button
+                  type="button"
+                  (click)="presentPopoverActions($event, material)"
+                  class="material-card__menu-button"
+                >
+
+                  <fa-icon [icon]="['fas', 'ellipsis-vertical']"></fa-icon>
+
+                </button>
+
+              </div>
+
+              <div class="material-card__body">
+
+                <div class="material-card__title-row">
+
+                  <h3>
+                    {{ material.title }}
+                  </h3>
+
+                </div>
+
+                <p class="material-card__description">
+                  {{ material.description || 'No description available.' }}
+                </p>
+
+                <div class="material-card__uploader">
+
+                  <fa-icon [icon]="['far', 'user']"></fa-icon>
+
+                  <span>
+                    Uploader:
+                    <strong>{{ material.uploadedByName }}</strong>
+                  </span>
+
+                </div>
+
+                <div class="material-card__divider"></div>
+
+                <div class="material-card__footer">
+
+                  <span class="material-card__course">
+                    Course:
+                    {{ material.courseCode || material.courseName || 'COURSE' }}
+                  </span>
+
+                  <div class="material-card__footer-actions">
+
+                    <button
+                      type="button"
+                      title="View"
+                      (click)="openMaterial(material)"
+                    >
+
+                      <fa-icon [icon]="['far', 'eye']"></fa-icon>
+
+                    </button>
+
+                    <button
+                      type="button"
+                      title="Download"
+                      (click)="downloadMaterial(material)"
+                    >
+
+                      <fa-icon [icon]="['fas', 'download']"></fa-icon>
+
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </ng-container>
+
+  </main>
+
+</section>
