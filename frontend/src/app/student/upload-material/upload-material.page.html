@@ -1,0 +1,158 @@
+  <section class="upload-material">
+
+    <div class="upload-material__breadcrumb">
+
+      <button
+        type="button"
+        class="upload-material__breadcrumb-link"
+        (click)="goBackToMaterials()"
+      >
+        Approved Materials
+      </button>
+
+      <span class="upload-material__breadcrumb-separator">
+      ›
+    </span>
+
+      <span class="upload-material__breadcrumb-current">
+      Upload New Material
+    </span>
+
+    </div>
+
+    <header class="upload-material__header">
+      <h1>Upload New Material</h1>
+      <p>
+        Add new educational resources to the official university course catalog.
+      </p>
+    </header>
+
+    <form
+      class="upload-card"
+      [formGroup]="materialForm"
+      (ngSubmit)="uploadMaterial()"
+    >
+
+      <div class="upload-card__policy">
+
+        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+
+        <div>
+          <h3>Upload Policy</h3>
+
+          <p>
+            Ensure all materials comply with the University's Intellectual Property
+            Rights policy. Supported formats include PDF, JPEG, PNG, MP4, and MP3.
+            Maximum file size per upload is 500MB.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="upload-card__body">
+
+        <div class="form-group">
+          <label>Material Title</label>
+
+          <input
+            type="text"
+            formControlName="title"
+            placeholder="e.g. Introduction to Macroeconomics - Week 4"
+          />
+
+          @if (
+            materialForm.controls.title.touched &&
+            materialForm.controls.title.invalid
+            ) {
+            <span class="form-error">
+              Material title is required
+            </span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+
+          <textarea
+            rows="6"
+            formControlName="description"
+            placeholder="Briefly describe the contents of this material and its learning objectives..."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>File Upload</label>
+
+          <label
+            class="file-upload"
+            [class.file-upload--active]="isDragOver"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)"
+          >
+
+            <input
+              type="file"
+              hidden
+              (change)="onFileSelected($event)"
+            />
+
+            <div class="file-upload__icon">
+              <fa-icon [icon]="['fas', 'cloud-arrow-up']"></fa-icon>
+            </div>
+
+            @if (selectedFile) {
+
+              <strong>
+                {{ selectedFile.name }}
+              </strong>
+
+              <small>
+                {{ selectedFile.size / 1024 / 1024 | number:'1.1-1' }} MB
+              </small>
+
+            } @else {
+
+              <strong>
+                Click to upload or drag and drop
+              </strong>
+
+              <small>
+                PDF, Images, Video, or Audio
+              </small>
+
+            }
+
+          </label>
+
+          @if (!selectedFile && materialForm.touched) {
+            <span class="form-error">
+              File is required
+            </span>
+          }
+        </div>
+
+        <div class="upload-card__actions">
+
+          <button
+            type="button"
+            class="btn btn--secondary"
+            (click)="cancel()"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="btn btn--primary"
+          >
+            Upload Material
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </section>

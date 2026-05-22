@@ -109,7 +109,8 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
 
     this.store.dispatch(MajorActions.loadMajors());
   }
-  public courseDetailsSubscription(): void { 
+
+  public courseDetailsSubscription(): void {
     this.subscription$.add(
       this.courseDetailsSelected$.subscribe((courseDetailsState) => {
         if (!courseDetailsState?.status) {
@@ -249,7 +250,25 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
           this.presentDeleteAlert(course)
 
         }
+      },
+      {
+        faIcon: ['fas', 'book'],
+        visible: true,
+        label: 'View Materials',
+        handler: () => {
+          this.navigateToCourseMaterials(course.id)
+
+        }
       }
+    ]);
+  }
+
+  public navigateToCourseMaterials(courseId: string): void {
+    void this.router.navigate([
+      '/admin',
+      this.adminId,
+      courseId,
+      'materials'
     ]);
   }
 

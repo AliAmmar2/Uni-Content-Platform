@@ -21,6 +21,8 @@ import { StudentLoginPage } from './login-page/login-student-page/student-login.
 import { AdminLoginPage } from './login-page/login-admin-page/admin-login.page';
 import { StudentsPageComponent } from './student/students-page.component';
 import { StudentCoursesPage } from './student/courses/student-courses.page';
+import { ApprovedMaterialsPage } from './student/approved-materials/approved-materials.page';
+import { UploadMaterialPage } from './student/upload-material/upload-material.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -124,6 +126,14 @@ export const routes: Routes = [
       {
         path: ':courseId/edit-course',
         component: EditCoursePage
+      },
+      {
+        path: ':courseId/materials',
+        component: ApprovedMaterialsPage
+      },
+      {
+        path: 'courses/:courseId/upload-material',
+        component: UploadMaterialPage
       },
       {
         path: ':majorId/add-new-course',
