@@ -73,8 +73,8 @@ exports.login = async (req, res) => {
     // reset login attempts on successful login
     await user.resetLoginAttempts();
 
-    if (!process.env.JWT_SECRET) {
-      console.error("CRITICAL: JWT_SECRET is not defined");
+    if (!process.env.JWT_ACCESS_SECRET) {
+      console.error("CRITICAL: JWT_ACCESS_SECRET is not defined");
       return res.status(500).json({ 
         message: "Server configuration error" 
       });
@@ -87,7 +87,7 @@ exports.login = async (req, res) => {
         universityId: user.universityId,
         roles: user.roles 
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -96,7 +96,7 @@ exports.login = async (req, res) => {
         id: user._id.toString(),
         type: 'refresh'
       },
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
+      process.env.JWT_REFRESH_SECRET || process.env.JWT_ACCESS_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -171,7 +171,7 @@ exports.requestMagicLink = async (req, res) => {
         type: 'magic-link',
         roles: user.roles
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: '15m' }
     );
 
@@ -205,7 +205,7 @@ exports.verifyMagicLink = async (req, res) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
     if (decoded.type !== 'magic-link') {
       return res.status(403).json({ 
@@ -240,7 +240,7 @@ exports.verifyMagicLink = async (req, res) => {
         universityId: user.universityId,
         roles: user.roles 
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -249,7 +249,7 @@ exports.verifyMagicLink = async (req, res) => {
         id: user._id.toString(),
         type: 'refresh'
       },
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET,
+      process.env.JWT_REFRESH_SECRET || process.env.JWT_ACCESS_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -303,7 +303,7 @@ exports.refreshToken = async (req, res) => {
     // verify refresh token
     const decoded = jwt.verify(
       refreshToken, 
-      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET
+      process.env.JWT_REFRESH_SECRET || process.env.JWT_ACCESS_SECRET
     );
 
     if (decoded.type !== 'refresh') {
@@ -327,7 +327,7 @@ exports.refreshToken = async (req, res) => {
         universityId: user.universityId,
         roles: user.roles 
       },
-      process.env.JWT_SECRET,
+      process.env.JWT_ACCESS_SECRET,
       { expiresIn: "1h" }
     );
 
