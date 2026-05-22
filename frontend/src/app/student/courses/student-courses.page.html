@@ -2,216 +2,181 @@
 
   <ng-container *ngrxLet="studentDetailsSelected$ as studentState">
 
-    <ng-container
-      *ngIf="
-        studentState?.[STUDENT_DETAILS_KEY] ||
-        studentState?.[LOGGED_IN_STUDENT_KEY]
-      "
-    >
+    @if (studentState?.[STUDENT_DETAILS_KEY] ||
+    studentState?.[LOGGED_IN_STUDENT_KEY]) {
+      <ng-container>
+        @if (studentState?.[STUDENT_DETAILS_KEY] ??
+        studentState?.[LOGGED_IN_STUDENT_KEY];
+          as student) {
+          <ng-container>
 
-      <ng-container
-        *ngIf="
-          studentState?.[STUDENT_DETAILS_KEY] ??
-          studentState?.[LOGGED_IN_STUDENT_KEY]
-          as student
-        "
-      >
+            <!-- RIGHT TOP CARDS -->
+            <div class="student-courses__top-cards">
 
-        <!-- RIGHT TOP CARDS -->
-        <div class="student-courses__top-cards">
+              <article class="info-card">
 
-          <article class="info-card">
+                <fa-icon
+                  [icon]="faBuildingColumns"
+                ></fa-icon>
 
-            <fa-icon
-              [icon]="faBuildingColumns"
-            ></fa-icon>
-
-            <div>
+                <div>
 
               <span>
                 FACULTY
               </span>
 
-              <strong>
-                {{ student.faculty }}
-              </strong>
+                  <strong>
+                    {{ student.faculty }}
+                  </strong>
 
-            </div>
+                </div>
 
-          </article>
+              </article>
 
-          <article class="info-card">
+              <article class="info-card">
 
-            <fa-icon
-              [icon]="faGraduationCap"
-            ></fa-icon>
+                <fa-icon
+                  [icon]="faGraduationCap"
+                ></fa-icon>
 
-            <div>
+                <div>
 
               <span>
                 MAJOR
               </span>
 
-              <strong>
-                {{ student.major }}
-              </strong>
+                  <strong>
+                    {{ student.major }}
+                  </strong>
+
+                </div>
+
+              </article>
 
             </div>
 
-          </article>
+            <!-- TITLE -->
+            <header class="student-courses__header">
 
-        </div>
+              <h1>
+                Current Curriculum
+              </h1>
 
-        <!-- BREADCRUMB -->
-        <div class="student-courses__breadcrumb">
-          Academic /
-          <span>
-            My Courses
-          </span>
-        </div>
+            </header>
 
-        <!-- TITLE -->
-        <header class="student-courses__header">
+            <!-- FILTERS -->
+            <div class="student-courses__toolbar">
 
-          <h1>
-            Current Curriculum
-          </h1>
+              <div class="student-courses__filters">
 
-        </header>
+                <button
+                  type="button"
+                  class="filter-button"
+                  [class.filter-button--active]="selectedSemester === 'SEM1'"
+                  (click)="selectSemester('SEM1')"
+                >
+                  Semester 1
+                </button>
 
-        <!-- FILTERS -->
-        <div class="student-courses__toolbar">
+                <button
+                  type="button"
+                  class="filter-button"
+                  [class.filter-button--active]="selectedSemester === 'SEM2'"
+                  (click)="selectSemester('SEM2')"
+                >
+                  Semester 2
+                </button>
 
-          <div class="student-courses__filters">
+                <button
+                  type="button"
+                  class="filter-button"
+                  [class.filter-button--active]="selectedSemester === 'all'"
+                  (click)="selectSemester('all')"
+                >
+                  All Semesters
+                </button>
 
-            <button
-              type="button"
-              class="filter-button"
-              [class.filter-button--active]="selectedSemester === 'SEM1'"
-              (click)="selectSemester('SEM1')"
-            >
-              Semester 1
-            </button>
+              </div>
 
-            <button
-              type="button"
-              class="filter-button"
-              [class.filter-button--active]="selectedSemester === 'SEM2'"
-              (click)="selectSemester('SEM2')"
-            >
-              Semester 2
-            </button>
+              <!-- VIEW BUTTONS -->
+              <div class="student-courses__view-actions">
 
-            <button
-              type="button"
-              class="filter-button"
-              [class.filter-button--active]="selectedSemester === 'all'"
-              (click)="selectSemester('all')"
-            >
-              All Semesters
-            </button>
+                <button
+                  type="button"
+                  class="student-courses__view-button"
+                  [class.student-courses__view-button--active]="viewMode === 'grid'"
+                  (click)="setViewMode('grid')"
+                >
 
-          </div>
+                  <fa-icon
+                    [icon]="faGrip"
+                  ></fa-icon>
 
-          <!-- VIEW BUTTONS -->
-          <div class="student-courses__view-actions">
+                </button>
 
-            <button
-              type="button"
-              class="student-courses__view-button"
-              [class.student-courses__view-button--active]="viewMode === 'grid'"
-              (click)="setViewMode('grid')"
-            >
+                <button
+                  type="button"
+                  class="student-courses__view-button"
+                  [class.student-courses__view-button--active]="viewMode === 'list'"
+                  (click)="setViewMode('list')"
+                >
 
-              <fa-icon
-                [icon]="faGrip"
-              ></fa-icon>
+                  <fa-icon
+                    [icon]="faList"
+                  ></fa-icon>
 
-            </button>
+                </button>
 
-            <button
-              type="button"
-              class="student-courses__view-button"
-              [class.student-courses__view-button--active]="viewMode === 'list'"
-              (click)="setViewMode('list')"
-            >
+              </div>
 
-              <fa-icon
-                [icon]="faList"
-              ></fa-icon>
+            </div>
 
-            </button>
+            <!-- COURSES -->
+            <ng-container *ngrxLet="coursesSelected$ as coursesState">
 
-          </div>
+              <!-- LOADING -->
+              @if (coursesState?.status === CoursesStatusEnum.loading) {
+                <div class="student-courses__loading">
 
-        </div>
+                  <fa-icon
+                    [icon]="faSpinner"
+                    animation="spin"
+                  ></fa-icon>
 
-        <!-- COURSES -->
-        <ng-container *ngrxLet="coursesSelected$ as coursesState">
-
-          <!-- LOADING -->
-          <div
-            *ngIf="coursesState?.status === CoursesStatusEnum.loading"
-            class="student-courses__loading"
-          >
-
-            <fa-icon
-              [icon]="faSpinner"
-              animation="spin"
-            ></fa-icon>
-
-            <span>
+                  <span>
               Loading courses...
             </span>
 
-          </div>
+                </div>
+              }
+              <!-- GRID -->
+              @if (coursesState?.[COURSES_KEY]?.length) {
+                <div class="courses-grid"
+                     [class.courses-grid--list]="viewMode === 'list'">
 
-          <!-- GRID -->
-          <div
-            *ngIf="coursesState?.[COURSES_KEY]?.length"
-            class="courses-grid"
-            [class.courses-grid--list]="viewMode === 'list'"
-          >
+                  <ng-container
+                    *ngFor="let course of coursesState[COURSES_KEY]"
+                  >
 
-            <ng-container
-              *ngFor="let course of coursesState[COURSES_KEY]"
-            >
-
-              <article
-                *ngIf="
-                  selectedSemester === 'all' ||
-                  course.semester === selectedSemester
-                "
-                class="course-card"
-              >
-
-                <!-- TOP -->
-                <div class="course-card__top">
+                    @if (selectedSemester === 'all' ||
+                    course.semester === selectedSemester) {
+                      <article class="course-card">
+                        <!-- TOP -->
+                        <div class="course-card__top">
 
                   <span class="course-card__code">
                     {{ course.code }}
                   </span>
 
-                  <button
-                    type="button"
-                    class="course-card__menu"
-                  >
+                        </div>
 
-                    <fa-icon
-                      [icon]="faEllipsisVertical"
-                    ></fa-icon>
+                        <!-- TITLE -->
+                        <h2 class="course-card__title">
+                          {{ course.name }}
+                        </h2>
 
-                  </button>
-
-                </div>
-
-                <!-- TITLE -->
-                <h2 class="course-card__title">
-                  {{ course.name }}
-                </h2>
-
-                <!-- META -->
-                <div class="course-card__meta">
+                        <!-- META -->
+                        <div class="course-card__meta">
 
                   <span>
 
@@ -223,69 +188,67 @@
 
                   </span>
 
-                  <span>
+                          <span>
 
                     <fa-icon
                       [icon]="faClock"
                     ></fa-icon>
 
-                    {{ course.semester }}
+                            {{ course.semester }}
 
                   </span>
 
+                        </div>
+
+                        <!-- DESCRIPTION -->
+                        <p class="course-card__description">
+                          {{
+                            course.description ||
+                            'No description available for this course.'
+                          }}
+                        </p>
+
+                        <!-- ACTION -->
+                        <button
+                          type="button"
+                          class="course-card__materials"
+                          (click)="navigateToStudentMaterialsPage(course.id)"
+                        >
+                          Show Materials
+                        </button>
+
+                      </article>
+                    }
+                  </ng-container>
+
                 </div>
+              }
+              <!-- EMPTY -->
+              @if (coursesState?.status !== CoursesStatusEnum.loading &&
+              !coursesState?.[COURSES_KEY]?.length) {
+                <div class="student-courses__empty">
 
-                <!-- DESCRIPTION -->
-                <p class="course-card__description">
-                  {{
-                    course.description ||
-                    'No description available for this course.'
-                  }}
-                </p>
+                  <fa-icon
+                    [icon]="faBookOpen"
+                  ></fa-icon>
 
-                <!-- ACTION -->
-                <button
-                  type="button"
-                  class="course-card__materials"
-                >
-                  Show Materials
-                </button>
+                  <h3>
+                    No Courses Found
+                  </h3>
 
-              </article>
+                  <p>
+                    Your curriculum will appear here once courses are available.
+                  </p>
+
+                </div>
+              }
 
             </ng-container>
 
-          </div>
-
-          <!-- EMPTY -->
-          <div
-            *ngIf="
-              coursesState?.status !== CoursesStatusEnum.loading &&
-              !coursesState?.[COURSES_KEY]?.length
-            "
-            class="student-courses__empty"
-          >
-
-            <fa-icon
-              [icon]="faBookOpen"
-            ></fa-icon>
-
-            <h3>
-              No Courses Found
-            </h3>
-
-            <p>
-              Your curriculum will appear here once courses are available.
-            </p>
-
-          </div>
-
-        </ng-container>
-
+          </ng-container>
+        }
       </ng-container>
-
-    </ng-container>
-
+    }
   </ng-container>
 
 </section>

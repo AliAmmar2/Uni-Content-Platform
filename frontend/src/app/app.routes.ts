@@ -21,8 +21,12 @@ import { StudentLoginPage } from './login-page/login-student-page/student-login.
 import { AdminLoginPage } from './login-page/login-admin-page/admin-login.page';
 import { StudentsPageComponent } from './student/students-page.component';
 import { StudentCoursesPage } from './student/courses/student-courses.page';
-import { ApprovedMaterialsPage } from './student/approved-materials/approved-materials.page';
-import { UploadMaterialPage } from './student/upload-material/upload-material.page';
+import { ApprovedMaterialsPage } from './portal-admin/approved-materials/approved-materials.page';
+import { UploadMaterialPage } from './portal-admin/upload-material/upload-material.page';
+import { PendingMaterialsPage } from './portal-admin/pending-materials/pending-materials.page';
+import { StudentsApprovedMaterialsPage } from './student/student-approved-materials/students-approved-materials.page';
+import { UploadMaterialByStudentPage } from './student/upload-material-by-student/upload-material-by-student.page';
+import { StudentPendingMaterialsPage } from './student/student-pending-materials/student-pending-materials.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -54,7 +58,19 @@ export const routes: Routes = [
       {
         path: 'courses',
         component: StudentCoursesPage
-      }
+      },
+      {
+        path: 'courses/:courseId/materials',
+        component: StudentsApprovedMaterialsPage
+      },
+      {
+        path: 'courses/:courseId/upload-material',
+        component: UploadMaterialByStudentPage
+      },
+      {
+        path: 'courses/:courseId/pending-materials',
+        component: StudentPendingMaterialsPage
+      },
     ],
   },
   {
@@ -134,6 +150,10 @@ export const routes: Routes = [
       {
         path: 'courses/:courseId/upload-material',
         component: UploadMaterialPage
+      },
+      {
+        path: 'courses/:courseId/pending-materials',
+        component: PendingMaterialsPage
       },
       {
         path: ':majorId/add-new-course',

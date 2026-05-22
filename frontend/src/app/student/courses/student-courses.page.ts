@@ -88,9 +88,9 @@ export class StudentCoursesPage implements OnInit, OnDestroy {
       void this.router.navigate(['/login']);
       return;
     }
-
     this.studentId =
-      this.activatedRoute.snapshot.paramMap.get('universityId');
+      this.activatedRoute.snapshot.paramMap.get('universityId') ??
+      this.activatedRoute.parent?.snapshot.paramMap.get('universityId');
     this.store.dispatch(StudentActions.loadMe());
 
     this.studentDetailsSubscription();
@@ -134,7 +134,20 @@ export class StudentCoursesPage implements OnInit, OnDestroy {
 
       })
     );
+  }
 
+  public navigateToStudentMaterialsPage(courseId: string): void {
+    if (!this.studentId || !courseId) {
+      return;
+    }
+
+    void this.router.navigate([
+      '/students',
+      this.studentId,
+      'courses',
+      courseId,
+      'materials'
+    ]);
   }
 
 }
