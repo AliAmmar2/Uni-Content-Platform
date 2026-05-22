@@ -1,61 +1,49 @@
 const mongoose = require("mongoose");
 
-const materialSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true,
-        trim: true
-    },
+const materialSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    description: String,
 
-    description: {
-        type: String,
-        trim: true
-    },
+    // file storage reference (Supabase path)
+    storagePath: { type: String, required: true },
 
-    fileUrl: {
-        type: String,
-        required: true
-    },// stored in cloud (S3, Firebase, etc.)
+    originalFilename: String,
+    mimeType: String,
 
-    uploadedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        refPath: "uploadedByModel"
-    },
+      uploadedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          refPath: "uploadedByModel"
+      },
 
-    uploadedByModel: {
-        type: String,
-        required: true,
-        enum: ["Student", "Admin"]
-    },
+      uploadedByModel: {
+          type: String,
+          required: true,
+          enum: ["Student", "Admin"]
+      },
 
-    uploadedByName: {
-        type: String,
-        required: true,
-        trim: true
-    },
+      uploadedByName: {
+          type: String,
+          required: true,
+          trim: true
+      },
 
     course: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Course",
-        required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true
     },
 
     approvalStatus: {
-        type: String,
-        enum: ["PENDING", "APPROVED", "REJECTED"],
-        default: "PENDING"
+      type: String,
+      enum: ["PENDING", "APPROVED", "REJECTED"],
+      default: "PENDING"
     },
 
-    rejectionReason: {
-        type: String,
-        trim: true
-    }
+    rejectionReason: String
+  },
+  { timestamps: true }
+);
 
-}, {
-    timestamps: true
-});
-
-module.exports =
-    mongoose.models.Material ||
-    mongoose.model("Material", materialSchema);
+module.exports = mongoose.model("Material", materialSchema);

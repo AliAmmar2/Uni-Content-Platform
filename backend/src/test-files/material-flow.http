@@ -1,0 +1,122 @@
+### =========================
+### 1. LOGIN (STUDENT)
+### =========================
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "universityEmail": "jad.mansour@ul.edu.lb",
+  "password": "Password123"
+}
+
+### COPY accessToken FROM RESPONSE BELOW
+### -----------------------------------
+# {
+#   "accessToken": "xxxxx",
+#   "refreshToken": "xxxxx"
+# }
+
+
+### =========================
+### 2. GET UPLOAD SIGNATURE
+### =========================
+GET http://localhost:5000/materials/upload-signature?filename=test.pdf&mimeType=application/pdf
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDVlYzM5MWExMjFkMTIwMzBmNTY2YiIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzc4Nzc1Mzg0LCJleHAiOjE3Nzg3Nzg5ODR9.1VIufknvIF5rf3G3XeLzxs-BXxwpFxvGjwAja2UUhLw
+
+### RESPONSE EXAMPLE:
+# {
+#   "signedUrl": "https://....",
+#   "storagePath": "uploads/uuid.pdf"
+# }
+
+
+### =========================
+### 3. UPLOAD FILE TO SUPABASE (MANUAL STEP)
+### =========================
+### THIS CANNOT BE DONE PURELY IN .http FILE
+
+### CURL EXAMPLE:
+curl -X PUT "https://ktzsuqmcmngkdizjqhed.supabase.co/storage/v1/object/upload/sign/course-material/uploads/6d4925d4-f115-42c6-b942-e6f6c9a74e5f.pdf?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8zOTYwNTg5MC02NGY2LTQwZmUtOGZiOC00MWI3Mjk3YmYwYWIiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJjb3Vyc2UtbWF0ZXJpYWwvdXBsb2Fkcy82ZDQ5MjVkNC1mMTE1LTQyYzYtYjk0Mi1lNmY2YzlhNzRlNWYucGRmIiwidXBzZXJ0IjpmYWxzZSwiaWF0IjoxNzc4Nzc1NDA1LCJleHAiOjE3Nzg3ODI2MDV9.7TamRhT8TPMje1Zy4rZ0tZlmcAW6hDkbQbBIRWZZYYQ" \
+-H "Content-Type: application/pdf" \
+--data-binary "@test.pdf"
+
+
+### =========================
+### 4. SAVE MATERIAL IN BACKEND
+### =========================
+POST http://localhost:5000/materials
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDVlYzM5MWExMjFkMTIwMzBmNTY2YiIsInJvbGUiOiJTVFVERU5UIiwiaWF0IjoxNzc4Nzc1Mzg0LCJleHAiOjE3Nzg3Nzg5ODR9.1VIufknvIF5rf3G3XeLzxs-BXxwpFxvGjwAja2UUhLw
+Content-Type: application/json
+
+{
+  "title": "Lecture 1 Notes",
+  "description": "Introduction to course",
+  "courseId": "PUT_COURSE_ID_HERE",
+  "storagePath": "uploads/uuid.pdf",
+  "originalFilename": "test.pdf",
+  "mimeType": "application/pdf"
+}
+
+
+### RESPONSE:
+# {
+#   "message": "Material uploaded",
+#   "material": {
+#     "approvalStatus": "PENDING"   <-- if STUDENT
+#   }
+# }
+
+
+### =========================
+### 5. FETCH APPROVED MATERIALS
+### =========================
+GET http://localhost:5000/materials/course/COURSE_ID_HERE
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+
+### =========================
+### 6. LOGIN AS MODERATOR
+### =========================
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "universityEmail": "karim.nasser@ul.edu.lb",
+  "password": "password123"
+}
+
+
+### COPY MODERATOR TOKEN
+
+
+### =========================
+### 7. GET PENDING MATERIALS (MODERATOR)
+### =========================
+GET http://localhost:5000/materials/pending
+Authorization: Bearer MODERATOR_TOKEN
+
+
+### =========================
+### 8. APPROVE MATERIAL
+### =========================
+PUT http://localhost:5000/materials/MATERIAL_ID/review
+Authorization: Bearer MODERATOR_TOKEN
+Content-Type: application/json
+
+{
+  "approvalStatus": "APPROVED"
+}
+
+
+### OR REJECT
+# {
+#   "approvalStatus": "REJECTED",
+#   "rejectionReason": "Not relevant"
+# }
+
+
+### =========================
+### 9. GET ACCESS URL (DOWNLOAD / VIEW)
+### =========================
+GET http://localhost:5000/materials/MATERIAL_ID/access?mode=view
+Authorization: Bearer YOUR_ACCESS_TOKEN

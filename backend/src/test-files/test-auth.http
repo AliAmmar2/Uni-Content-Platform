@@ -1,0 +1,26 @@
+POST http://localhost:5000/auth/register
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "universityId":"210001",
+  "password": "Password123",
+  "confirmPassword":"Password123"
+}
+###
+POST http://localhost:5000/auth/verify-email
+Content-Type: application/json
+
+{
+  "universityEmail": "ammarsoltan51@gmail.com",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMDc2NjM4NTZjODIyMmEyMTY2YjA1ZSIsInR5cGUiOiJlbWFpbC12ZXJpZmljYXRpb24iLCJpYXQiOjE3Nzg4Njk4MTYsImV4cCI6MTc3ODg3MDcxNn0.xf26wXytPhzllelxZ6hJViYlZvOaX7NojrEbwPeXnOE"
+}
+
+###
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "universityEmail": "rana.haddad@ul.edu.lb",
+  "password": "Password123"
+}

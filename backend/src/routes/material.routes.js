@@ -9,7 +9,34 @@ const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middlewar
 const controller = require("../controllers/material.controller");
 
 // Upload
-router.post("/upload", anyAuth, upload.single("file"), controller.uploadMaterial
+// router.post("/upload", anyAuth, upload.single("file"), controller.uploadMaterial
+// );
+
+router.get(
+    "/pending",
+    anyAuth,
+    allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]),
+    controller.getPendingMaterials
+);
+
+router.get(
+    "/upload-signature",
+    anyAuth,
+    allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]),
+    controller.getUploadSignature
+);
+
+router.post(
+    "/",
+    anyAuth,
+    controller.uploadMaterial
+);
+
+router.get(
+    "/:id/access",
+    auth,
+    requireRole(["STUDENT", "MODERATOR"]),
+    controller.getMaterialAccessUrl
 );
 
 // View approved materials
@@ -21,7 +48,7 @@ router.get("/course/:courseId/pending", anyAuth,
 );
 
 // Approve / Reject
-router.put("/:id/approve", anyAuth, allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]), controller.reviewMaterial);
+router.put("/:id/review", anyAuth, allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]), controller.reviewMaterial);
 
 // Delete
 router.delete("/:id", anyAuth, allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]), controller.deleteMaterial);
