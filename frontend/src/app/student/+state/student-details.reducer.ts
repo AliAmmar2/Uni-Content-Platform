@@ -4,15 +4,18 @@ import { StudentDetailsStatusEnum } from './enums/student-details-status.enum';
 import { StudentDetailsBo } from '../bo/student-details.bo';
 
 export const STUDENT_DETAILS_KEY = 'studentDetailsKey';
+export const LOGGED_IN_STUDENT_KEY = 'loggedInStudentKey';
 
 export interface StudentDetailsState {
   readonly [STUDENT_DETAILS_KEY]: StudentDetailsBo;
+  readonly [LOGGED_IN_STUDENT_KEY]: StudentDetailsBo;
   readonly status: StudentDetailsStatusEnum;
   readonly error: Error;
 }
 
 const initialStudentDetailsState: StudentDetailsState = {
   [STUDENT_DETAILS_KEY]: null,
+  [LOGGED_IN_STUDENT_KEY]: null,
   status: StudentDetailsStatusEnum.pending,
   error: null
 };
@@ -35,7 +38,6 @@ export const studentDetailsReducers = createReducer<StudentDetailsState, Action>
       error: null
     };
   }),
-
   on(StudentActions.loadStudentDetailsSuccess, (state: StudentDetailsState, { student }) => {
     return {
       ...state,
@@ -44,11 +46,31 @@ export const studentDetailsReducers = createReducer<StudentDetailsState, Action>
       error: null
     };
   }),
-
   on(StudentActions.loadStudentDetailsFailure, (state: StudentDetailsState, { error }) => {
     return {
       ...state,
       status: StudentDetailsStatusEnum.loadDetailsFailure,
+      error
+    };
+  }),
+
+  on(StudentActions.loadMe, (state) => {
+    return {
+      ...state,
+      status: StudentDetailsStatusEnum.loading
+    };
+  }),
+  on(StudentActions.loadMeSuccess, (state, { student }) => {
+    return {
+      ...state,
+      [LOGGED_IN_STUDENT_KEY]: student,
+      status: StudentDetailsStatusEnum.loadMeSuccess
+    };
+  }),
+  on(StudentActions.loadMeFailure, (state, { error }) => {
+    return {
+      ...state,
+      status: StudentDetailsStatusEnum.loadMeFailure,
       error
     };
   }),
@@ -60,7 +82,6 @@ export const studentDetailsReducers = createReducer<StudentDetailsState, Action>
       error: null
     };
   }),
-
   on(StudentActions.createStudentSuccess, (state: StudentDetailsState) => {
     return {
       ...state,
@@ -68,7 +89,6 @@ export const studentDetailsReducers = createReducer<StudentDetailsState, Action>
       error: null
     };
   }),
-
   on(StudentActions.createStudentFailure, (state: StudentDetailsState, { error }) => {
     return {
       ...state,

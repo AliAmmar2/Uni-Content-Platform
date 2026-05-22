@@ -5,6 +5,8 @@ export enum StudentDetailsStatusEnum {
   loadFailure = 'loadFailure',
   loadDetailsSuccess = 'loadDetailsSuccess',
   loadDetailsFailure = 'loadDetailsFailure',
+  loadMeSuccess = 'loadMeSuccess',
+  loadMeFailure = 'loadMeFailure',
   createSuccess = 'createSuccess',
   createFailure = 'createFailure',
   updateSuccess = 'updateSuccess',

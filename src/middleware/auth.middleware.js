@@ -18,14 +18,14 @@ module.exports = (req, res, next) => {
       });
     }
 
-    if (!process.env.JWT_SECRET) {
-      console.error("CRITICAL: JWT_SECRET is not defined");
+    if (!process.env.JWT_ACCESS_SECRET) {
+      console.error("CRITICAL: JWT_ACCESS_SECRET is not defined");
       return res.status(500).json({ 
         message: "Server configuration error" 
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
     // Validate decoded token structure
     if (!decoded.id || !decoded.roles || !Array.isArray(decoded.roles)) {

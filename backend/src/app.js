@@ -60,7 +60,7 @@ app.get("/protected/test", authMiddleware, (req, res) => {
     res.json({message: "Protected route works"});
 });
 
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
+console.log("JWT_SECRET:", process.env.JWT_ACCESS_SECRET);
 console.log("JWT_REFRESH_SECRET:", process.env.JWT_REFRESH_SECRET);
 
 // =========================
