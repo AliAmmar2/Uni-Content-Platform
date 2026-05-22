@@ -3,6 +3,7 @@ export enum MaterialStatusEnum {
   loading = 'loading',
   loadSuccess = 'loadSuccess',
   loadError = 'loadError',
+  uploadLoading = 'uploadLoading',
   uploadSuccess = 'uploadSuccess',
   uploadFailure = 'uploadFailure',
   reviewSuccess = 'reviewSuccess',

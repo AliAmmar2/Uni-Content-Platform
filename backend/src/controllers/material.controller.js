@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require("uuid");
+const {v4: uuidv4} = require("uuid");
 const supabase = require("../config/supabase.config");
 
 const Material = require("../models/Material");
@@ -18,25 +18,81 @@ function isCourseInScope(course, user) {
         course.calendarYear === user.calendarYear
     );
 }
+
 // ----------------------------
 // STEP 1: get signed upload URL
 // ----------------------------
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+//max file for free plan is 50 mb
 exports.getUploadSignature = async (req, res) => {
     try {
-        const { filename, mimeType } = req.query;
+        const {filename, mimeType, fileSize} = req.query;
 
-        if (!filename || !mimeType) {
+        if (!filename || !mimeType || !fileSize) {
             return res.status(400).json({
-                message: "filename and mimeType are required"
+                message: "filename, mimeType and fileSize are required"
             });
         }
 
-        // basic file validation (recommended)
+        const numericFileSize = Number(fileSize);
+
+        if (
+            Number.isNaN(numericFileSize) ||
+            numericFileSize <= 0
+        ) {
+            return res.status(400).json({
+                message: "Invalid file size"
+            });
+        }
+
+        if (numericFileSize > MAX_FILE_SIZE) {
+            return res.status(400).json({
+                message: "Maximum file size is 50MB"
+            });
+        }
+
         const allowedMimeTypes = [
+            //pdf
             "application/pdf",
-            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
+            //word
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+
+            //excel
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "text/csv",
+
+            //powerpoint
             "application/vnd.ms-powerpoint",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
+            //html
+            "text/html",
+
+            //images
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/gif",
+            "image/svg+xml",
+            "image/bmp",
+//videos
+            "video/mp4",
+            "video/webm",
+            "video/ogg",
+            "video/quicktime",
+            "video/x-msvideo",
+
+         //audio
+            "audio/mpeg",
+            "audio/mp3",
+            "audio/wav",
+            "audio/ogg",
+            "audio/webm",
+            "audio/mp4",
+            "audio/x-m4a"
         ];
 
         if (!allowedMimeTypes.includes(mimeType)) {
@@ -45,27 +101,33 @@ exports.getUploadSignature = async (req, res) => {
             });
         }
 
-        const ext = filename.split(".").pop();
+        const ext = filename.split(".").pop()?.toLowerCase();
+
         const storagePath = `uploads/${uuidv4()}.${ext}`;
 
-        const { data, error } = await supabase.storage
+        const {data, error} = await supabase.storage
             .from(BUCKET)
             .createSignedUploadUrl(storagePath);
 
         if (error) {
             console.error(error);
+
             return res.status(500).json({
                 message: "Failed to generate upload URL"
             });
         }
 
-        res.json({
+        return res.json({
             signedUrl: data.signedUrl,
             storagePath
         });
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
 //STEP 2
@@ -105,7 +167,7 @@ exports.uploadMaterial = async (req, res) => {
         let uploadedByName;
         let approvalStatus = "PENDING";
 
-        if (req.user.type === "STUDENT") {
+        if (req.user.userType === "STUDENT") {
             const student = await Student.findById(req.user.id);
 
             if (!student) {
@@ -123,12 +185,12 @@ exports.uploadMaterial = async (req, res) => {
             uploadedByModel = "Student";
             uploadedByName = student.name;
 
-            approvalStatus = req.user.role?.includes("MODERATOR")
+            approvalStatus = student.role === "MODERATOR"
                 ? "APPROVED"
                 : "PENDING";
         }
 
-        if (req.user.type === "ADMIN") {
+        if (req.user.userType === "ADMIN") {
             const admin = await Admin.findById(req.user.id);
 
             if (!admin) {
@@ -138,12 +200,15 @@ exports.uploadMaterial = async (req, res) => {
             }
 
             uploadedByModel = "Admin";
-            uploadedByName = admin.name;
+            uploadedByName = admin.fullName;
 
-            approvalStatus = req.user.role?.includes("super_admin") ||
-            req.user.role?.includes("admin")
-                ? "APPROVED"
-                : "PENDING";
+            approvalStatus = "APPROVED";
+        }
+
+        if (!uploadedByModel || !uploadedByName) {
+            return res.status(400).json({
+                message: "Invalid user type"
+            });
         }
 
         const material = await Material.create({
@@ -175,9 +240,8 @@ exports.uploadMaterial = async (req, res) => {
 // ----------------------------
 // ACCESS MATERIAL
 // ----------------------------
-eexports.getMaterialAccessUrl = async (req, res) => {
+exports.getMaterialAccessUrl = async (req, res) => {
     try {
-
         const mode =
             req.query.mode === "download"
                 ? "download"
@@ -192,17 +256,25 @@ eexports.getMaterialAccessUrl = async (req, res) => {
             });
         }
 
-        if (material.approvalStatus !== "APPROVED") {
+        const isAdmin =
+            req.user.userType === "ADMIN" &&
+            ["admin", "super_admin"].includes(req.user.role);
+
+        const isModerator =
+            req.user.userType === "STUDENT" &&
+            req.user.role === "MODERATOR";
+
+        const isNormalStudent =
+            req.user.userType === "STUDENT" &&
+            req.user.role === "STUDENT";
+
+        if (isNormalStudent && material.approvalStatus !== "APPROVED") {
             return res.status(403).json({
                 message: "Not approved yet"
             });
         }
 
-        // ----------------------------
-        // STUDENT ACCESS
-        // ----------------------------
-        if (req.user.type === "STUDENT") {
-
+        if (req.user.userType === "STUDENT") {
             const student = await Student.findById(req.user.id);
 
             if (!student) {
@@ -211,36 +283,30 @@ eexports.getMaterialAccessUrl = async (req, res) => {
                 });
             }
 
-            if (!isCourseInScope(material.course, student)) {
+            const isEnrolled =
+                material.course.major.toString() === student.major.toString() &&
+                material.course.academicYear === student.academicYear &&
+                material.course.calendarYear === student.calendarYear;
+
+            if (!isEnrolled) {
                 return res.status(403).json({
                     message: "Access denied"
                 });
             }
+        } else if (!isAdmin) {
+            return res.status(403).json({
+                message: "Access denied"
+            });
         }
 
-        // ----------------------------
-        // ADMIN ACCESS
-        // ----------------------------
-        if (req.user.type === "ADMIN") {
-
-            const admin = await Admin.findById(req.user.id);
-
-            if (!admin) {
-                return res.status(404).json({
-                    message: "Admin not found"
-                });
-            }
-        }
-
-        const { data, error } = await supabase.storage
-            .from(BUCKET)
+        const {data, error} = await supabase.storage
+            .from(process.env.SUPABASE_BUCKET)
             .createSignedUrl(
                 material.storagePath,
                 60 * 60,
                 mode === "download"
                     ? {
-                        download:
-                            material.originalFilename || true
+                        download: material.originalFilename || true
                     }
                     : {}
             );
@@ -258,7 +324,6 @@ eexports.getMaterialAccessUrl = async (req, res) => {
         });
 
     } catch (error) {
-
         console.error("ACCESS URL ERROR:", error);
 
         return res.status(500).json({
@@ -299,9 +364,15 @@ exports.getApprovedMaterialsByCourse = async (req, res) => {
             course: course._id,
             approvalStatus: "APPROVED"
         })
-            .populate("uploadedBy", "name universityEmail")
-            .populate("course", "name code")
-            .sort({ createdAt: -1 });
+            .populate(
+                "uploadedBy",
+                "name fullName universityEmail email role"
+            )
+            .populate(
+                "course",
+                "name code academicYear calendarYear semester"
+            )
+            .sort({createdAt: -1});
 
         return res.json(materials);
 
@@ -314,9 +385,18 @@ exports.getApprovedMaterialsByCourse = async (req, res) => {
     }
 };
 //GET PENDING MATERIALS
-exports.getPendingMaterials = async (req, res) => {
+exports.getPendingMaterialsByCourseId = async (req, res) => {
     try {
-        let courseQuery = {};
+        const {courseId} = req.params;
+
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({
+                message: "Course not found"
+            });
+        }
+
         if (req.user.type === "STUDENT") {
             const student = await Student.findById(req.user.id);
 
@@ -332,11 +412,11 @@ exports.getPendingMaterials = async (req, res) => {
                 });
             }
 
-            courseQuery = {
-                major: student.major,
-                academicYear: student.academicYear,
-                calendarYear: student.calendarYear
-            };
+            if (!isCourseInScope(course, student)) {
+                return res.status(403).json({
+                    message: "You are not allowed to moderate this course"
+                });
+            }
         }
 
         if (req.user.type === "ADMIN") {
@@ -356,18 +436,10 @@ exports.getPendingMaterials = async (req, res) => {
                     message: "Access denied"
                 });
             }
-
-            courseQuery = {};
         }
 
-        const courses = await Course.find(courseQuery);
-
-        const courseIds = courses.map((course) => course._id);
-
         const materials = await Material.find({
-            course: {
-                $in: courseIds
-            },
+            course: courseId,
             approvalStatus: "PENDING"
         })
             .populate(
@@ -385,7 +457,7 @@ exports.getPendingMaterials = async (req, res) => {
         return res.status(200).json(materials);
 
     } catch (error) {
-        console.error("GET PENDING MATERIALS ERROR:", error);
+        console.error("GET PENDING MATERIALS BY COURSE ID ERROR:", error);
 
         return res.status(500).json({
             message: "Internal server error"
@@ -397,58 +469,156 @@ exports.getPendingMaterials = async (req, res) => {
 // ----------------------------
 exports.reviewMaterial = async (req, res) => {
     try {
-        const { approvalStatus, rejectionReason } = req.body;
+        const {approvalStatus, rejectionReason} = req.body;
 
         if (!["APPROVED", "REJECTED"].includes(approvalStatus)) {
-            return res.status(400).json({ message: "Invalid status" });
+            return res.status(400).json({
+                message: "Invalid status"
+            });
         }
 
-        const material = await Material.findById(req.params.id).populate(
-            "course"
-        );
+        const material = await Material.findById(req.params.id)
+            .populate("course");
 
-        const moderator = await Student.findById(req.user.id);
+        if (!material) {
+            return res.status(404).json({
+                message: "Material not found"
+            });
+        }
 
-        if (!isCourseInScope(material.course, moderator)) {
-            return res.status(403).json({ message: "Not allowed" });
+        if (req.user.userType === "STUDENT") {
+            const moderator = await Student.findById(req.user.id);
+
+            if (!moderator) {
+                return res.status(404).json({
+                    message: "Student not found"
+                });
+            }
+
+            if (req.user.role !== "MODERATOR") {
+                return res.status(403).json({
+                    message: "Access denied"
+                });
+            }
+
+            if (!isCourseInScope(material.course, moderator)) {
+                return res.status(403).json({
+                    message: "Not allowed"
+                });
+            }
+        } else if (req.user.userType === "ADMIN") {
+            const admin = await Admin.findById(req.user.id);
+
+            if (!admin) {
+                return res.status(404).json({
+                    message: "Admin not found"
+                });
+            }
+
+            if (
+                req.user.role !== "admin" &&
+                req.user.role !== "super_admin"
+            ) {
+                return res.status(403).json({
+                    message: "Access denied"
+                });
+            }
+        } else {
+            return res.status(403).json({
+                message: "Access denied"
+            });
         }
 
         material.approvalStatus = approvalStatus;
         material.rejectionReason =
-            approvalStatus === "REJECTED" ? rejectionReason : undefined;
+            approvalStatus === "REJECTED"
+                ? rejectionReason || "No reason provided"
+                : undefined;
 
         await material.save();
 
-        res.json({ message: "Updated", material });
+        return res.json({
+            message: "Updated",
+            material
+        });
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        console.error("REVIEW MATERIAL ERROR:", error);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
 };
 
 // Delete
 exports.deleteMaterial = async (req, res) => {
-  try {
-    const material = await Material.findById(req.params.id).populate(
-      "course"
-    );
+    try {
+        const material = await Material.findById(req.params.id)
+            .populate("course");
 
-    const moderator = await Student.findById(req.user.id);
+        if (!material) {
+            return res.status(404).json({
+                message: "Material not found"
+            });
+        }
 
-    if (!isCourseInScope(material.course, moderator)) {
-      return res.status(403).json({ message: "Not allowed" });
+        if (req.user.userType === "STUDENT") {
+            const moderator = await Student.findById(req.user.id);
+
+            if (!moderator) {
+                return res.status(404).json({
+                    message: "Student not found"
+                });
+            }
+
+            if (!req.user.role?.includes("MODERATOR")) {
+                return res.status(403).json({
+                    message: "Access denied"
+                });
+            }
+
+            if (!isCourseInScope(material.course, moderator)) {
+                return res.status(403).json({
+                    message: "Not allowed"
+                });
+            }
+        }
+
+        if (req.user.userType === "ADMIN") {
+            const admin = await Admin.findById(req.user.id);
+
+            if (!admin) {
+                return res.status(404).json({
+                    message: "Admin not found"
+                });
+            }
+
+            if (
+                !req.user.role?.includes("admin") &&
+                !req.user.role?.includes("super_admin")
+            ) {
+                return res.status(403).json({
+                    message: "Access denied"
+                });
+            }
+        }
+
+        await supabase.storage
+            .from(BUCKET)
+            .remove([material.storagePath]);
+
+        await material.deleteOne();
+
+        return res.json({
+            message: "Material deleted successfully"
+        });
+
+    } catch (error) {
+        console.error("DELETE MATERIAL ERROR:", error);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
     }
-
-    await supabase.storage
-      .from(BUCKET)
-      .remove([material.storagePath]);
-
-    await material.deleteOne();
-
-    res.json({ message: "Material deleted successfully" });
-
-  } catch (error) {
-    console.error("DELETE MATERIAL ERROR:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
 };

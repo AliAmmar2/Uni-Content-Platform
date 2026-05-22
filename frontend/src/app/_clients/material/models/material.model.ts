@@ -29,7 +29,9 @@ export interface MaterialModel {
   title: string;
   description?: string;
 
-  fileUrl: string;
+  storagePath: string;
+  originalFilename?: string;
+  mimeType?: string;
 
   uploadedBy: string | UploadedByModel;
 

@@ -8,19 +8,22 @@ import { MaterialItemBo } from '../bo/material-item.bo';
 
 import { MaterialStatusEnum } from './enums/material-status.enum';
 import { MaterialActions } from './material.action';
-import { AdminDetailsState } from '../../portal-admin/+state/admin-details.reducer';
 
 export const MATERIAL_KEY = 'materialKey';
+export const APPROVED_MATERIALS_KEY = 'approvedMaterialsKey';
+export const PENDING_MATERIALS_KEY = 'pendingMaterialsKey';
 
 export interface MaterialState {
-  readonly [MATERIAL_KEY]: Array<MaterialItemBo>;
+  readonly [APPROVED_MATERIALS_KEY]: Array<MaterialItemBo>;
+  readonly [PENDING_MATERIALS_KEY]: Array<MaterialItemBo>;
   readonly status: MaterialStatusEnum;
   readonly error: Error;
 }
 
 const initialMaterialState: MaterialState = {
   status: MaterialStatusEnum.pending,
-  [MATERIAL_KEY]: null,
+  [APPROVED_MATERIALS_KEY]: [],
+  [PENDING_MATERIALS_KEY]: [],
   error: null
 };
 
@@ -44,7 +47,7 @@ export const materialReducers =
       (state: MaterialState, { materials }) => {
         return {
           ...state,
-          [MATERIAL_KEY]: materials,
+          [APPROVED_MATERIALS_KEY]: materials,
           status: MaterialStatusEnum.loadSuccess
         };
       }
@@ -60,7 +63,6 @@ export const materialReducers =
         };
       }
     ),
-
 
     on(
       MaterialActions.loadPendingMaterialsByCourse,
@@ -78,7 +80,7 @@ export const materialReducers =
       (state: MaterialState, { materials }) => {
         return {
           ...state,
-          [MATERIAL_KEY]: materials,
+          [PENDING_MATERIALS_KEY]: materials,
           status: MaterialStatusEnum.loadSuccess
         };
       }
@@ -93,5 +95,36 @@ export const materialReducers =
           error
         };
       }
-    )
+    ),
+
+    on(MaterialActions.reviewMaterial, (state) => {
+      return {
+        ...state,
+        status: MaterialStatusEnum.loading,
+        error: null
+      };
+    }),
+
+    on(MaterialActions.reviewMaterialSuccess, (state) => {
+      return {
+        ...state,
+        status: MaterialStatusEnum.reviewSuccess
+      };
+    }),
+
+    on(MaterialActions.reviewMaterialFailure, (state, { error }) => {
+      return {
+        ...state,
+        status: MaterialStatusEnum.reviewFailure,
+        error
+      };
+    }),
+
+    on(MaterialActions.resetMaterialState, (state) => {
+      return {
+        ...state,
+        status: MaterialStatusEnum.pending,
+        error: null
+      };
+    })
   );

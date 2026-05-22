@@ -25,15 +25,22 @@ export const materialDetailsReducers =
     on(MaterialActions.uploadMaterial, (state) => {
       return {
         ...state,
-        status: MaterialStatusEnum.loading,
+        status: MaterialStatusEnum.uploadLoading,
         error: null
       };
     }),
 
+    on(MaterialActions.cancelUploadMaterial, (state) => {
+      return {
+        ...state,
+        status: MaterialStatusEnum.pending,
+        error: null
+      };
+    }),
     on(MaterialActions.uploadMaterialSuccess, (state) => {
       return {
         ...state,
-        status: MaterialStatusEnum.uploadSuccess
+        status: MaterialStatusEnum.uploadSuccess,
       };
     }),
 

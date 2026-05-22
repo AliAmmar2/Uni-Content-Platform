@@ -5,7 +5,10 @@ export class MaterialItemBo {
 
   title: string;
   description?: string;
-  fileUrl: string;
+
+  storagePath: string;
+  originalFilename?: string;
+  mimeType?: string;
 
   uploadedByName: string;
   uploadedByModel: 'Student' | 'Admin';
@@ -25,7 +28,10 @@ export class MaterialItemBo {
 
     this.title = materialModel.title;
     this.description = materialModel.description;
-    this.fileUrl = materialModel.fileUrl;
+
+    this.storagePath = materialModel.storagePath;
+    this.originalFilename = materialModel.originalFilename;
+    this.mimeType = materialModel.mimeType;
 
     this.uploadedByName = materialModel.uploadedByName;
     this.uploadedByModel = materialModel.uploadedByModel;

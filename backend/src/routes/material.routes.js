@@ -2,27 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const anyAuth = require("../middleware/any-auth.middleware");
-const upload = require("../middleware/upload.middleware");
 
 const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middleware-auth");
 
 const controller = require("../controllers/material.controller");
 
-// Upload
-// router.post("/upload", anyAuth, upload.single("file"), controller.uploadMaterial
-// );
-
-router.get(
-    "/pending",
-    anyAuth,
-    allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]),
-    controller.getPendingMaterials
-);
-
 router.get(
     "/upload-signature",
     anyAuth,
-    allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]),
     controller.getUploadSignature
 );
 
@@ -34,8 +21,7 @@ router.post(
 
 router.get(
     "/:id/access",
-    auth,
-    requireRole(["STUDENT", "MODERATOR"]),
+    anyAuth,
     controller.getMaterialAccessUrl
 );
 
@@ -44,7 +30,7 @@ router.get("/course/:courseId", anyAuth, controller.getApprovedMaterialsByCourse
 );
 router.get("/course/:courseId/pending", anyAuth,
     allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]),
-    controller.getPendingMaterialsByCourse
+    controller.getPendingMaterialsByCourseId
 );
 
 // Approve / Reject

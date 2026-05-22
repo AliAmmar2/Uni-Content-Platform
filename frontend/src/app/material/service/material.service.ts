@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import * as _ from 'lodash';
-import { map, Observable } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 
 import { MaterialClient, MaterialResponseModel } from '../../_clients/material/material.client';
 
@@ -14,6 +14,20 @@ import { ReviewMaterialFormGroupInterface } from '../interfaces/review-material-
 
 import { MaterialForCreationDto } from '../dtos/material-for-creation.dto';
 import { MaterialForReviewDto } from '../dtos/material-for-review.dto';
+
+export interface UploadMaterialProgressEvent {
+  type: 'PROGRESS';
+  progress: number;
+}
+
+export interface UploadMaterialCompletedEvent {
+  type: 'COMPLETED';
+  response: MaterialResponseModel;
+}
+
+export type UploadMaterialEvent =
+  | UploadMaterialProgressEvent
+  | UploadMaterialCompletedEvent;
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +46,30 @@ export class MaterialService {
     const materialForCreationDto =
       new MaterialForCreationDto(materialFormValue);
 
-    return this.materialClient.uploadMaterial(
-      materialForCreationDto.toFormData()
-    );
+    return this.materialClient
+      .getUploadSignature(
+        materialForCreationDto.file.name,
+        materialForCreationDto.file.type,
+        materialForCreationDto.file.size
+      )
+      .pipe(
+        switchMap(signatureResponse => {
+          return this.materialClient
+            .uploadFileToSupabase(
+              signatureResponse.signedUrl,
+              materialForCreationDto.file
+            )
+            .pipe(
+              switchMap(() => {
+                return this.materialClient.uploadMaterial(
+                  materialForCreationDto.toSavePayload(
+                    signatureResponse.storagePath
+                  )
+                );
+              })
+            );
+        })
+      );
   }
 
   public getApprovedMaterialsByCourse(
@@ -67,6 +102,17 @@ export class MaterialService {
           );
         })
       );
+  }
+
+  public getMaterialAccessUrl(
+    materialId: string,
+    mode: 'view' | 'download' = 'view'
+  ): Observable<{ url: string }> {
+
+    return this.materialClient.getMaterialAccessUrl(
+      materialId,
+      mode
+    );
   }
 
   public reviewMaterial(

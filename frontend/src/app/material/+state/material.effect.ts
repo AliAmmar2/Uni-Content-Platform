@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap, takeUntil } from 'rxjs';
 
 import { MaterialActions } from './material.action';
 import { MaterialService } from '../service/material.service';
@@ -63,6 +63,31 @@ export class MaterialEffect {
     )
   );
 
+  // public uploadMaterial$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(MaterialActions.uploadMaterial),
+  //     switchMap((action) => {
+  //       return this.materialService
+  //         .uploadMaterial(action.material)
+  //         .pipe(
+  //           switchMap(() => {
+  //             return [
+  //               MaterialActions.uploadMaterialSuccess(),
+  //               MaterialActions.resetMaterialState()
+  //             ];
+  //           }),
+  //           catchError((error) => {
+  //             return of(
+  //               MaterialActions.uploadMaterialFailure({
+  //                 error: error.error
+  //               })
+  //             );
+  //           })
+  //         );
+  //     })
+  //   )
+  // );
+
   public uploadMaterial$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MaterialActions.uploadMaterial),
@@ -70,12 +95,14 @@ export class MaterialEffect {
         return this.materialService
           .uploadMaterial(action.material)
           .pipe(
-            switchMap(() => {
-              return [
-                MaterialActions.uploadMaterialSuccess(),
-                MaterialActions.resetMaterialState()
-              ];
-            }),
+            switchMap(() => [
+              MaterialActions.uploadMaterialSuccess()
+            ]),
+            takeUntil(
+              this.actions$.pipe(
+                ofType(MaterialActions.cancelUploadMaterial)
+              )
+            ),
             catchError((error) => {
               return of(
                 MaterialActions.uploadMaterialFailure({
@@ -101,8 +128,8 @@ export class MaterialEffect {
             switchMap(() => {
               return [
                 MaterialActions.reviewMaterialSuccess(),
-                MaterialActions.loadApprovedMaterialsByCourse({ courseId: action.id }),
-                MaterialActions.loadPendingMaterialsByCourse({ courseId: action.id }),
+                MaterialActions.loadApprovedMaterialsByCourse({ courseId: action.courseId }),
+                MaterialActions.loadPendingMaterialsByCourse({ courseId: action.courseId }),
                 MaterialActions.resetMaterialState()
               ];
             }),
@@ -128,8 +155,8 @@ export class MaterialEffect {
             switchMap(() => {
               return [
                 MaterialActions.deleteMaterialSuccess(),
-                MaterialActions.loadApprovedMaterialsByCourse({ courseId: action.id }),
-                MaterialActions.loadPendingMaterialsByCourse({ courseId: action.id }),
+                MaterialActions.loadApprovedMaterialsByCourse({ courseId: action.courseId }),
+                MaterialActions.loadPendingMaterialsByCourse({ courseId: action.courseId }),
                 MaterialActions.resetMaterialState()
               ];
             }),

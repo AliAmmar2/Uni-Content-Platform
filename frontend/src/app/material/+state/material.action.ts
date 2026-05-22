@@ -1,8 +1,4 @@
-import {
-  createActionGroup,
-  emptyProps,
-  props
-} from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 import { MaterialItemBo } from '../bo/material-item.bo';
 
@@ -23,17 +19,22 @@ export const MaterialActions = createActionGroup({
     'load Pending Materials By Course Failure': props<{ error: Error }>(),
 
     'upload Material': props<{ material: CreateMaterialFormGroupInterface }>(),
+    'cancel Upload Material': emptyProps(),
+    'upload Material Progress': props<{
+      progress: number;
+    }>(),
     'upload Material Success': emptyProps(),
     'upload Material Failure': props<{ error: Error }>(),
 
     'review Material': props<{
       id: string;
+      courseId: string;
       material: ReviewMaterialFormGroupInterface;
     }>(),
     'review Material Success': emptyProps(),
     'review Material Failure': props<{ error: Error }>(),
 
-    'delete Material': props<{ id: string }>(),
+    'delete Material': props<{ courseId: string, id: string }>(),
     'delete Material Success': emptyProps(),
     'delete Material Failure': props<{ error: Error }>(),
   }
