@@ -1,4 +1,4 @@
-const express = require("express"); 
+const express = require("express");
 const router = express.Router();
 
 const auth = require("../middleware/auth.middleware");
@@ -6,12 +6,40 @@ const { requireRole } = require("../middleware/role.middleware");
 
 const controller = require("../controllers/announcement.controller");
 
-router.post("/", auth, requireRole([ "MODERATOR"]), controller.createAnnouncement);
 
-router.get("/course/:courseId", auth, requireRole(["STUDENT","MODERATOR"]), controller.getCourseAnnouncements);
+// Create announcement
+router.post(
+  "/",
+  auth,
+  requireRole(["MODERATOR"]),
+  controller.createAnnouncement
+);
 
-router.put("/:id", auth, requireRole(["MODERATOR"]), controller.updateAnnouncement);
 
-router.delete("/:id", auth, requireRole(["MODERATOR"]), controller.deleteAnnouncement);
+// Get announcements for a course
+router.get(
+  "/course/:courseId",
+  auth,
+  requireRole(["STUDENT", "MODERATOR"]),
+  controller.getCourseAnnouncements
+);
 
-module.exports = router; 
+
+// Update announcement (moderator only)
+router.put(
+  "/:id",
+  auth,
+  requireRole(["MODERATOR"]),
+  controller.updateAnnouncement
+);
+
+
+// Delete announcement (moderator only)
+router.delete(
+  "/:id",
+  auth,
+  requireRole(["MODERATOR"]),
+  controller.deleteAnnouncement
+);
+
+module.exports = router;

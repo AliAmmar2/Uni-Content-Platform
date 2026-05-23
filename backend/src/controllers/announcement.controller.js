@@ -1,19 +1,33 @@
-const Announcement = require('../models/Announcement');
+const Announcement = require("../models/Announcement");
 const Student = require("../models/Student");
 const Course = require("../models/Course");
+
+// ─────────────────────────────────────────────
+// Helper
+// ─────────────────────────────────────────────
+
+function isCourseInScope(course, user) {
+  return (
+    course.major.toString() === user.major.toString() &&
+    course.academicYear === user.academicYear &&
+    course.calendarYear === user.calendarYear
+  );
+}
+
+// ─────────────────────────────────────────────
+// Create announcement
+// ─────────────────────────────────────────────
 
 exports.createAnnouncement = async (req, res) => {
   try {
     const { title, content, courseId } = req.body;
 
-    // Validate required fields
-    if (!title?.trim() || !content?.trim() || !courseId)  {
+    if (!title?.trim() || !content?.trim() || !courseId) {
       return res.status(400).json({
         message: "Missing required fields"
       });
     }
 
-    // Get logged-in user
     const moderator = await Student.findById(req.user.id);
 
     if (!moderator) {
@@ -22,14 +36,6 @@ exports.createAnnouncement = async (req, res) => {
       });
     }
 
-    // Check role
-    if (moderator.role !== "MODERATOR") {
-      return res.status(403).json({
-        message: "Only moderators can create announcements"
-      });
-    }
-
-    // Find course
     const course = await Course.findById(courseId);
 
     if (!course) {
@@ -38,18 +44,12 @@ exports.createAnnouncement = async (req, res) => {
       });
     }
 
-    // Moderator can only post inside their own major/year
-    if (
-      course.major.toString() !== moderator.major.toString() ||
-      course.academicYear !== moderator.academicYear ||
-      course.calendarYear !== moderator.calendarYear
-    ) {
+    if (!isCourseInScope(course, moderator)) {
       return res.status(403).json({
         message: "Cannot post announcement for this course"
       });
     }
 
-    // Create announcement
     const announcement = await Announcement.create({
       title,
       content,
@@ -71,8 +71,12 @@ exports.createAnnouncement = async (req, res) => {
   }
 };
 
+// ─────────────────────────────────────────────
+// Get course announcements
+// ─────────────────────────────────────────────
+
 exports.getCourseAnnouncements = async (req, res) => {
-    try {
+  try {
     const student = await Student.findById(req.user.id);
 
     if (!student) {
@@ -89,12 +93,7 @@ exports.getCourseAnnouncements = async (req, res) => {
       });
     }
 
-    // only users from same major/year can access
-    if (
-      course.major.toString() !== student.major.toString() ||
-      course.academicYear !== student.academicYear ||
-      course.calendarYear !== student.calendarYear
-    ) {
+    if (!isCourseInScope(course, student)) {
       return res.status(403).json({
         message: "Access denied"
       });
@@ -115,7 +114,11 @@ exports.getCourseAnnouncements = async (req, res) => {
       message: "Internal server error"
     });
   }
- }
+};
+
+// ─────────────────────────────────────────────
+// Update announcement
+// ─────────────────────────────────────────────
 
 exports.updateAnnouncement = async (req, res) => {
   try {
@@ -130,12 +133,6 @@ exports.updateAnnouncement = async (req, res) => {
       });
     }
 
-    if (moderator.role !== "MODERATOR") {
-      return res.status(403).json({
-        message: "Only moderators can update announcements"
-      });
-    }
-
     const announcement = await Announcement.findById(id)
       .populate("course");
 
@@ -145,21 +142,19 @@ exports.updateAnnouncement = async (req, res) => {
       });
     }
 
-    const course = announcement.course;
-
-    // Must belong to same cohort
-    if (
-      course.major.toString() !== moderator.major.toString() ||
-      course.academicYear !== moderator.academicYear ||
-      course.calendarYear !== moderator.calendarYear
-    ) {
+    if (!isCourseInScope(announcement.course, moderator)) {
       return res.status(403).json({
         message: "You cannot edit announcements for this course"
       });
     }
 
-    if (title) announcement.title = title;
-    if (content) announcement.content = content;
+    if (title?.trim()) {
+      announcement.title = title;
+    }
+
+    if (content?.trim()) {
+      announcement.content = content;
+    }
 
     await announcement.save();
 
@@ -177,6 +172,10 @@ exports.updateAnnouncement = async (req, res) => {
   }
 };
 
+// ─────────────────────────────────────────────
+// Delete announcement
+// ─────────────────────────────────────────────
+
 exports.deleteAnnouncement = async (req, res) => {
   try {
     const moderator = await Student.findById(req.user.id);
@@ -184,12 +183,6 @@ exports.deleteAnnouncement = async (req, res) => {
     if (!moderator) {
       return res.status(404).json({
         message: "User not found"
-      });
-    }
-
-    if (moderator.role !== "MODERATOR") {
-      return res.status(403).json({
-        message: "Only moderators can delete announcements"
       });
     }
 
@@ -202,14 +195,7 @@ exports.deleteAnnouncement = async (req, res) => {
       });
     }
 
-    const course = announcement.course;
-
-    // Must belong to same cohort
-    if (
-      course.major.toString() !== moderator.major.toString() ||
-      course.academicYear !== moderator.academicYear ||
-      course.calendarYear !== moderator.calendarYear
-    ) {
+    if (!isCourseInScope(announcement.course, moderator)) {
       return res.status(403).json({
         message: "You cannot delete announcements for this course"
       });
@@ -229,7 +215,3 @@ exports.deleteAnnouncement = async (req, res) => {
     });
   }
 };
-
-
-
-
