@@ -5,32 +5,29 @@ require("dotenv").config({
 const mongoose = require("mongoose");
 
 // Models
+const Student = require("../src/models/Student");
 const Faculty = require("../src/models/Faculty");
 const Major = require("../src/models/Major");
+const Course = require("../src/models/Course");
 const OfficialStudent = require("../src/models/OfficialStudent");
-
+const Material = require("../src/models/Material");
 // Data
 const studentsData = require("../data/officialStudents");
 
 const seed = async () => {
     try {
-
         await mongoose.connect(process.env.MONGO_URI);
 
         console.log("Connected to MongoDB");
-
-        // =====================================
-        // CLEAR COLLECTIONS
-        // =====================================
+        await Student.deleteMany();
+        await Material.deleteMany();
         await OfficialStudent.deleteMany();
+        await Course.deleteMany();
         await Major.deleteMany();
         await Faculty.deleteMany();
 
         console.log("Old data cleared");
 
-        // =====================================
-        // SEED FACULTIES
-        // =====================================
         const faculties = await Faculty.insertMany([
             {
                 name: "Engineering",
@@ -51,16 +48,12 @@ const seed = async () => {
 
         console.log("Faculties seeded");
 
-        // Create faculty lookup map
         const facultyMap = {};
 
         faculties.forEach(faculty => {
             facultyMap[faculty.name.trim()] = faculty._id;
         });
 
-        // =====================================
-        // SEED MAJORS
-        // =====================================
         const majors = await Major.insertMany([
             {
                 name: "Computer Engineering",
@@ -91,41 +84,113 @@ const seed = async () => {
 
         console.log("Majors seeded");
 
-        // Create major lookup map
         const majorMap = {};
 
         majors.forEach(major => {
             majorMap[major.name.trim()] = major._id;
         });
 
-        // =====================================
-        // FORMAT OFFICIAL STUDENTS
-        // =====================================
-        const formattedStudents = studentsData.map(student => ({
+        const courses = await Course.insertMany([
+            // Computer Engineering
+            {
+                name: "Circuit Analysis",
+                code: "CE101",
+                description: "Introduction to electrical circuits.",
+                credits: 3,
+                major: majorMap["Computer Engineering"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM1"
+            },
+            {
+                name: "Digital Logic Design",
+                code: "CE102",
+                description: "Basics of digital systems and logic gates.",
+                credits: 3,
+                major: majorMap["Computer Engineering"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM2"
+            },
 
+            // Computer Science
+            {
+                name: "Introduction to Programming",
+                code: "CS101",
+                description: "Programming fundamentals.",
+                credits: 3,
+                major: majorMap["Computer Science"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM1"
+            },
+            {
+                name: "Data Structures",
+                code: "CS102",
+                description: "Arrays, stacks, queues, trees, and graphs.",
+                credits: 3,
+                major: majorMap["Computer Science"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM2"
+            },
+
+            // Mathematics
+            {
+                name: "Calculus I",
+                code: "MATH101",
+                description: "Limits, derivatives, and integrals.",
+                credits: 3,
+                major: majorMap["Mathematics"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM1"
+            },
+
+            // Physics
+            {
+                name: "General Physics I",
+                code: "PHY101",
+                description: "Mechanics and motion.",
+                credits: 3,
+                major: majorMap["Physics"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM1"
+            },
+
+            // Finance
+            {
+                name: "Principles of Finance",
+                code: "FIN101",
+                description: "Introduction to financial principles.",
+                credits: 3,
+                major: majorMap["Finance"],
+                academicYear: 1,
+                calendarYear: 2025,
+                semester: "SEM1"
+            }
+        ]);
+
+        console.log("Courses seeded");
+
+        const formattedStudents = studentsData.map(student => ({
             universityId: student.universityId,
 
-            universityEmail:
-                student.universityEmail.toLowerCase().trim(),
+            universityEmail: student.universityEmail.toLowerCase().trim(),
 
             name: student.name.trim(),
 
-            faculty:
-                facultyMap[student.faculty?.trim()],
+            faculty: facultyMap[student.faculty?.trim()],
 
-            major:
-                majorMap[student.major?.trim()],
+            major: majorMap[student.major?.trim()],
 
             academicYear: student.academicYear,
 
             calendarYear: student.calendarYear
         }));
 
-        // =====================================
-        // DEBUG CHECKS
-        // =====================================
         formattedStudents.forEach(student => {
-
             if (!student.faculty) {
                 console.log("MISSING FACULTY:", student);
             }
@@ -135,21 +200,14 @@ const seed = async () => {
             }
         });
 
-        // =====================================
-        // INSERT OFFICIAL STUDENTS
-        // =====================================
         await OfficialStudent.insertMany(formattedStudents);
 
         console.log("Official students seeded");
-
         console.log("ALL DATA SEEDED SUCCESSFULLY");
 
         process.exit();
-
     } catch (err) {
-
         console.error("SEED ERROR:", err);
-
         process.exit(1);
     }
 };
