@@ -158,36 +158,33 @@ exports.verifyEmail = async (req, res) => {
   }
 };
 
-
-// LOGIN
 exports.login = async (req, res) => {
   try {
-    const { universityEmail, password } = req.body;
+    const { universityEmail, universityId, password } = req.body;
 
-    if (!universityEmail || !password) {
-      return res.status(400).json({ message: "Missing credentials" });
+    if (!universityEmail || !universityId || !password) {
+      return res.status(400).json({
+        message: "Missing credentials"
+      });
     }
 
     const email = universityEmail.toLowerCase().trim();
+    const id = universityId.trim();
 
     const user = await Student.findOne({ universityEmail: email })
-      .populate("faculty", "name")
-      .populate("major", "name");
+        .populate("faculty", "name")
+        .populate("major", "name");
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(404).json({
+        message: "Email not registered. Please sign up."
+      });
     }
 
-    if (user.isLocked) {
-      return res.status(423).json({ message: "Account locked" });
-    }
-
-    if (!user.emailVerified) {
-      return res.status(403).json({ message: "Please verify your email" });
-    }
-
-    if (user.status !== "ACTIVE") {
-      return res.status(403).json({ message: "Account inactive" });
+    if (String(user.universityId).trim() !== id) {
+      return res.status(401).json({
+        message: "University ID is wrong"
+      });
     }
 
     const validPassword = await bcrypt.compare(password, user.passwordHash);
@@ -201,7 +198,27 @@ exports.login = async (req, res) => {
 
       await user.save();
 
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({
+        message: "Password is wrong"
+      });
+    }
+
+    if (user.isLocked) {
+      return res.status(423).json({
+        message: "Account locked. Please try again later."
+      });
+    }
+
+    if (!user.emailVerified) {
+      return res.status(403).json({
+        message: "Please verify your email"
+      });
+    }
+
+    if (user.status !== "ACTIVE") {
+      return res.status(403).json({
+        message: "Account inactive"
+      });
     }
 
     user.loginAttempts = 0;
@@ -220,9 +237,9 @@ exports.login = async (req, res) => {
   } catch (error) {
     console.error("LOGIN ERROR:", error);
 
-  res.status(500).json({
-    message: "Internal server error",
-    error: error.message
-  });
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
   }
 };
