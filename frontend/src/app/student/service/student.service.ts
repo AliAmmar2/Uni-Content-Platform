@@ -39,6 +39,16 @@ export class StudentService {
       );
   }
 
+  public getMe(): Observable<StudentDetailsBo> {
+    return this.studentClient
+      .getMe()
+      .pipe(
+        map((studentModel: StudentModel) => {
+          return new StudentDetailsBo(studentModel);
+        })
+      );
+  }
+
   public getStudentDetails(studentId: string): Observable<StudentDetailsBo> {
     return this.studentClient
       .getStudentById(studentId)

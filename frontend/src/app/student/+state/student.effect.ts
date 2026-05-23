@@ -57,6 +57,24 @@ export class StudentEffect {
       )
   );
 
+
+  loadMe$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(StudentActions.loadMe),
+      switchMap(() =>
+        this.studentService.getMe().pipe(
+          map((student: StudentDetailsBo) =>
+            StudentActions.loadMeSuccess({ student })
+          ),
+          catchError((error) =>
+            of(StudentActions.loadMeFailure({ error: error.error }))
+          )
+        )
+      )
+    )
+  );
+
+
   /*
    * Create Student
    */

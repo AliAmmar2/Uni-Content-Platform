@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { RegisterPage } from './reigister-page/register.page';
-import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
 import { PortalAdminPage } from './portal-admin/portal-admin-page.component';
 import { FacultyPage } from './portal-admin/faculty-page/faculty.page';
 import { EditFacultyPage } from './portal-admin/edit-faculty-page/edit-faculty.page';
@@ -19,6 +18,16 @@ import { VerifyEmailPage } from './reigister-page/verify-email-page/verify-email
 import { CheckEmailPage } from './reigister-page/check-email-page/check-email.page';
 import { StudentLoginPage } from './login-page/login-student-page/student-login.page';
 import { AdminLoginPage } from './login-page/login-admin-page/admin-login.page';
+import { StudentsPageComponent } from './student/students-page.component';
+import { StudentCoursesPage } from './student/courses/student-courses.page';
+import { ApprovedMaterialsPage } from './portal-admin/approved-materials/approved-materials.page';
+import { UploadMaterialPage } from './portal-admin/upload-material/upload-material.page';
+import { PendingMaterialsPage } from './portal-admin/pending-materials/pending-materials.page';
+import { StudentsApprovedMaterialsPage } from './student/student-approved-materials/students-approved-materials.page';
+import { UploadMaterialByStudentPage } from './student/upload-material-by-student/upload-material-by-student.page';
+import { StudentPendingMaterialsPage } from './student/student-pending-materials/student-pending-materials.page';
+import { StudentDashboardPage } from './student/student-dashboard/student-dashboard.page';
+import { StudentAccountSettingsPage } from './student/student-account-settings-page/student-account-settings.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -44,7 +53,34 @@ export const routes: Routes = [
   },
   {
     path: 'students/:universityId',
-    component: StudentDashboardPage
+    component: StudentsPageComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        component: StudentDashboardPage
+      },
+      {
+        path: 'courses',
+        component: StudentCoursesPage
+      },
+      {
+        path: 'account-settings',
+        component: StudentAccountSettingsPage
+      },
+      {
+        path: 'courses/:courseId/materials',
+        component: StudentsApprovedMaterialsPage
+      },
+      {
+        path: 'courses/:courseId/upload-material',
+        component: UploadMaterialByStudentPage
+      },
+      {
+        path: 'courses/:courseId/pending-materials',
+        component: StudentPendingMaterialsPage
+      },
+    ],
   },
   {
     path: 'students/:universityId/announcements',
@@ -115,6 +151,18 @@ export const routes: Routes = [
       {
         path: ':courseId/edit-course',
         component: EditCoursePage
+      },
+      {
+        path: ':courseId/materials',
+        component: ApprovedMaterialsPage
+      },
+      {
+        path: 'courses/:courseId/upload-material',
+        component: UploadMaterialPage
+      },
+      {
+        path: 'courses/:courseId/pending-materials',
+        component: PendingMaterialsPage
       },
       {
         path: ':majorId/add-new-course',

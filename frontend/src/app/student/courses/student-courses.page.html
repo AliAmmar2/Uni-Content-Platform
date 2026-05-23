@@ -1,0 +1,254 @@
+<section class="student-courses">
+
+  <ng-container *ngrxLet="studentDetailsSelected$ as studentState">
+
+    @if (studentState?.[STUDENT_DETAILS_KEY] ||
+    studentState?.[LOGGED_IN_STUDENT_KEY]) {
+      <ng-container>
+        @if (studentState?.[STUDENT_DETAILS_KEY] ??
+        studentState?.[LOGGED_IN_STUDENT_KEY];
+          as student) {
+          <ng-container>
+
+            <!-- RIGHT TOP CARDS -->
+            <div class="student-courses__top-cards">
+
+              <article class="info-card">
+
+                <fa-icon
+                  [icon]="faBuildingColumns"
+                ></fa-icon>
+
+                <div>
+
+              <span>
+                FACULTY
+              </span>
+
+                  <strong>
+                    {{ student.faculty }}
+                  </strong>
+
+                </div>
+
+              </article>
+
+              <article class="info-card">
+
+                <fa-icon
+                  [icon]="faGraduationCap"
+                ></fa-icon>
+
+                <div>
+
+              <span>
+                MAJOR
+              </span>
+
+                  <strong>
+                    {{ student.major }}
+                  </strong>
+
+                </div>
+
+              </article>
+
+            </div>
+
+            <!-- TITLE -->
+            <header class="student-courses__header">
+
+              <h1>
+                Current Curriculum
+              </h1>
+
+            </header>
+
+            <!-- FILTERS -->
+            <div class="student-courses__toolbar">
+
+              <div class="student-courses__filters">
+
+                <button
+                  type="button"
+                  class="filter-button"
+                  [class.filter-button--active]="selectedSemester === 'SEM1'"
+                  (click)="selectSemester('SEM1')"
+                >
+                  Semester 1
+                </button>
+
+                <button
+                  type="button"
+                  class="filter-button"
+                  [class.filter-button--active]="selectedSemester === 'SEM2'"
+                  (click)="selectSemester('SEM2')"
+                >
+                  Semester 2
+                </button>
+
+                <button
+                  type="button"
+                  class="filter-button"
+                  [class.filter-button--active]="selectedSemester === 'all'"
+                  (click)="selectSemester('all')"
+                >
+                  All Semesters
+                </button>
+
+              </div>
+
+              <!-- VIEW BUTTONS -->
+              <div class="student-courses__view-actions">
+
+                <button
+                  type="button"
+                  class="student-courses__view-button"
+                  [class.student-courses__view-button--active]="viewMode === 'grid'"
+                  (click)="setViewMode('grid')"
+                >
+
+                  <fa-icon
+                    [icon]="faGrip"
+                  ></fa-icon>
+
+                </button>
+
+                <button
+                  type="button"
+                  class="student-courses__view-button"
+                  [class.student-courses__view-button--active]="viewMode === 'list'"
+                  (click)="setViewMode('list')"
+                >
+
+                  <fa-icon
+                    [icon]="faList"
+                  ></fa-icon>
+
+                </button>
+
+              </div>
+
+            </div>
+
+            <!-- COURSES -->
+            <ng-container *ngrxLet="coursesSelected$ as coursesState">
+
+              <!-- LOADING -->
+              @if (coursesState?.status === CoursesStatusEnum.loading) {
+                <div class="student-courses__loading">
+
+                  <fa-icon
+                    [icon]="faSpinner"
+                    animation="spin"
+                  ></fa-icon>
+
+                  <span>
+              Loading courses...
+            </span>
+
+                </div>
+              }
+              <!-- GRID -->
+              @if (coursesState?.[COURSES_KEY]?.length) {
+                <div class="courses-grid"
+                     [class.courses-grid--list]="viewMode === 'list'">
+
+                  <ng-container
+                    *ngFor="let course of coursesState[COURSES_KEY]"
+                  >
+
+                    @if (selectedSemester === 'all' ||
+                    course.semester === selectedSemester) {
+                      <article class="course-card">
+                        <!-- TOP -->
+                        <div class="course-card__top">
+
+                  <span class="course-card__code">
+                    {{ course.code }}
+                  </span>
+
+                        </div>
+
+                        <!-- TITLE -->
+                        <h2 class="course-card__title">
+                          {{ course.name }}
+                        </h2>
+
+                        <!-- META -->
+                        <div class="course-card__meta">
+
+                  <span>
+
+                    <fa-icon
+                      [icon]="faStar"
+                    ></fa-icon>
+
+                    {{ course.credits }} Credits
+
+                  </span>
+
+                          <span>
+
+                    <fa-icon
+                      [icon]="faClock"
+                    ></fa-icon>
+
+                            {{ course.semester }}
+
+                  </span>
+
+                        </div>
+
+                        <!-- DESCRIPTION -->
+                        <p class="course-card__description">
+                          {{
+                            course.description ||
+                            'No description available for this course.'
+                          }}
+                        </p>
+
+                        <!-- ACTION -->
+                        <button
+                          type="button"
+                          class="course-card__materials"
+                          (click)="navigateToStudentMaterialsPage(course.id)"
+                        >
+                          Show Materials
+                        </button>
+
+                      </article>
+                    }
+                  </ng-container>
+
+                </div>
+              }
+              <!-- EMPTY -->
+              @if (coursesState?.status !== CoursesStatusEnum.loading &&
+              !coursesState?.[COURSES_KEY]?.length) {
+                <div class="student-courses__empty">
+
+                  <fa-icon
+                    [icon]="faBookOpen"
+                  ></fa-icon>
+
+                  <h3>
+                    No Courses Found
+                  </h3>
+
+                  <p>
+                    Your curriculum will appear here once courses are available.
+                  </p>
+
+                </div>
+              }
+
+            </ng-container>
+
+          </ng-container>
+        }
+      </ng-container>
+    }
+  </ng-container>
+
+</section>

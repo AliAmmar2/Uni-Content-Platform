@@ -1,58 +1,43 @@
 const express = require("express");
 const router = express.Router();
 
-const auth = require("../middleware/student-auth.middleware");
-const { requireRole } = require("../middleware/role.middleware");
+const anyAuth = require("../middleware/any-auth.middleware");
+
+const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middleware-auth");
+
 const controller = require("../controllers/material.controller");
 
-
 router.get(
-  "/pending",
-  auth,
-  requireRole(["MODERATOR"]),
-  controller.getPendingMaterials
-);
-
-router.get(
-  "/upload-signature",
-  auth,
-  requireRole(["STUDENT", "MODERATOR"]),
-  controller.getUploadSignature
+    "/upload-signature",
+    anyAuth,
+    controller.getUploadSignature
 );
 
 router.post(
-  "/",
-  auth,
-  requireRole(["STUDENT", "MODERATOR"]),
-  controller.uploadMaterial
+    "/",
+    anyAuth,
+    controller.uploadMaterial
 );
 
 router.get(
-  "/:id/access",
-  auth,
-  requireRole(["STUDENT", "MODERATOR"]),
-  controller.getMaterialAccessUrl
+    "/:id/access",
+    anyAuth,
+    controller.getMaterialAccessUrl
 );
 
-router.get(
-  "/course/:courseId",
-  auth,
-  requireRole(["STUDENT", "MODERATOR"]),
-  controller.getApprovedMaterialsByCourse
+// View approved materials
+router.get("/course/:courseId", anyAuth, controller.getApprovedMaterialsByCourse
+);
+router.get("/course/:courseId/pending", anyAuth,
+    allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]),
+    controller.getPendingMaterialsByCourseId
 );
 
-router.put(
-  "/:id/review",
-  auth,
-  requireRole(["MODERATOR"]),
-  controller.reviewMaterial
-);
+// Approve / Reject
+router.put("/:id/review", anyAuth, allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]), controller.reviewMaterial);
 
-router.delete(
-  "/:id",
-  auth,
-  requireRole(["MODERATOR"]),
-  controller.deleteMaterial
-);
+// Delete
+router.delete("/:id", anyAuth, allowStudentOrAdminRole(["MODERATOR"], ["admin", "super_admin"]), controller.deleteMaterial);
+
 
 module.exports = router;

@@ -1,0 +1,158 @@
+<section class="pending-materials-page">
+
+  <main class="pending-materials-page__content">
+
+    <div class="pending-materials-page__header">
+
+      <div>
+        <h2>Pending Materials</h2>
+        <p>Review uploaded materials before approval.</p>
+      </div>
+
+      <button
+        type="button"
+        class="pending-materials-page__back-button"
+        (click)="navigateToApprovedMaterials()"
+      >
+        <fa-icon [icon]="['fas', 'arrow-left']"></fa-icon>
+        Back to Approved
+      </button>
+
+    </div>
+
+    <div class="pending-materials-page__actions">
+
+      <div class="pending-materials-page__search">
+        <fa-icon [icon]="['fas', 'search']"></fa-icon>
+
+        <input
+          type="text"
+          placeholder="Search pending materials..."
+          (input)="search$.next($any($event.target).value)"
+        />
+      </div>
+
+    </div>
+
+    <ng-container *ngrxLet="filteredMaterials$ as materials">
+
+      @if (!materials?.length) {
+
+        <div class="pending-materials-page__empty">
+
+          <fa-icon [icon]="['fas', 'folder-open']"></fa-icon>
+
+          <h3>No pending materials</h3>
+
+          <p>Pending uploads will appear here once submitted.</p>
+
+        </div>
+
+      } @else {
+
+        <div class="pending-materials">
+
+          @for (material of materials; track material.id) {
+
+            <article class="pending-card">
+
+              <div class="pending-card__main">
+
+                <div class="pending-card__icon">
+                  <fa-icon [icon]="['far', 'file-lines']"></fa-icon>
+                </div>
+
+                <div class="pending-card__info">
+
+                  <div class="pending-card__title-row">
+                    <h3>{{ material.title }}</h3>
+
+                    <span>{{ getFileType(material) }}</span>
+                  </div>
+
+                  <p>
+                    {{ material.description || 'No description available.' }}
+                  </p>
+
+                  <small>
+                    Course:
+                    {{ material?.courseName }}
+                  </small>
+
+                </div>
+
+              </div>
+
+              <div class="pending-card__footer">
+
+                <div class="pending-card__uploader">
+
+                  <div class="pending-card__avatar">
+                    {{ getUploaderInitials(material.uploadedByName) }}
+                  </div>
+
+                  <div>
+                    <strong>{{ material.uploadedByName }}</strong>
+
+                    <span>
+                      ID: #{{ material.id.slice(-8) }}
+                    </span>
+                  </div>
+
+                </div>
+
+                <div class="pending-card__actions">
+
+                  <button
+                    type="button"
+                    class="pending-card__view"
+                    (click)="openMaterial(material)"
+                  >
+                    <fa-icon [icon]="['far', 'eye']"></fa-icon>
+                    View
+                  </button>
+
+                  <button
+                    type="button"
+                    class="pending-card__download"
+                    (click)="downloadMaterial(material)"
+                  >
+                    <fa-icon [icon]="['fas', 'download']"></fa-icon>
+                    Download
+                  </button>
+
+                  <button
+                    type="button"
+                    class="pending-card__reject"
+                    (click)="rejectMaterial(material)"
+                  >
+                    <fa-icon [icon]="['far', 'circle-xmark']"></fa-icon>
+                    Reject
+                  </button>
+
+                  <button
+                    type="button"
+                    class="pending-card__approve"
+                    (click)="approveMaterial(material)"
+                  >
+                    <fa-icon [icon]="['fas', 'circle-check']"></fa-icon>
+                    Approve
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      }
+
+    </ng-container>
+
+  </main>
+
+</section>

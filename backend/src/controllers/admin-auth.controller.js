@@ -40,7 +40,7 @@ exports.loginAdmin = async (req, res) => {
                 role: admin.role,
                 userType: "ADMIN"
             },
-            process.env.JWT_SECRET,
+            process.env.JWT_ACCESS_SECRET,
             {expiresIn: "7d"}
         );
 

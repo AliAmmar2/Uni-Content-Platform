@@ -11,11 +11,23 @@ const materialSchema = new mongoose.Schema(
     originalFilename: String,
     mimeType: String,
 
-    uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Student",
-      required: true
-    },
+      uploadedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          refPath: "uploadedByModel"
+      },
+
+      uploadedByModel: {
+          type: String,
+          required: true,
+          enum: ["Student", "Admin"]
+      },
+
+      uploadedByName: {
+          type: String,
+          required: true,
+          trim: true
+      },
 
     course: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,0 +1,225 @@
+.account-settings {
+  padding: 32px;
+  background: #f8fafc;
+  min-height: 100vh;
+
+  &__header {
+    margin-bottom: 32px;
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    p {
+      margin: 6px 0 0;
+      color: #5f2d2d;
+      font-size: 15px;
+    }
+  }
+
+  &__card {
+    margin-bottom: 28px;
+    padding: 28px;
+    background: #fff;
+    border: 1px solid #efb8b8;
+    border-radius: 8px;
+  }
+
+  &__card-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 26px;
+
+    fa-icon {
+      color: #c40012;
+      font-size: 18px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 800;
+      color: #222;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+
+  &__field {
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #4a2020;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    div {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      background: #eef3f9;
+      border: 1px solid #dfe6ef;
+      border-radius: 4px;
+      color: #334761;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    &--full {
+      grid-column: 1 / -1;
+    }
+  }
+
+  &__status {
+    gap: 8px;
+    font-weight: 700 !important;
+
+    span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    &--active {
+      background: #ecfdf3 !important;
+      border-color: #a7f3c3 !important;
+      color: #15803d !important;
+    }
+
+    &--suspended {
+      background: #fef2f2 !important;
+      border-color: #fecaca !important;
+      color: #b91c1c !important;
+    }
+
+    &--graduated {
+      background: #eff6ff !important;
+      border-color: #bfdbfe !important;
+      color: #1d4ed8 !important;
+    }
+  }
+
+  &__note {
+    margin-top: 34px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px dashed #efb8b8;
+    color: #5f2d2d;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  &__security {
+    p {
+      margin: 0 0 22px;
+      color: #5f2d2d;
+      font-size: 15px;
+    }
+  }
+
+  &__primary-button,
+  &__outline-button {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  &__primary-button {
+    border: none;
+    background: #c40012;
+    color: #fff;
+  }
+
+  &__outline-button {
+    margin-top: 14px;
+    border: 1px solid #efb8b8;
+    background: #fff;
+    color: #c40012;
+  }
+}
+
+@media (max-width: 768px) {
+  .account-settings {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    padding: 18px 14px 40px;
+
+    &__header {
+      margin-bottom: 22px;
+
+      h1 {
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 13px;
+      }
+    }
+
+    &__card {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      padding: 18px 14px;
+      overflow: hidden;
+    }
+
+    &__card-title {
+      align-items: flex-start;
+      gap: 10px;
+
+      h2 {
+        font-size: 22px;
+        line-height: 1.15;
+        word-break: normal;
+      }
+    }
+
+    &__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    &__field {
+      min-width: 0;
+
+      &--full {
+        grid-column: auto;
+      }
+
+      div {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+    }
+
+    &__primary-button,
+    &__outline-button {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}

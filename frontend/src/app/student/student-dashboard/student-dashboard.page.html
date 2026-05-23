@@ -1,0 +1,73 @@
+<ng-container *ngrxLet="studentDetailsSelected$ as studentState">
+
+  @if (studentState?.[LOGGED_IN_STUDENT_KEY]; as student) {
+
+    <section class="student-dashboard">
+
+      <div class="student-dashboard__hero">
+        <div>
+          <h1>Welcome back, {{ student.name }}</h1>
+
+          <p>
+            You are registered as a {{ student.role | lowercase }} in
+            {{ student?.major }}.
+          </p>
+        </div>
+
+        <div class="student-dashboard__hero-mark">
+          ✦
+        </div>
+      </div>
+
+      <div class="student-dashboard__profile-card">
+
+        <div class="student-dashboard__card-header">
+          <h2>Academic Profile</h2>
+        </div>
+
+        <div class="student-dashboard__role-box">
+          <span>Role</span>
+          <strong>{{ student.role }}</strong>
+        </div>
+
+        <div class="student-dashboard__profile-grid">
+
+          <div class="student-dashboard__info-item">
+            <span>Student ID</span>
+            <strong>{{ student.universityId }}</strong>
+          </div>
+
+          <div class="student-dashboard__info-item">
+            <span>Current Year</span>
+            <strong>Year {{ student.academicYear }}</strong>
+          </div>
+
+          <div class="student-dashboard__info-item">
+            <span>Faculty</span>
+            <strong>{{ student?.faculty }}</strong>
+          </div>
+
+          <div class="student-dashboard__info-item">
+            <span>Major</span>
+            <strong>{{ student?.major }}</strong>
+          </div>
+
+          <div class="student-dashboard__info-item">
+            <span>Academic Year</span>
+            <strong>{{ student.calendarYear }}</strong>
+          </div>
+
+          <div class="student-dashboard__info-item">
+            <span>Status</span>
+            <strong>{{ student.status }}</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+</ng-container>

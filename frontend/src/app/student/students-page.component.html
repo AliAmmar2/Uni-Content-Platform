@@ -1,0 +1,90 @@
+<div class="dashboard-container">
+  <ng-container *ngrxLet="studentDetailsSelected$ as admin">
+    <div class="mobile-header">
+      <div class="mobile-logo">
+        Lebanese University
+      </div>
+
+      <div class="hamburger-menu" (click)="toggleSidebar()">
+        <fa-icon [icon]="['fas','bars']"></fa-icon>
+      </div>
+
+    </div>
+
+    <div
+      class="dashboard-container-left-menu left-menu"
+      [ngClass]="{ 'mobile-open': isSidebarOpen }"
+    >
+
+      <div class="mobile-close" (click)="toggleSidebar()">
+        <fa-icon [icon]="['fas','times']"></fa-icon>
+      </div>
+
+      <div class="left-menu-title">
+        <h1>Lebanese University</h1>
+      </div>
+
+      <div class="items">
+
+        <div class="item"
+             [routerLink]="['/students', studentId, 'dashboard']"
+             (click)="setActiveMenu('dashboard'); toggleSidebar()"
+             [ngClass]="{ 'active': (activeMenu$ | async) === 'dashboard' }">
+
+          <fa-icon [icon]="['fas','chart-line']"></fa-icon>
+          <span>Dashboard</span>
+
+        </div>
+
+        <div class="item"
+             [routerLink]="['/students', studentId, 'courses']"
+             (click)="setActiveMenu('courses'); toggleSidebar()"
+             [ngClass]="{ 'active': (activeMenu$ | async) === 'courses' }">
+
+          <fa-icon [icon]="['fas','book']"></fa-icon>
+          <span>Courses</span>
+
+        </div>
+
+        <div class="item"
+             [routerLink]="['/students', studentId, 'announcements']"
+             (click)="setActiveMenu('announcements'); toggleSidebar()"
+             [ngClass]="{ 'active': (activeMenu$ | async) === 'announcements' }">
+
+          <fa-icon [icon]="['fas','bell']"></fa-icon>
+          <span>Announcements</span>
+
+        </div>
+
+        <div class="item"
+             [routerLink]="['/students', studentId, 'account-settings']"
+             (click)="setActiveMenu('account-settings'); toggleSidebar()"
+             [ngClass]="{ 'active': (activeMenu$ | async) === 'account-settings' }">
+
+          <fa-icon [icon]="['fas','user-cog']"></fa-icon>
+          <span>Account Settings</span>
+
+        </div>
+
+      </div>
+
+      <div class="logout-button" (click)="logout()">
+        <fa-icon [icon]="['fas','sign-out-alt']"></fa-icon>
+        <span>Logout</span>
+      </div>
+
+    </div>
+
+    @if (isSidebarOpen) {
+      <div class="mobile-backdrop" (click)="toggleSidebar()"></div>
+    }
+
+    <div class="dashboard-container-right">
+      <router-outlet></router-outlet>
+    </div>
+  </ng-container>
+</div>
+
+<footer class="footer">
+  © 2026 Lebanese University - Students Portal
+</footer>

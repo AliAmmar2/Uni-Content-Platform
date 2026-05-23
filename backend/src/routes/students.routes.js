@@ -4,7 +4,16 @@ const router = express.Router();
 const adminAuthMiddleware = require("../middleware/admin-auth.middleware");
 const studentController = require("../controllers/students.controller");
 const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middleware-auth");
+const adminController = require("../controllers/admin.controller");
+const studentAuth = require("../middleware/student-auth.middleware");
 
+
+// router.put(
+//     "/me/password",
+//     studentAuth,
+//     studentController.updateOwnPassword
+// );
+router.get("/me", studentAuth, studentController.getMe);
 
 router.use(adminAuthMiddleware);
 

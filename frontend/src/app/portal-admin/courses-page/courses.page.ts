@@ -109,6 +109,7 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
 
     this.store.dispatch(MajorActions.loadMajors());
   }
+
   public courseDetailsSubscription(): void {
     this.subscription$.add(
       this.courseDetailsSelected$.subscribe((courseDetailsState) => {
@@ -189,25 +190,30 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private filterCourses(
-    courses: any[],
+    courses: CourseItemBo[],
     search: string,
-    major: string,
+    majorId: string,
     year: string,
     semester: string
-  ): any[] {
+  ): CourseItemBo[] {
 
     const term = search.toLowerCase().trim();
 
-    return courses.filter(course => {
+    return courses.filter((course) => {
+
+      const courseMajorId =
+        course.major?.id ??
+        (course.major as any)?._id ??
+        '';
 
       const matchesSearch =
         !term ||
-        course.name?.toLowerCase()?.includes(term) ||
-        course.code?.toLowerCase()?.includes(term);
+        course.name?.toLowerCase().includes(term) ||
+        course.code?.toLowerCase().includes(term);
 
       const matchesMajor =
-        !major ||
-        course.majorName === major;
+        !majorId ||
+        courseMajorId === majorId;
 
       const matchesYear =
         !year ||
@@ -244,7 +250,25 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
           this.presentDeleteAlert(course)
 
         }
+      },
+      {
+        faIcon: ['fas', 'book'],
+        visible: true,
+        label: 'View Materials',
+        handler: () => {
+          this.navigateToCourseMaterials(course.id)
+
+        }
       }
+    ]);
+  }
+
+  public navigateToCourseMaterials(courseId: string): void {
+    void this.router.navigate([
+      '/admin',
+      this.adminId,
+      courseId,
+      'materials'
     ]);
   }
 

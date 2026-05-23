@@ -43,6 +43,9 @@ import { ADMIN_DETAILS_KEY, adminDetailsReducers } from './portal-admin/+state/a
 
 import { AdminEffects } from './portal-admin/+state/admin.effect';
 import { provideToastr } from 'ngx-toastr';
+import { MaterialEffect } from './material/+state/material.effect';
+import { MATERIAL_KEY, materialReducers } from './material/+state/material.reducer';
+import { MATERIAL_DETAILS_KEY, materialDetailsReducers } from './material/+state/material-details.reducer';
 
 export function initializeFaIconLibrary(
   library: FaIconLibrary
@@ -57,7 +60,8 @@ export const bootstrapEffectList = [
   CourseEffects,
   FacultyEffect,
   MajorEffects,
-  AdminEffects
+  AdminEffects,
+  MaterialEffect
 ];
 
 export const reducers = {
@@ -80,7 +84,11 @@ export const reducers = {
 
   [ADMIN_KEY]: adminReducer,
 
-  [ADMIN_DETAILS_KEY]: adminDetailsReducers
+  [ADMIN_DETAILS_KEY]: adminDetailsReducers,
+
+  [MATERIAL_KEY]: materialReducers,
+
+  [MATERIAL_DETAILS_KEY]: materialDetailsReducers,
 
 };
 
