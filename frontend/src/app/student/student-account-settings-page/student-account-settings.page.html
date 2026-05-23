@@ -1,0 +1,107 @@
+<section class="account-settings">
+  <header class="account-settings__header">
+    <h1>Account Settings</h1>
+    <p>Manage your institutional identity and security preferences.</p>
+  </header>
+
+  <ng-container *ngrxLet="studentDetailsSelected$ as studentState">
+    @if (studentState?.[LOGGED_IN_STUDENT_KEY]; as student) {
+
+      <section class="account-settings__card">
+        <div class="account-settings__card-title">
+          <fa-icon [icon]="['fas', 'id-card']"></fa-icon>
+          <h2>Profile Information</h2>
+        </div>
+
+        <div class="account-settings__grid">
+          <div class="account-settings__field">
+            <label>Full Name</label>
+            <div>{{ student.name }}</div>
+          </div>
+
+          <div class="account-settings__field">
+            <label>University ID</label>
+            <div>{{ student.universityId }}</div>
+          </div>
+
+          <div class="account-settings__field account-settings__field--full">
+            <label>University Email</label>
+            <div>{{ student.universityEmail }}</div>
+          </div>
+
+          <div class="account-settings__field">
+            <label>Faculty</label>
+            <div>{{ student.faculty }}</div>
+          </div>
+
+          <div class="account-settings__field">
+            <label>Major</label>
+            <div>{{ student.major }} ({{ student.majorCode }})</div>
+          </div>
+
+          <div class="account-settings__field">
+            <label>Academic Year</label>
+            <div>Year {{ student.academicYear }}</div>
+          </div>
+
+          <div class="account-settings__field">
+            <label>Status</label>
+            <div
+              class="account-settings__status"
+              [ngClass]="{
+    'account-settings__status--active': student.status === 'ACTIVE',
+    'account-settings__status--suspended': student.status === 'SUSPENDED',
+    'account-settings__status--graduated': student.status === 'GRADUATED'
+  }"
+            >
+              <span></span>
+              {{ student.status }}
+            </div>
+          </div>
+
+          <div class="account-settings__field">
+            <label>Role</label>
+            <div>{{ student.role }}</div>
+          </div>
+        </div>
+
+        <div class="account-settings__note">
+          <em>
+            Note: Personal and academic information is managed by the Registrar’s Office.
+            If you notice any discrepancies, please contact your faculty administration.
+          </em>
+        </div>
+      </section>
+
+      <section class="account-settings__card account-settings__security">
+        <div class="account-settings__card-title">
+          <fa-icon [icon]="['fas', 'shield-halved']"></fa-icon>
+          <h2>Security</h2>
+        </div>
+
+        <p>
+          Ensure your account remains secure by updating your password regularly.
+        </p>
+
+        <button
+          type="button"
+          class="account-settings__primary-button"
+          (click)="navigateToChangePassword()"
+        >
+          <fa-icon [icon]="['fas', 'clock-rotate-left']"></fa-icon>
+          Change Password
+        </button>
+
+        <button
+          type="button"
+          class="account-settings__outline-button"
+          (click)="navigateToForgotPassword()"
+        >
+          <fa-icon [icon]="['fas', 'circle-question']"></fa-icon>
+          Forgot Password?
+        </button>
+      </section>
+
+    }
+  </ng-container>
+</section>

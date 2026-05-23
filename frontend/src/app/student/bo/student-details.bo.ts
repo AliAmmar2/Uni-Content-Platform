@@ -8,6 +8,7 @@ export class StudentDetailsBo {
   facultyId: string;
 	major: string;
   majorId: string;
+  majorCode: string;
 	calendarYear: number;
 	academicYear: number;
 	role: string;
@@ -20,6 +21,7 @@ export class StudentDetailsBo {
     this.facultyId=studentModel.faculty._id;
 		this.major = studentModel.major.name;
     this.majorId=studentModel.major._id;
+    this.majorCode=studentModel.major.code;
 		this.name = studentModel.name;
 		this.calendarYear = studentModel.calendarYear ?? 2025;
 		this.academicYear = studentModel.academicYear;

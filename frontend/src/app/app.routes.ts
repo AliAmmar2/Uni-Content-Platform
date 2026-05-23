@@ -27,6 +27,7 @@ import { StudentsApprovedMaterialsPage } from './student/student-approved-materi
 import { UploadMaterialByStudentPage } from './student/upload-material-by-student/upload-material-by-student.page';
 import { StudentPendingMaterialsPage } from './student/student-pending-materials/student-pending-materials.page';
 import { StudentDashboardPage } from './student/student-dashboard/student-dashboard.page';
+import { StudentAccountSettingsPage } from './student/student-account-settings-page/student-account-settings.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -62,6 +63,10 @@ export const routes: Routes = [
       {
         path: 'courses',
         component: StudentCoursesPage
+      },
+      {
+        path: 'account-settings',
+        component: StudentAccountSettingsPage
       },
       {
         path: 'courses/:courseId/materials',
