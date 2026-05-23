@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { RegisterPage } from './reigister-page/register.page';
-import { StudentDashboardPage } from './student/dashboard/student-dashboard.page';
 import { PortalAdminPage } from './portal-admin/portal-admin-page.component';
 import { FacultyPage } from './portal-admin/faculty-page/faculty.page';
 import { EditFacultyPage } from './portal-admin/edit-faculty-page/edit-faculty.page';
@@ -27,6 +26,7 @@ import { PendingMaterialsPage } from './portal-admin/pending-materials/pending-m
 import { StudentsApprovedMaterialsPage } from './student/student-approved-materials/students-approved-materials.page';
 import { UploadMaterialByStudentPage } from './student/upload-material-by-student/upload-material-by-student.page';
 import { StudentPendingMaterialsPage } from './student/student-pending-materials/student-pending-materials.page';
+import { StudentDashboardPage } from './student/student-dashboard/student-dashboard.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -55,6 +55,10 @@ export const routes: Routes = [
     component: StudentsPageComponent,
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        component: StudentDashboardPage
+      },
       {
         path: 'courses',
         component: StudentCoursesPage
