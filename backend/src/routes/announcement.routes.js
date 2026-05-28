@@ -1,13 +1,24 @@
 const express = require("express");
+
 const router = express.Router();
 
-const auth = require("../middleware/auth.middleware");
-const { requireRole } = require("../middleware/role.middleware");
+const auth =
+  require("../middleware/auth.middleware");
 
-const controller = require("../controllers/announcement.controller");
+const {
+  requireRole
+} = require("../middleware/role.middleware");
 
+const controller =
+  require("../controllers/announcement.controller");
 
-// Create announcement
+router.get(
+  "/image-upload-signature",
+  auth,
+  requireRole(["MODERATOR"]),
+  controller.getImageUploadSignature
+);
+
 router.post(
   "/",
   auth,
@@ -15,17 +26,16 @@ router.post(
   controller.createAnnouncement
 );
 
-
-// Get announcements for a course
 router.get(
   "/course/:courseId",
   auth,
-  requireRole(["STUDENT", "MODERATOR"]),
+  requireRole([
+    "STUDENT",
+    "MODERATOR"
+  ]),
   controller.getCourseAnnouncements
 );
 
-
-// Update announcement (moderator only)
 router.put(
   "/:id",
   auth,
@@ -33,8 +43,6 @@ router.put(
   controller.updateAnnouncement
 );
 
-
-// Delete announcement (moderator only)
 router.delete(
   "/:id",
   auth,

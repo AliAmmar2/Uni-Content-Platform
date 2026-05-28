@@ -27,7 +27,11 @@ const AnnouncementSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Student",
       required: true
-    }
+    },
+
+    imagePath: String,
+    imageMimeType: String,
+    imageOriginalFilename: String
   },
   { timestamps: true }
 );
