@@ -7,12 +7,12 @@ const {allowStudentOrAdminRole} = require("../middleware/allow-by-role-middlewar
 const adminController = require("../controllers/admin.controller");
 const studentAuth = require("../middleware/student-auth.middleware");
 
+router.put(
+    "/me/password",
+    studentAuth,
+    studentController.changeOwnPassword
+);
 
-// router.put(
-//     "/me/password",
-//     studentAuth,
-//     studentController.updateOwnPassword
-// );
 router.get("/me", studentAuth, studentController.getMe);
 
 router.use(adminAuthMiddleware);

@@ -259,6 +259,14 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
           this.navigateToCourseMaterials(course.id)
 
         }
+      }, {
+        faIcon: ['fas', 'bell'],
+        visible: true,
+        label: 'View Announcements',
+        handler: () => {
+          this.navigateToCourseAnnouncements(course.id)
+
+        }
       }
     ]);
   }
@@ -269,6 +277,16 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
       this.adminId,
       courseId,
       'materials'
+    ]);
+  }
+
+  public navigateToCourseAnnouncements(courseId: string): void {
+    void this.router.navigate([
+      '/admin',
+      this.adminId,
+      'courses',
+      courseId,
+      'announcements'
     ]);
   }
 

@@ -17,8 +17,6 @@ const {
   validateUniversityId
 } = require("../utils/validation");
 
-
-// REGISTER
 exports.register = async (req, res) => {
   try {
     const {
@@ -29,31 +27,42 @@ exports.register = async (req, res) => {
     } = req.body;
 
     if (!universityEmail || !universityId || !password || !confirmPassword) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({
+        message: "Missing required fields"
+      });
     }
 
     const email = universityEmail.toLowerCase().trim();
+    const id = universityId.trim();
 
     if (!validateUniversityEmail(email)) {
-      return res.status(400).json({ message: "Invalid university email" });
+      return res.status(400).json({
+        message: "Invalid university email"
+      });
     }
 
-    if (!validateUniversityId(universityId)) {
-      return res.status(400).json({ message: "Invalid university ID" });
+    if (!validateUniversityId(id)) {
+      return res.status(400).json({
+        message: "Invalid university ID"
+      });
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match" });
+      return res.status(400).json({
+        message: "Passwords do not match"
+      });
     }
 
     if (password.length < 8) {
-      return res.status(400).json({ message: "Password must be at least 8 characters" });
+      return res.status(400).json({
+        message: "Password must be at least 8 characters"
+      });
     }
 
     const existingUser = await Student.findOne({
       $or: [
         { universityEmail: email },
-        { universityId }
+        { universityId: id }
       ]
     });
 
@@ -71,7 +80,7 @@ exports.register = async (req, res) => {
 
     const officialStudent = await OfficialStudent.findOne({
       universityEmail: email,
-      universityId
+      universityId: id
     });
 
     if (!officialStudent) {
@@ -93,6 +102,7 @@ exports.register = async (req, res) => {
         major: officialStudent.major,
         academicYear: officialStudent.academicYear,
         calendarYear: officialStudent.calendarYear,
+        role: "STUDENT",
         passwordHash
       });
     } catch (err) {
@@ -101,14 +111,17 @@ exports.register = async (req, res) => {
           message: "Account already exists"
         });
       }
+
       throw err;
     }
 
     const verificationToken = generateEmailVerificationToken(user);
 
     const verificationLink =
-      `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
-      console.log("VERIFY LINK:", verificationLink);
+        `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+    console.log("VERIFY LINK:", verificationLink);
+
     await sendVerificationEmail(user.universityEmail, verificationLink);
 
     return res.status(201).json({
@@ -118,49 +131,74 @@ exports.register = async (req, res) => {
   } catch (error) {
     console.error("REGISTER ERROR:", error);
 
-  return res.status(500).json({
-    message: "Internal server error",
-    error: error.message
-  });
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message
+    });
   }
 };
 
-
-// VERIFY EMAIL
 exports.verifyEmail = async (req, res) => {
   try {
     const { token } = req.body;
 
     if (!token) {
-      return res.status(400).json({ message: "Token is required" });
+      return res.status(400).json({
+        message: "Token is required"
+      });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_EMAIL_SECRET);
 
     if (decoded.type !== "email-verification") {
-      return res.status(403).json({ message: "Invalid token type" });
+      return res.status(403).json({
+        message: "Invalid token type"
+      });
     }
 
     const user = await Student.findById(decoded.id);
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({
+        message: "User not found"
+      });
     }
 
     user.emailVerified = true;
     user.status = "ACTIVE";
+
     await user.save();
 
-    return res.json({ message: "Email verified successfully" });
+    return res.json({
+      message: "Email verified successfully"
+    });
 
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({
+        message: "Verification link expired"
+      });
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(400).json({
+        message: "Invalid verification token"
+      });
+    }
+
+    return res.status(500).json({
+      message: "Internal server error"
+    });
   }
 };
 
 exports.login = async (req, res) => {
   try {
-    const { universityEmail, universityId, password } = req.body;
+    const {
+      universityEmail,
+      universityId,
+      password
+    } = req.body;
 
     if (!universityEmail || !universityId || !password) {
       return res.status(400).json({
@@ -171,7 +209,9 @@ exports.login = async (req, res) => {
     const email = universityEmail.toLowerCase().trim();
     const id = universityId.trim();
 
-    const user = await Student.findOne({ universityEmail: email })
+    const user = await Student.findOne({
+      universityEmail: email
+    })
         .populate("faculty", "name")
         .populate("major", "name");
 
@@ -187,10 +227,19 @@ exports.login = async (req, res) => {
       });
     }
 
-    const validPassword = await bcrypt.compare(password, user.passwordHash);
+    if (user.isLocked) {
+      return res.status(423).json({
+        message: "Account locked. Please try again later."
+      });
+    }
+
+    const validPassword = await bcrypt.compare(
+        password,
+        user.passwordHash
+    );
 
     if (!validPassword) {
-      user.loginAttempts += 1;
+      user.loginAttempts = (user.loginAttempts || 0) + 1;
 
       if (user.loginAttempts >= 5) {
         user.lockUntil = Date.now() + 15 * 60 * 1000;
@@ -200,12 +249,6 @@ exports.login = async (req, res) => {
 
       return res.status(401).json({
         message: "Password is wrong"
-      });
-    }
-
-    if (user.isLocked) {
-      return res.status(423).json({
-        message: "Account locked. Please try again later."
       });
     }
 
@@ -223,6 +266,7 @@ exports.login = async (req, res) => {
 
     user.loginAttempts = 0;
     user.lockUntil = undefined;
+
     await user.save();
 
     const accessToken = generateAccessToken(user);

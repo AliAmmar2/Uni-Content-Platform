@@ -7,6 +7,12 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import { selectStudentDetails } from '../+state/student.selector';
 import { LOGGED_IN_STUDENT_KEY } from '../+state/student-details.reducer';
+import { passwordsMatchValidator } from '../../validators/passwordMatchValidator';
+import { Validators } from '@angular/forms';
+import { AdminActions } from '../../portal-admin/+state/admin.action';
+import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
+import { ToastrService } from 'ngx-toastr';
+import { StudentService } from '../service/student.service';
 
 @Component({
   selector: 'app-student-account-settings',
@@ -22,16 +28,14 @@ import { LOGGED_IN_STUDENT_KEY } from '../+state/student-details.reducer';
 export class StudentAccountSettingsPage {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
-
+  private toastr = inject(ToastrService);
+  private ngxMdDialogService = inject(NgxMdDialogService);
+  private studentService = inject(StudentService);
   protected readonly LOGGED_IN_STUDENT_KEY = LOGGED_IN_STUDENT_KEY;
 
   public studentDetailsSelected$ = this.store.pipe(
     select(selectStudentDetails)
   );
-
-  public navigateToChangePassword(): void {
-    void this.router.navigate(['change-password']);
-  }
 
   public navigateToForgotPassword(): void {
     void this.router.navigate(['/forgot-password']);
@@ -43,5 +47,114 @@ export class StudentAccountSettingsPage {
 
   public getRoleLabel(role: string): string {
     return role === 'MODERATOR' ? 'Moderator' : 'Student';
+  }
+
+  public async presentUpdatePasswordModal() {
+    const dialogRef = this.ngxMdDialogService.openFormActionsDialog(
+      {
+        title: 'Update Password',
+        faIcon: ['fas', 'lock'],
+        message: 'Enter your old password and choose a new password.',
+
+        formValidators: [
+          passwordsMatchValidator('newPassword', 'confirmPassword')
+        ],
+
+        formErrorMessages: {
+          passwordsMismatch: 'Passwords do not match'
+        },
+
+        inputs: [
+          {
+            controlName: 'oldPassword',
+            label: 'Old Password',
+            placeholder: 'Enter old password',
+            type: 'password',
+            validators: [Validators.required],
+            errorMessages: {
+              required: 'Old password is required'
+            }
+          },
+          {
+            controlName: 'newPassword',
+            label: 'New Password',
+            placeholder: 'Enter new password',
+            type: 'password',
+            validators: [Validators.required, Validators.minLength(8)],
+            errorMessages: {
+              required: 'New password is required',
+              minlength: 'New password must be at least 8 characters'
+            }
+          },
+          {
+            controlName: 'confirmPassword',
+            label: 'Confirm Password',
+            placeholder: 'Confirm new password',
+            type: 'password',
+            validators: [Validators.required],
+            errorMessages: {
+              required: 'Confirm password is required'
+            }
+          }
+        ],
+
+        actions: [
+          {
+            label: 'Cancel',
+            color: '#64748b',
+            handler: () => {
+              dialogRef.close();
+            }
+          },
+          {
+            label: 'Update',
+            color: '#c4001a',
+            closeOnClick: false,
+            disabledWhenInvalid: true,
+            handler: (formValue) => {
+              this.studentService.updatePassword({
+                oldPassword: formValue.oldPassword,
+                newPassword: formValue.newPassword
+              }).subscribe({
+                next: (response) => {
+                  this.toastr.clear();
+
+                  this.toastr.success(
+                    response?.message || 'Password updated successfully',
+                    'Success',
+                    {
+                      positionClass: 'toast-top-right',
+                      progressBar: true,
+                      closeButton: true,
+                      timeOut: 3000
+                    }
+                  );
+
+                  dialogRef.close();
+
+                  this.store.dispatch(AdminActions.loadMe());
+                },
+
+                error: (error) => {
+                  this.toastr.clear();
+
+                  this.toastr.error(
+                    error?.error?.message || 'Something went wrong',
+                    'Cannot update password',
+                    {
+                      positionClass: 'toast-top-right',
+                      progressBar: true,
+                      closeButton: true,
+                      timeOut: 4000
+                    }
+                  );
+                }
+              });
+            }
+          }
+        ]
+      },
+      { width: '430px' }
+    );
   }
 }

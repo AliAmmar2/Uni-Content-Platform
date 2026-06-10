@@ -28,6 +28,16 @@ import { UploadMaterialByStudentPage } from './student/upload-material-by-studen
 import { StudentPendingMaterialsPage } from './student/student-pending-materials/student-pending-materials.page';
 import { StudentDashboardPage } from './student/student-dashboard/student-dashboard.page';
 import { StudentAccountSettingsPage } from './student/student-account-settings-page/student-account-settings.page';
+import { CourseAnnouncementsPage } from './portal-admin/course-announcements/course-announcements.page';
+import { EditCourseAnnouncementsPage } from './portal-admin/edit-course-announcements/edit-course-announcements.page';
+import {
+  CourseAnnouncementDetailsPage
+} from './portal-admin/course-announcement-details/course-announcement-details.page';
+import { StudentCourseAnnouncementsPage } from './student/course-announcements/student-course-announcements.page';
+import {
+  StudentsCourseAnnouncementDetailsPage
+} from './student/course-announcement-details/students-course-announcement-details.page';
+import { StudentEditCourseAnnouncementsPage } from './student/edit-course-announcements/student-edit-course-announcements.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -71,6 +81,22 @@ export const routes: Routes = [
       {
         path: 'courses/:courseId/materials',
         component: StudentsApprovedMaterialsPage
+      },
+      {
+        path: 'courses/:courseId/announcements',
+        component: StudentCourseAnnouncementsPage
+      },
+      {
+        path: 'courses/:courseId/announcements/create',
+        component: StudentEditCourseAnnouncementsPage
+      },
+      {
+        path: 'courses/:courseId/announcements/edit/:announcementId',
+        component: StudentEditCourseAnnouncementsPage
+      },
+      {
+        path: 'courses/:courseId/announcements/:announcementId',
+        component: StudentsCourseAnnouncementDetailsPage
       },
       {
         path: 'courses/:courseId/upload-material',
@@ -148,6 +174,7 @@ export const routes: Routes = [
         path: ':adminId/edit-admin',
         component: EditAdminPage
       },
+
       {
         path: ':courseId/edit-course',
         component: EditCoursePage
@@ -159,6 +186,22 @@ export const routes: Routes = [
       {
         path: 'courses/:courseId/upload-material',
         component: UploadMaterialPage
+      },
+      {
+        path: 'courses/:courseId/announcements',
+        component: CourseAnnouncementsPage
+      },
+      {
+        path: 'courses/:courseId/announcement-details/:announcementId',
+        component: CourseAnnouncementDetailsPage
+      },
+      {
+        path: 'courses/:courseId/announcements/create',
+        component: EditCourseAnnouncementsPage
+      },
+      {
+        path: 'courses/:courseId/announcements/edit/:announcementId',
+        component: EditCourseAnnouncementsPage
       },
       {
         path: 'courses/:courseId/pending-materials',

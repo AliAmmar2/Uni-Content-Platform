@@ -46,6 +46,15 @@ import { provideToastr } from 'ngx-toastr';
 import { MaterialEffect } from './material/+state/material.effect';
 import { MATERIAL_KEY, materialReducers } from './material/+state/material.reducer';
 import { MATERIAL_DETAILS_KEY, materialDetailsReducers } from './material/+state/material-details.reducer';
+import { CourseAnnouncementEffects } from './courses-announcements/+state/courses-announcement.effect';
+import {
+  COURSE_ANNOUNCEMENT_KEY,
+  courseAnnouncementsReducer
+} from './courses-announcements/+state/course-announcement.reducer';
+import {
+  COURSE_ANNOUNCEMENT_DETAILS_KEY,
+  courseAnnouncementDetailsReducers
+} from './courses-announcements/+state/course-announcement-details.reducer';
 
 export function initializeFaIconLibrary(
   library: FaIconLibrary
@@ -61,7 +70,8 @@ export const bootstrapEffectList = [
   FacultyEffect,
   MajorEffects,
   AdminEffects,
-  MaterialEffect
+  MaterialEffect,
+  CourseAnnouncementEffects
 ];
 
 export const reducers = {
@@ -89,6 +99,8 @@ export const reducers = {
   [MATERIAL_KEY]: materialReducers,
 
   [MATERIAL_DETAILS_KEY]: materialDetailsReducers,
+  [COURSE_ANNOUNCEMENT_KEY]: courseAnnouncementsReducer,
+  [COURSE_ANNOUNCEMENT_DETAILS_KEY]: courseAnnouncementDetailsReducers
 
 };
 

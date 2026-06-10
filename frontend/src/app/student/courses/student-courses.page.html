@@ -217,6 +217,16 @@
                           Show Materials
                         </button>
 
+                        <div class="course-card__actions-divider"></div>
+
+                        <button
+                          type="button"
+                          class="course-card__announcements"
+                          (click)="navigateToStudentAnnouncementsPage(course.id)"
+                        >
+                          Show Announcements
+                        </button>
+
                       </article>
                     }
                   </ng-container>

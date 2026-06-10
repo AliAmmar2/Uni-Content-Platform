@@ -1,0 +1,138 @@
+<section class="create-announcement-page">
+
+  <div class="create-announcement-page__breadcrumb">
+    <button type="button" (click)="goToCoursesPage()">
+      Courses
+    </button>
+
+    <span>›</span>
+
+    <button type="button" (click)="goToAnnouncementsPage()">
+      Announcements
+    </button>
+
+    <span>›</span>
+
+    <strong>
+      {{ isEditMode ? 'Edit Announcement' : 'Create New Announcement' }}
+    </strong>
+  </div>
+
+  <div class="create-announcement-page__header">
+    <h1>
+      {{ isEditMode ? 'Edit Course Announcement' : 'New Course Announcement' }}
+    </h1>
+
+    <p>
+      {{ isEditMode
+      ? 'Update the announcement details. You can also replace the existing image.'
+      : 'Broadcast important updates to students and faculty members within this course.'
+      }}
+    </p>
+  </div>
+
+  <form
+    class="announcement-form"
+    [formGroup]="announcementForm"
+    (ngSubmit)="onSubmit()"
+  >
+
+    <div class="announcement-form__field">
+      <label>Title</label>
+
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="e.g., Midterm Exam Schedule"
+      />
+    </div>
+
+    <div class="announcement-form__field">
+      <label>Announcement Content</label>
+
+      <textarea
+        formControlName="content"
+        placeholder="Provide detailed information about the announcement..."
+      ></textarea>
+    </div>
+
+    <div class="announcement-form__field">
+      <label>
+        {{ isEditMode ? 'Replace Image (Optional)' : 'Upload Image (Optional)' }}
+      </label>
+
+      @if (isEditMode && currentImageUrl && !selectedImageName) {
+        <div class="announcement-form__current-image">
+          <img
+            [src]="currentImageUrl"
+            alt="Current announcement image"
+          />
+
+          <span>
+            Current image: {{ currentImageName || 'Announcement image' }}
+          </span>
+        </div>
+      }
+
+      <label class="upload-box">
+        <input
+          type="file"
+          accept="image/*"
+          hidden
+          (change)="onImageSelected($event)"
+        />
+
+        <div class="upload-box__icon">
+          <fa-icon [icon]="['fas', 'cloud-arrow-up']"></fa-icon>
+        </div>
+
+        <strong>
+          Drop image here or click to upload
+        </strong>
+
+        <span>
+          PNG, JPG, JPEG
+        </span>
+
+        @if (selectedImageName) {
+          <p>
+            Selected: {{ selectedImageName }}
+          </p>
+        }
+      </label>
+    </div>
+
+    <div class="announcement-form__footer">
+
+      <div class="announcement-form__note">
+        <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+
+        <p>
+          This announcement will be visible to all students registered in
+          the selected course.
+        </p>
+      </div>
+
+      <div class="announcement-form__actions">
+        <button
+          type="button"
+          class="announcement-form__cancel"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="announcement-form__submit"
+          [disabled]="isSubmitting"
+        >
+          {{ isEditMode ? 'Update Announcement' : 'Create Announcement' }}
+        </button>
+      </div>
+
+    </div>
+
+  </form>
+
+</section>

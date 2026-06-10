@@ -14,15 +14,16 @@ module.exports = (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
-    if (!decoded.id || !decoded.role) {
+    if (decoded.userType !== "STUDENT") {
       return res.status(403).json({
-        message: "Invalid token payload"
+        message: "Student access only"
       });
     }
 
     req.user = {
       id: decoded.id,
-      role: decoded.role
+      role: decoded.role,
+      userType: "STUDENT"
     };
 
     next();

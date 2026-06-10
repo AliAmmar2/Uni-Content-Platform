@@ -46,15 +46,15 @@
 
         </div>
 
-        <div class="item"
-             [routerLink]="['/students', studentId, 'announcements']"
-             (click)="setActiveMenu('announcements'); toggleSidebar()"
-             [ngClass]="{ 'active': (activeMenu$ | async) === 'announcements' }">
+<!--        <div class="item"-->
+<!--             [routerLink]="['/students', studentId, 'announcements']"-->
+<!--             (click)="setActiveMenu('announcements'); toggleSidebar()"-->
+<!--             [ngClass]="{ 'active': (activeMenu$ | async) === 'announcements' }">-->
 
-          <fa-icon [icon]="['fas','bell']"></fa-icon>
-          <span>Announcements</span>
+<!--          <fa-icon [icon]="['fas','bell']"></fa-icon>-->
+<!--          <span>Announcements</span>-->
 
-        </div>
+<!--        </div>-->
 
         <div class="item"
              [routerLink]="['/students', studentId, 'account-settings']"
