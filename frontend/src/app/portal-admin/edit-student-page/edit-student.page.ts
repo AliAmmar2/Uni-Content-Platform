@@ -89,7 +89,7 @@ export class EditStudentPage implements OnInit, OnDestroy {
       academicYear: new FormControl('', Validators.required),
       calendarYear: new FormControl(new Date().getFullYear(), [Validators.required, Validators.pattern(/^\d{4}$/)]),
       role: new FormControl<'STUDENT' | 'MODERATOR'>('STUDENT', Validators.required),
-      status: new FormControl<'ACTIVE' | 'SUSPENDED' | 'GRADUATED'>('ACTIVE', Validators.required),
+      status: new FormControl<'ACTIVE' | 'SUSPENDED' | 'PENDING_VERIFICATION'>('PENDING_VERIFICATION', Validators.required),
     });
   }
 
@@ -168,7 +168,7 @@ export class EditStudentPage implements OnInit, OnDestroy {
           studentDetails.status === StudentDetailsStatusEnum.createSuccess
         ) {
           this.toastr.success(
-            'Student created successfully',
+            'Student created successfully, student should verify email',
             'Success',
             {
               positionClass: 'toast-top-right',

@@ -1,0 +1,155 @@
+<section class="announcements-page">
+
+  <div class="announcements-page__breadcrumb">
+    <button type="button" (click)="goToCoursesPage()">
+      Courses
+    </button>
+    <span>›</span>
+    <strong>Announcements</strong>
+  </div>
+
+  <div class="announcements-page__header">
+    <div>
+      <h1>Course Announcements</h1>
+
+      <p>
+        Stay updated with the latest news, deadlines, and
+        administrative updates for this course.
+      </p>
+    </div>
+
+    @if (isModerator) {
+      <button
+        class="announcements-page__create-button"
+        type="button"
+        (click)="createAnnouncement()"
+      >
+        <span>＋</span>
+        Create Announcement
+      </button>
+    }
+  </div>
+
+  <ng-container *ngrxLet="courseAnnouncementState$ as state">
+
+    @if (!state[COURSE_ANNOUNCEMENT_KEY]?.length) {
+
+      <div class="announcements-page__empty-state">
+
+        <div class="announcements-page__empty-icon">
+          📢
+        </div>
+
+        <h2 class="announcements-page__empty-title">
+          No Announcements Yet
+        </h2>
+
+        <p class="announcements-page__empty-description">
+          There are currently no announcements for this course.
+        </p>
+
+        @if (isModerator) {
+          <button
+            type="button"
+            class="announcements-page__empty-button"
+            (click)="createAnnouncement()"
+          >
+            Create First Announcement
+          </button>
+        }
+
+      </div>
+
+    } @else {
+
+      <div class="announcements-page__grid">
+
+        @for (announcement of state[COURSE_ANNOUNCEMENT_KEY]; track announcement.id) {
+
+          <article class="announcement-card">
+
+            <div class="announcement-card__top">
+
+              <span class="announcement-card__date">
+                {{ announcement.createdAt | date:'MMM d, y' }}
+              </span>
+
+              @if (isModerator) {
+                <button
+                  class="ellipsis-button"
+                  type="button"
+                  (click)="presentPopoverActions($event, announcement)"
+                >
+                  <fa-icon [icon]="['fas','ellipsis-vertical']"></fa-icon>
+                </button>
+              }
+
+            </div>
+
+            <h2>
+              {{ announcement.title }}
+            </h2>
+
+            <p class="announcement-card__content">
+              {{ announcement.content }}
+            </p>
+
+            @if (announcement.imageUrl) {
+              <img
+                class="announcement-card__image"
+                [src]="announcement.imageUrl"
+                alt="Announcement Image"
+              />
+            }
+
+            <div class="announcement-card__footer">
+
+              <div class="announcement-card__author">
+
+                <div class="announcement-card__avatar">
+                  {{ getInitials(announcement.postedByName) }}
+                </div>
+
+                <strong>
+                  {{ announcement.postedByName }}
+                </strong>
+
+              </div>
+
+              <button
+                type="button"
+                class="announcement-card__details"
+                (click)="viewDetails(announcement.id)"
+              >
+                View Details →
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+        @if (isModerator) {
+          <button
+            type="button"
+            class="announcement-create-card"
+            (click)="createAnnouncement()"
+          >
+            <div>+</div>
+
+            <h3>New Announcement</h3>
+
+            <p>
+              Post a message to your course
+            </p>
+          </button>
+        }
+
+      </div>
+
+    }
+
+  </ng-container>
+
+</section>

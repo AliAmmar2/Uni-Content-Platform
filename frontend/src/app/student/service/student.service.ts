@@ -19,6 +19,8 @@ import { UpdatePasswordBySuperadminDto } from '../dtos/update-password-by-supera
 import {
   UpdatePasswordBySuperadminFormGroupInterface
 } from '../interfaces/update-password-by-superadmin-form-group.interface';
+import { UpdatePasswordDto } from '../../login-page/dto/update-password.dto';
+import { UpdatePasswordFormInterface } from '../interfaces/update-password-form.interface';
 
 @Injectable({ providedIn: 'root' })
 export class StudentService {
@@ -98,6 +100,16 @@ export class StudentService {
     return this.studentClient.updatePasswordBySuperAdmin(
       studentId,
       updatePasswordDto
+    );
+  }
+
+  public updatePassword(updatePasswordFormValue: UpdatePasswordFormInterface) {
+    const updatePasswordDto = new UpdatePasswordDto(
+      updatePasswordFormValue
+    );
+
+    return this.studentClient.updatePassword(
+      updatePasswordDto.toJSON()
     );
   }
 }

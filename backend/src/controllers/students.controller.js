@@ -1,6 +1,13 @@
 const Student = require("../models/Student");
 const Admin = require("../models/Admin");
 const bcrypt = require("bcrypt");
+
+const {
+    generateEmailVerificationToken
+} = require("../utils/jwt");
+
+const { sendVerificationEmail } = require("../utils/email");
+
 // GET ALL
 exports.getStudents = async (req, res) => {
     try {
@@ -57,7 +64,6 @@ exports.getMe = async (req, res) => {
     }
 };
 // CREATE
-
 exports.createStudent = async (req, res) => {
     try {
         const {
@@ -69,11 +75,9 @@ exports.createStudent = async (req, res) => {
             academicYear,
             calendarYear,
             role,
-            status,
             password
         } = req.body;
 
-        // required validation
         if (
             !universityId ||
             !universityEmail ||
@@ -89,60 +93,73 @@ exports.createStudent = async (req, res) => {
             });
         }
 
-        // unique university ID
-        const existingStudentByUniversityId = await Student.findOne({
-            universityId
+        const email = universityEmail.toLowerCase().trim();
+        const id = universityId.trim();
+
+        const existingStudent = await Student.findOne({
+            $or: [
+                { universityId: id },
+                { universityEmail: email }
+            ]
         });
 
-        if (existingStudentByUniversityId) {
+        if (existingStudent) {
             return res.status(409).json({
-                message: "University ID already exists"
+                message: "Student already exists"
             });
         }
 
-        // unique university email
-        const existingStudentByEmail = await Student.findOne({
-            universityEmail: universityEmail.toLowerCase()
-        });
+        const passwordHash = await bcrypt.hash(password, 12);
 
-        if (existingStudentByEmail) {
-            return res.status(409).json({
-                message: "University email already exists"
-            });
-        }
-
-        const passwordHash = await bcrypt.hash(password, 10);
-
-        const newStudent = new Student({
-            universityId,
-            universityEmail: universityEmail.toLowerCase(),
+        const newStudent = await Student.create({
+            universityId: id,
+            universityEmail: email,
             name,
             faculty,
             major,
             academicYear,
             calendarYear,
-            role,
-            status,
+
+            role: role || "STUDENT",
+            userType: "STUDENT",
+
+            // important: not active until email verification
+            status: "PENDING_VERIFICATION",
+            emailVerified: false,
+
             passwordHash
         });
 
-        const saved = await newStudent.save();
+        const verificationToken = generateEmailVerificationToken(newStudent);
 
-        const populatedStudent = await Student.findById(saved._id)
+        const verificationLink =
+            `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
+
+        console.log("VERIFY LINK:", verificationLink);
+
+        await sendVerificationEmail(
+            newStudent.universityEmail,
+            verificationLink
+        );
+
+        const populatedStudent = await Student.findById(newStudent._id)
             .populate("faculty")
             .populate("major");
 
         const studentResponse = populatedStudent.toObject();
-
         delete studentResponse.passwordHash;
 
-        return res.status(201).json(studentResponse);
+        return res.status(201).json({
+            message: "Student created successfully. Verification email sent.",
+            student: studentResponse
+        });
 
     } catch (err) {
         console.error("CREATE STUDENT ERROR:", err);
 
         return res.status(500).json({
-            message: "Internal server error"
+            message: "Internal server error",
+            error: err.message
         });
     }
 };
@@ -349,72 +366,71 @@ exports.updatePasswordBySuperAdmin = async (req, res) => {
         });
     }
 };
-//
-// exports.updateOwnPassword = async (req, res) => {
-//     try {
-//         const {
-//             oldPassword,
-//             newPassword
-//         } = req.body;
-//
-//         if (!oldPassword || !newPassword) {
-//             return res.status(400).json({
-//                 message: "Old password and new password are required"
-//             });
-//         }
-//
-//         if (newPassword.length < 8) {
-//             return res.status(400).json({
-//                 message: "New password must be at least 8 characters"
-//             });
-//         }
-//
-//         const student = await Student.findById(req.user.id);
-//
-//         if (!student) {
-//             return res.status(404).json({
-//                 message: "Student not found"
-//             });
-//         }
-//
-//         const isOldPasswordValid = await bcrypt.compare(
-//             oldPassword,
-//             student.passwordHash
-//         );
-//
-//         if (!isOldPasswordValid) {
-//             return res.status(400).json({
-//                 message: "Old password is incorrect"
-//             });
-//         }
-//
-//         const isSamePassword = await bcrypt.compare(
-//             newPassword,
-//             student.passwordHash
-//         );
-//
-//         if (isSamePassword) {
-//             return res.status(400).json({
-//                 message: "New password must be different from old password"
-//             });
-//         }
-//
-//         student.passwordHash = await bcrypt.hash(newPassword, 10);
-//
-//         student.loginAttempts = 0;
-//         student.lockUntil = undefined;
-//
-//         await student.save();
-//
-//         return res.status(200).json({
-//             message: "Password updated successfully"
-//         });
-//
-//     } catch (error) {
-//         console.error("UPDATE OWN STUDENT PASSWORD ERROR:", error);
-//
-//         return res.status(500).json({
-//             message: "Internal server error"
-//         });
-//     }
-// };
+exports.changeOwnPassword = async (req, res) => {
+    try {
+        const {
+            oldPassword,
+            newPassword
+        } = req.body;
+
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({
+                message: "Old password and new password are required"
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                message: "New password must be at least 8 characters"
+            });
+        }
+
+        const student = await Student.findById(req.user.id);
+
+        if (!student) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
+
+        const isOldPasswordValid = await bcrypt.compare(
+            oldPassword,
+            student.passwordHash
+        );
+
+        if (!isOldPasswordValid) {
+            return res.status(400).json({
+                message: "Old password is incorrect"
+            });
+        }
+
+        const isSamePassword = await bcrypt.compare(
+            newPassword,
+            student.passwordHash
+        );
+
+        if (isSamePassword) {
+            return res.status(400).json({
+                message: "New password must be different from old password"
+            });
+        }
+
+        student.passwordHash = await bcrypt.hash(newPassword, 12);
+
+        student.loginAttempts = 0;
+        student.lockUntil = undefined;
+
+        await student.save();
+
+        return res.status(200).json({
+            message: "Password changed successfully"
+        });
+
+    } catch (error) {
+        console.error("CHANGE OWN PASSWORD ERROR:", error);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};

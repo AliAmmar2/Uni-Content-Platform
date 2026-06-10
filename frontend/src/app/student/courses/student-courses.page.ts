@@ -150,4 +150,17 @@ export class StudentCoursesPage implements OnInit, OnDestroy {
     ]);
   }
 
+  public navigateToStudentAnnouncementsPage(courseId: string): void {
+    if (!this.studentId) {
+      return;
+    }
+
+    void this.router.navigate([
+      '/students',
+      this.studentId,
+      'courses',
+      courseId,
+      'announcements'
+    ]);
+  }
 }

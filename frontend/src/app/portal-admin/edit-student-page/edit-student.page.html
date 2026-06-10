@@ -330,38 +330,38 @@
           }
 
         </div>
+        @if (isEditMode) {
+          <div class="form-group">
 
-        <div class="form-group">
+            <label>
+              Status
+            </label>
 
-          <label>
-            Status
-          </label>
+            <select formControlName="status">
 
-          <select formControlName="status">
+              <option value="ACTIVE">
+                ACTIVE
+              </option>
 
-            <option value="ACTIVE">
-              ACTIVE
-            </option>
+              <option value="SUSPENDED">
+                SUSPENDED
+              </option>
 
-            <option value="SUSPENDED">
-              SUSPENDED
-            </option>
+<!--              <option value="PENDING_VERIFICATION">-->
+              <!--                PENDING_VERIFICATION-->
+              <!--              </option>-->
 
-            <option value="GRADUATED">
-              GRADUATED
-            </option>
+            </select>
 
-          </select>
-
-          @if (studentForm.controls['status'].hasError('required') &&
-          studentForm.controls['status'].touched) {
-            <span class="error-message">
+            @if (studentForm.controls['status'].hasError('required') &&
+            studentForm.controls['status'].touched) {
+              <span class="error-message">
               Status is required
             </span>
-          }
+            }
 
-        </div>
-
+          </div>
+        }
       </div>
 
       <div class="student-form__divider"></div>

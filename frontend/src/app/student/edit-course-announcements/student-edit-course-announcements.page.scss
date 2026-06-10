@@ -1,0 +1,277 @@
+.create-announcement-page {
+  min-height: 100vh;
+  padding: 32px 40px;
+  background: #f6f7fb;
+  color: #111827;
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+    color: #475569;
+    font-size: 14px;
+
+    button {
+      border: none;
+      background: transparent;
+      padding: 0;
+      color: #475569;
+      cursor: pointer;
+      font-size: 14px;
+
+      &:hover {
+        color: #b00020;
+      }
+    }
+
+    strong {
+      color: #b00020;
+    }
+  }
+
+  &__header {
+    margin-bottom: 48px;
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    p {
+      margin: 0;
+      color: #475569;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+  }
+}
+
+.announcement-form {
+  max-width: 1100px;
+  padding: 48px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+
+
+  &__field {
+    margin-bottom: 30px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #efb8b8;
+      border-radius: 5px;
+      padding: 14px 18px;
+      color: #111827;
+      background: #ffffff;
+      font-size: 16px;
+      outline: none;
+      transition: 0.2s ease;
+
+      &:focus {
+        border-color: #b00020;
+        box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.08);
+      }
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    small {
+      display: block;
+      margin-top: 6px;
+      color: #64748b;
+      font-size: 13px;
+    }
+  }
+
+  &__footer {
+    margin-top: 42px;
+    padding-top: 26px;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+  }
+
+  &__note {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 480px;
+    color: #475569;
+
+    fa-icon {
+      color: #b00020;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  &__cancel,
+  &__submit {
+    min-width: 170px;
+    border-radius: 5px;
+    padding: 14px 24px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  &__cancel {
+    border: 1px solid #efb8b8;
+    background: #ffffff;
+    color: #475569;
+  }
+
+  &__submit {
+    border: none;
+    background: #b00020;
+    color: #ffffff;
+    box-shadow: 0 8px 16px rgba(176, 0, 32, 0.18);
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.upload-box {
+  min-height: 230px;
+  border: 2px dashed #efb8b8;
+  border-radius: 8px;
+  background: #f8fafc;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+
+  &__icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 12px;
+    background: #dbe7ff;
+    color: #b00020;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  strong {
+    color: #111827;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  span {
+    margin-top: 6px;
+    color: #64748b;
+    font-size: 13px;
+  }
+
+  p {
+    margin: 12px 0 0;
+    color: #b00020;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 900px) {
+  .create-announcement-page {
+    padding: 24px 18px;
+
+    &__header {
+      margin-bottom: 28px;
+
+      h1 {
+        font-size: 28px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+    }
+  }
+
+  .announcement-form {
+    padding: 28px;
+
+    &__footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__actions {
+      flex-direction: column;
+    }
+
+    &__cancel,
+    &__submit {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .create-announcement-page {
+    padding: 20px 14px;
+
+    &__header {
+      h1 {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .announcement-form {
+    padding: 20px;
+
+    &__field {
+      input,
+      select,
+      textarea {
+        font-size: 14px;
+        padding: 12px 14px;
+      }
+    }
+  }
+
+  .upload-box {
+    min-height: 190px;
+  }
+}

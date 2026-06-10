@@ -39,6 +39,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { StudentModel } from './models/student.model';
+import { UpdatePasswordFormInterface } from '../../login-page/interface/update-password-form.interface';
 
 @Injectable({ providedIn: 'root' })
 export class StudentClient {
@@ -116,5 +117,11 @@ export class StudentClient {
       payload,
       this.getAuthOptions()
     );
+  }
+
+  public updatePassword(updateFormValue: UpdatePasswordFormInterface): Observable<any> {
+    return this.http.put(`${this.API_URL}/me/password`,
+      updateFormValue,
+      this.getAuthOptions());
   }
 }

@@ -1,0 +1,127 @@
+<section
+  class="announcement-details-page"
+  *ngrxLet="announcementDetailsSelected$ as state"
+>
+
+  @if (state[COURSE_ANNOUNCEMENT_DETAILS_KEY]) {
+
+    @let announcement =
+      state[COURSE_ANNOUNCEMENT_DETAILS_KEY];
+
+    <div class="announcement-details-page__breadcrumb">
+
+      <button
+        type="button"
+        (click)="goToCoursesPage()"
+      >
+        Courses
+      </button>
+
+      <span>›</span>
+
+      <button
+        type="button"
+        (click)="goToAnnouncementsPage()"
+      >
+        Announcements
+      </button>
+
+      <span>›</span>
+
+      <strong>
+        {{ announcement.title }}
+      </strong>
+
+    </div>
+
+    <article class="announcement-details-card">
+
+      <div class="announcement-details-card__meta">
+
+        <span class="announcement-details-card__badge">
+          Official Notice
+        </span>
+
+        <span class="announcement-details-card__date">
+          {{ announcement.createdAt | date:'MMM d, y' }}
+        </span>
+
+      </div>
+
+      <h1>
+        {{ announcement.title }}
+      </h1>
+
+      <div class="announcement-details-card__info">
+
+        <div class="announcement-details-card__info-item">
+
+          <div class="announcement-details-card__icon">
+            <fa-icon [icon]="['fas', 'user']"></fa-icon>
+          </div>
+
+          <div>
+            <span>Posted by</span>
+            <strong>
+              {{ announcement.postedByName }}
+            </strong>
+          </div>
+
+        </div>
+
+        <div class="announcement-details-card__info-item">
+
+          <div class="announcement-details-card__icon">
+            <fa-icon [icon]="['fas', 'graduation-cap']"></fa-icon>
+          </div>
+
+          <div>
+            <span>Associated Course</span>
+            <strong>
+              {{ announcement.courseName }}
+            </strong>
+          </div>
+
+        </div>
+
+      </div>
+
+      @if (announcement.imageUrl) {
+
+        <div
+          class="announcement-details-card__image-wrapper"
+        >
+
+          <img
+            [src]="announcement.imageUrl"
+            alt="Announcement image"
+          />
+
+          <button
+            type="button"
+            class="announcement-details-card__download"
+            (click)="downloadImage(
+              announcement.imageUrl,
+              announcement.imageOriginalFilename
+            )"
+          >
+            <fa-icon [icon]="['fas', 'download']"></fa-icon>
+
+            Download Image
+          </button>
+
+        </div>
+
+      }
+
+      <div
+        class="announcement-details-card__content"
+      >
+        {{ announcement.content }}
+      </div>
+
+    </article>
+
+  }
+
+</section>

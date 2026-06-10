@@ -12,6 +12,7 @@ const majorRoutes = require("./routes/major.routes");
 const courseRoutes = require("./routes/course.routes");
 const materialRoutes = require("./routes/material.routes");
 const studentRoutes = require("./routes/students.routes");
+const courseAnnouncementRoutes = require("./routes/course-announcement.routes");
 
 const authMiddleware = require("./middleware/student-auth.middleware");
 
@@ -51,6 +52,7 @@ app.use("/dashboard", dashboardRoutes);
 app.use("/faculties", facultyRoutes);
 app.use("/majors", majorRoutes);
 app.use("/courses", courseRoutes);
+app.use("/announcementCourses", courseAnnouncementRoutes);
 app.use("/materials", materialRoutes);
 
 // =========================
