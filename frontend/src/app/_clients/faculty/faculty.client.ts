@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 import { FacultyModel } from './models/faculty.model';
 import { CreateFacultyFormGroupInterface } from '../../faculty/interfaces/create-faculty-form-group.interface';
 import { FacultyDetailsModel } from './models/faculty-details.model';
@@ -9,7 +9,7 @@ import { FacultyDetailsModel } from './models/faculty-details.model';
 @Injectable({ providedIn: 'root' })
 export class FacultyClient {
 
-  private readonly API_URL = 'http://localhost:5000/faculties';
+  private readonly API_URL = `${environment.apiUrl}/faculties`;
 
   constructor(private http: HttpClient) {}
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-
+import { environment } from '../../../environments/environment'
 import { SaveAnnouncementPayload } from './models/save-announcement-payload.model';
 import { AnnouncementUploadSignatureResponseModel } from './models/announcement-upload-signature-response.model';
 import { CoursesAnnouncementModel } from './models/courses-announcement.model';
@@ -17,7 +17,7 @@ export interface AnnouncementResponseModel {
 })
 export class CourseAnnouncementClient {
 
-  private readonly API_URL = 'http://localhost:5000/announcementCourses';
+  private readonly API_URL = `${environment.apiUrl}/announcementCourses`;
 
   constructor(private http: HttpClient) {
   }

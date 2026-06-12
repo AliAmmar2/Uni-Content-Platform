@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 import { AdminModel } from './models/admin.model';
 import { AdminDetailsModel } from './models/admin-details.model';
@@ -10,7 +11,7 @@ import { UpdateAdminFormGroupInterface } from '../../portal-admin/interfaces/upd
 @Injectable({ providedIn: 'root' })
 export class AdminClient {
 
-  private readonly API_URL = 'http://localhost:5000/admins';
+  private readonly API_URL = `${environment.apiUrl}/admins`;
 
   constructor(private http: HttpClient) {}
 

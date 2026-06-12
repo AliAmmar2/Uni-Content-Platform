@@ -3,11 +3,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoginAdminFormInterface } from '../../login-page/interface/login-admin-form.interface';
 import { UpdatePasswordFormInterface } from '../../login-page/interface/update-password-form.interface';
-
+import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 
 export class LoginAdminClient {
-  private readonly API_URL = 'http://localhost:5000/admin';
+  private readonly API_URL = `${environment.apiUrl}/admin`;
 
   private getAuthOptions() {
     const token = localStorage.getItem('accessToken');

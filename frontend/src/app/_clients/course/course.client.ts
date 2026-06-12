@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 import { CourseModel } from './models/course.model';
 import { CourseDetailsModel } from './models/course-details.model';
 import { CourseForUpdateDto } from '../../courses/dtos/course-for-update.dto';
@@ -10,7 +10,7 @@ import { CourseForCreationDto } from '../../courses/dtos/course-for-creation.dto
 @Injectable({ providedIn: 'root' })
 export class CourseClient {
 
-  private readonly API_URL = 'http://localhost:5000/courses';
+  private readonly API_URL = `${environment.apiUrl}/courses`;
 
   constructor(private http: HttpClient) {
   }

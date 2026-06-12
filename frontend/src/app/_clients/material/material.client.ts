@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 import { MaterialModel } from './models/material.model';
 import { ReviewMaterialModel } from './models/review-material.model';
 import { SaveMaterialPayload } from './models/save-material-payload.model';
@@ -18,7 +18,7 @@ export interface MaterialResponseModel {
 })
 export class MaterialClient {
 
-  private readonly API_URL = 'http://localhost:5000/materials';
+  private readonly API_URL = `${environment.apiUrl}/materials`;
 
   constructor(private http: HttpClient) {
   }

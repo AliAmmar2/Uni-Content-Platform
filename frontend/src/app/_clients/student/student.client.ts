@@ -37,14 +37,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { environment } from '../../../environments/environment';
 import { StudentModel } from './models/student.model';
 import { UpdatePasswordFormInterface } from '../../login-page/interface/update-password-form.interface';
 
 @Injectable({ providedIn: 'root' })
 export class StudentClient {
 
-  private readonly API_URL = 'http://localhost:5000/students';
+  private readonly API_URL = `${environment.apiUrl}/students`;
 
   constructor(private http: HttpClient) {
   }

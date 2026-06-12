@@ -3,11 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { MajorModel } from './models/major-item.model';
 import { MajorDetailsModel } from './models/major-details.model';
-
+import { environment } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class MajorClient {
 
-  private readonly API_URL = 'http://localhost:5000/majors';
+  private readonly API_URL = `${environment.apiUrl}/majors`;
 
   constructor(private http: HttpClient) {
   }
