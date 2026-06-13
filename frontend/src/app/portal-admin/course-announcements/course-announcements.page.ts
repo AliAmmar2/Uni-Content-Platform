@@ -117,7 +117,7 @@ export class CourseAnnouncementsPage implements OnInit {
       message: announcement.title + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: ' #d40000',
           handler: () => {
             this.deleteAnnouncement(announcement.id);

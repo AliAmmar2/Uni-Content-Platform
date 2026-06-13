@@ -204,7 +204,7 @@ export class AdminsPage implements OnInit, AfterViewInit, OnDestroy {
       message: admin.fullName + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: '#d40000',
           handler: () => {
             this.deleteAdmin(admin.id);

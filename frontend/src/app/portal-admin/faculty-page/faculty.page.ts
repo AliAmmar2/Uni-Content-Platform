@@ -161,7 +161,7 @@ export class FacultyPage implements OnInit, OnDestroy {
       message: faculty.name + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: ' #d40000',
           handler: () => {
             this.deleteFaculty(faculty.id);

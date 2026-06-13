@@ -305,7 +305,7 @@ export class CoursesPage implements OnInit, AfterViewInit, OnDestroy {
       message: course.name + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: ' #d40000',
           handler: () => {
             this.deleteCourse(course.id);

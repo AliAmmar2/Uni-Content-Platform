@@ -357,7 +357,7 @@ export class StudentsApprovedMaterialsPage implements OnInit, OnDestroy {
       message: material.title + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: '#d40000',
           handler: () => {
             this.deleteMaterial(material.id);

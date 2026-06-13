@@ -152,7 +152,7 @@ export class MajorPage implements OnInit, OnDestroy {
       message: major.name + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: ' #d40000',
           handler: () => {
             this.deleteMajor(major.id);

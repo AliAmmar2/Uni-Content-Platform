@@ -334,7 +334,7 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
       message: student.name + ' will be permanently deleted!',
       action: [
         {
-          label: 'yes delete',
+          label: 'Yes',
           color: ' #d40000',
           handler: () => {
             this.deleteStudent(student.id);
