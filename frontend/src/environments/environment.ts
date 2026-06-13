@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://uni-content-platform.onrender.com'
+  production: false,
+  apiUrl: 'http://localhost:5000'
 };
