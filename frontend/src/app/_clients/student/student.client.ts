@@ -127,7 +127,7 @@ export class StudentClient {
 
  public forgotPassword(universityEmail: string): Observable<any> {
   return this.http.post(
-    `${environment.apiUrl}/forgot-password`,
+    `${environment.apiUrl}/auth/forgot-password`,
     {
       universityEmail
     }
@@ -136,7 +136,7 @@ export class StudentClient {
 
 public resetPassword(payload: { token: string; newPassword: string }) {
   return this.http.post(
-    `${environment.apiUrl}/reset-password`,
+    `${environment.apiUrl}/auth/reset-password`,
     payload
   );
 }
