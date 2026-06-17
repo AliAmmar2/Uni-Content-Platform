@@ -11,7 +11,10 @@ const {
   generatePasswordResetToken
 } = require("../utils/jwt");
 
-const { sendVerificationEmail } = require("../utils/email");
+const {
+  sendVerificationEmail,
+  sendPasswordResetEmail
+} = require("../utils/email");
 
 const {
   validateUniversityEmail,
@@ -355,9 +358,9 @@ exports.resetPassword = async (req, res) => {
     }
 
     const decoded = jwt.verify(
-      token,
-      process.env.JWT_EMAIL_SECRET
-    );
+  token,
+  process.env.JWT_RESET_SECRET
+);
 
     if (decoded.type !== "password-reset") {
       return res.status(400).json({
