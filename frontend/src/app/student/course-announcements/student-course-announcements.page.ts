@@ -217,7 +217,7 @@ export class StudentCourseAnnouncementsPage implements OnInit, OnDestroy {
           }
         },
         {
-          label: 'cancel',
+          label: 'Cancel',
           color: '#88a5db',
           handler: () => {
           }

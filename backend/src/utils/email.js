@@ -8,7 +8,10 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-exports.sendVerificationEmail = async (email, link) => {
+exports.sendVerificationEmail = async (
+  email,
+  link
+) => {
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
@@ -16,7 +19,44 @@ exports.sendVerificationEmail = async (email, link) => {
     html: `
       <h2>Email Verification</h2>
       <p>Click below to verify your account:</p>
-      <a href="${link}">${link}</a>
+      <a href="${link}">
+        Verify Email
+      </a>
+    `
+  });
+};
+
+exports.sendPasswordResetEmail = async (
+  email,
+  link
+) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: "Reset your password",
+    html: `
+      <h2>Password Reset</h2>
+
+      <p>
+        A request was made to reset your password.
+      </p>
+
+      <p>
+        Click the link below to choose a new password:
+      </p>
+
+      <a href="${link}">
+        Reset Password
+      </a>
+
+      <p>
+        This link expires in 30 minutes.
+      </p>
+
+      <p>
+        If you did not request this reset,
+        you can safely ignore this email.
+      </p>
     `
   });
 };

@@ -124,7 +124,7 @@ export class CourseAnnouncementsPage implements OnInit {
           }
         },
         {
-          label: 'cancel',
+          label: 'Cancel',
           color: '#88a5db',
           handler: () => {
           }

@@ -112,4 +112,12 @@ export class StudentService {
       updatePasswordDto.toJSON()
     );
   }
+
+public forgotPassword(
+  universityEmail: string
+): Observable<any> {
+  return this.studentClient.forgotPassword(
+    universityEmail
+  );
+}
 }

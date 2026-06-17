@@ -124,4 +124,13 @@ export class StudentClient {
       updateFormValue,
       this.getAuthOptions());
   }
+
+ public forgotPassword(universityEmail: string): Observable<any> {
+  return this.http.post(
+    `${environment.apiUrl}/auth/forgot-password`,
+    {
+      universityEmail
+    }
+  );
+}
 }

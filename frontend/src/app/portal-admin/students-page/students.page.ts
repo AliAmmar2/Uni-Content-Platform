@@ -341,7 +341,7 @@ export class StudentsPage implements OnInit, AfterViewInit, OnDestroy {
           }
         },
         {
-          label: 'cancel',
+          label: 'Cancel',
           color: '#88a5db',
           handler: () => {
           }

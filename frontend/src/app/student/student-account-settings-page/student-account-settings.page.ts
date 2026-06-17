@@ -37,9 +37,94 @@ export class StudentAccountSettingsPage {
     select(selectStudentDetails)
   );
 
-  public navigateToForgotPassword(): void {
-    void this.router.navigate(['/forgot-password']);
-  }
+public navigateToForgotPassword(): void {
+
+  const dialogRef =
+    this.ngxMdDialogService.openFormActionsDialog(
+      {
+        title: 'Forgot Password',
+        faIcon: ['fas', 'circle-question'],
+        message:
+          'Enter your university email and we will send a password reset link.',
+
+        inputs: [
+          {
+            controlName: 'universityEmail',
+            label: 'University Email',
+            placeholder: 'Enter your university email',
+            type: 'email',
+            validators: [Validators.required],
+            errorMessages: {
+              required: 'University email is required'
+            }
+          }
+        ],
+
+        actions: [
+          {
+            label: 'Cancel',
+            color: '#64748b',
+            handler: () => {
+              dialogRef.close();
+            }
+          },
+          {
+            label: 'Send Email',
+            color: '#c4001a',
+            closeOnClick: false,
+            disabledWhenInvalid: true,
+            handler: (formValue) => {
+
+              this.studentService
+                .forgotPassword(
+                  formValue.universityEmail
+                )
+                .subscribe({
+                  next: (response) => {
+
+                    this.toastr.clear();
+
+                    this.toastr.success(
+                      response?.message ||
+                      'Password reset email sent',
+                      'Success',
+                      {
+                        positionClass:
+                          'toast-top-right',
+                        progressBar: true,
+                        closeButton: true,
+                        timeOut: 3000
+                      }
+                    );
+
+                    dialogRef.close();
+                  },
+
+                  error: (error) => {
+
+                    this.toastr.clear();
+
+                    this.toastr.error(
+                      error?.error?.message ||
+                      'Something went wrong',
+                      'Error',
+                      {
+                        positionClass:
+                          'toast-top-right',
+                        progressBar: true,
+                        closeButton: true,
+                        timeOut: 4000
+                      }
+                    );
+                  }
+                });
+            }
+          }
+        ]
+      },
+      { width: '430px' }
+    );
+}
 
   public getStatusClass(status: string): string {
     return `account-settings__status--${status?.toLowerCase()}`;

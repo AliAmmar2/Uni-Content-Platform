@@ -7,7 +7,8 @@ const OfficialStudent = require("../models/OfficialStudent");
 const {
   generateAccessToken,
   generateRefreshToken,
-  generateEmailVerificationToken
+  generateEmailVerificationToken,
+  generatePasswordResetToken
 } = require("../utils/jwt");
 
 const { sendVerificationEmail } = require("../utils/email");
@@ -284,6 +285,127 @@ exports.login = async (req, res) => {
     return res.status(500).json({
       message: "Internal server error",
       error: error.message
+    });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { universityEmail } = req.body;
+
+    if (!universityEmail) {
+      return res.status(400).json({
+        message: "University email is required"
+      });
+    }
+
+    const user = await Student.findOne({
+      universityEmail: universityEmail
+        .toLowerCase()
+        .trim()
+    });
+
+    if (!user) {
+      return res.status(200).json({
+        message:
+          "If the account exists, a password reset email has been sent"
+      });
+    }
+
+    const resetToken =
+      generatePasswordResetToken(user);
+
+    const resetLink =
+      `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+
+    await sendPasswordResetEmail(
+      user.universityEmail,
+      resetLink
+    );
+
+    return res.status(200).json({
+      message:
+        "If the account exists, a password reset email has been sent"
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Internal server error"
+    });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({
+        message: "Token and password are required"
+      });
+    }
+
+    if (password.length < 8) {
+      return res.status(400).json({
+        message:
+          "Password must be at least 8 characters"
+      });
+    }
+
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_EMAIL_SECRET
+    );
+
+    if (decoded.type !== "password-reset") {
+      return res.status(400).json({
+        message: "Invalid token"
+      });
+    }
+
+    const user = await Student.findById(
+      decoded.id
+    );
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    user.passwordHash = await bcrypt.hash(
+      password,
+      12
+    );
+
+    await user.save();
+
+    return res.status(200).json({
+      message:
+        "Password reset successfully"
+    });
+
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({
+        message:
+          "Reset link has expired"
+      });
+    }
+
+    if (error.name === "JsonWebTokenError") {
+      return res.status(400).json({
+        message:
+          "Invalid reset token"
+      });
+    }
+
+    console.error(error);
+
+    return res.status(500).json({
+      message: "Internal server error"
     });
   }
 };
