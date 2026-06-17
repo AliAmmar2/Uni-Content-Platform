@@ -15,22 +15,17 @@ const studentRoutes = require("./routes/students.routes");
 const courseAnnouncementRoutes = require("./routes/course-announcement.routes");
 
 const authMiddleware = require("./middleware/student-auth.middleware");
-const corsOptions = {
-  origin: [
-    "http://localhost:4200",
-    "https://lu-hub.netlify.app"
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true
-};
+
 const app = express();
 
 // =========================
 // Middleware
 // =========================
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
