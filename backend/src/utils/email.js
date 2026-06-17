@@ -26,15 +26,37 @@ exports.sendVerificationEmail = async (
   });
 };
 
-exports.sendPasswordResetEmail = async (email, link) => {
+exports.sendPasswordResetEmail = async (
+  email,
+  link
+) => {
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
     subject: "Reset your password",
     html: `
       <h2>Password Reset</h2>
-      <p>Click below to reset your password:</p>
-      <a href="${link}">${link}</a>
+
+      <p>
+        A request was made to reset your password.
+      </p>
+
+      <p>
+        Click the link below to choose a new password:
+      </p>
+
+      <a href="${link}">
+        Reset Password
+      </a>
+
+      <p>
+        This link expires in 30 minutes.
+      </p>
+
+      <p>
+        If you did not request this reset,
+        you can safely ignore this email.
+      </p>
     `
   });
 };
