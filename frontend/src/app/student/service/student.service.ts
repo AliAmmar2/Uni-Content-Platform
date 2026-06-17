@@ -121,7 +121,7 @@ public forgotPassword(
   );
 }
 
-public resetPassword(payload: { token: string; newPassword: string }) {
+public resetPassword(payload: { token: string; password: string }) {
   return this.studentClient.resetPassword(payload);
 }
 }

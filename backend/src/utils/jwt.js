@@ -41,7 +41,7 @@ exports.generatePasswordResetToken = (user) => {
       id: user._id.toString(),
       type: "password-reset"
     },
-    process.env.JWT_EMAIL_SECRET,
+    process.env.JWT_RESET_SECRET,
     { expiresIn: "30m" }
   );
 };
