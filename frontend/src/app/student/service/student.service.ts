@@ -120,4 +120,8 @@ public forgotPassword(
     universityEmail
   );
 }
+
+public resetPassword(payload: { token: string; newPassword: string }) {
+  return this.studentClient.resetPassword(payload);
+}
 }

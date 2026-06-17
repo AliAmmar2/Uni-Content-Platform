@@ -133,4 +133,11 @@ export class StudentClient {
     }
   );
 }
+
+public resetPassword(payload: { token: string; newPassword: string }) {
+  return this.http.post(
+    `${environment.apiUrl}/auth/reset-password`,
+    payload
+  );
+}
 }
