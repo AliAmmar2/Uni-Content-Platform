@@ -38,7 +38,7 @@ import {
   StudentsCourseAnnouncementDetailsPage
 } from './student/course-announcement-details/students-course-announcement-details.page';
 import { StudentEditCourseAnnouncementsPage } from './student/edit-course-announcements/student-edit-course-announcements.page';
-
+import { ResetPasswordPage } from './reset-password-page/reset-password.page';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
@@ -223,7 +223,11 @@ export const routes: Routes = [
       {
         path: ':majorId/details',
         component: MajorDetailsPage
-      }
+      },
+      {
+  path: 'reset-password',
+  component: ResetPasswordPage
+}
     ]
   }
 ];
