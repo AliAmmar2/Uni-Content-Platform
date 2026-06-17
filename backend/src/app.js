@@ -24,11 +24,6 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 };
-const app = express();
-
-// =========================
-// Middleware
-// =========================
 app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
@@ -37,6 +32,12 @@ app.use((req, res, next) => {
   }
   next();
 });
+const app = express();
+
+// =========================
+// Middleware
+// =========================
+
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
