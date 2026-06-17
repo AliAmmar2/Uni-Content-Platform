@@ -319,7 +319,7 @@ exports.forgotPassword = async (req, res) => {
       generatePasswordResetToken(user);
 
     const resetLink =
-      `${process.env.FRONTEND_URL}/auth/sreset-password?token=${resetToken}`;
+      `${process.env.FRONTEND_URL}/auth/reset-password?token=${resetToken}`;
 
     await sendPasswordResetEmail(
       user.universityEmail,
