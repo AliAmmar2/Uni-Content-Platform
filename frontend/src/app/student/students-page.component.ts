@@ -10,6 +10,10 @@ import { DashboardUiService } from '../portal-admin/services/dashboard-ui.servic
 import { selectStudentDetails } from './+state/student.selector';
 import { StudentActions } from './+state/student.action';
 import { LOGGED_IN_STUDENT_KEY } from './+state/student-details.reducer';
+import {
+  MatMultiActionsInterface
+} from '../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
+import { NgxMdDialogService } from '../components/mat-dialog/service/ngx-md-dialog.service';
 
 @Component({
   standalone: true,
@@ -35,6 +39,7 @@ export class StudentsPageComponent implements OnInit {
   public studentDetailsSelected$ = this.store.pipe(select(selectStudentDetails));
   activeMenu$: Observable<string> = this.dashboardUiService.activeMenu$;
   private subscription$ = new Subscription();
+  private ngxMdDialogService = inject(NgxMdDialogService);
 
   ngOnInit(): void {
     const accessToken = localStorage.getItem('accessToken');
@@ -72,6 +77,30 @@ export class StudentsPageComponent implements OnInit {
     this.subscription$.unsubscribe();
     this.dashboardUiService.clearMenu();
     void this.router.navigate(['/login']);
+  }
+
+  public presentLogoutAlert() {
+    const matYesNoDialogData: MatMultiActionsInterface = {
+      faIcon: ['fas', 'arrow-right-from-bracket'],
+      title: 'Logout?',
+      message: 'Are you sure you want to logout?',
+      action: [
+        {
+          label: 'Yes',
+          color: ' #d40000',
+          handler: () => {
+            this.logout();
+          }
+        },
+        {
+          label: 'Cancel',
+          color: '#88a5db',
+          handler: () => {
+          }
+        }
+      ]
+    };
+    this.ngxMdDialogService.openMultiActionsDialog(matYesNoDialogData, { width: '400px' });
   }
 
   protected readonly LOGGED_IN_STUDENT_KEY = LOGGED_IN_STUDENT_KEY;
