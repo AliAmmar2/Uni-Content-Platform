@@ -10,6 +10,10 @@ import { selectAdminDetails } from './+state/admin.selector';
 import { AdminActions } from './+state/admin.action';
 import { LetDirective } from '@ngrx/component';
 import { ADMIN_DETAILS_KEY, LOGGED_IN_ADMIN_KEY } from './+state/admin-details.reducer';
+import {
+  MatMultiActionsInterface
+} from '../components/mat-dialog/mat-mutli-actions-dialog/mat-multi-actions.interface';
+import { NgxMdDialogService } from '../components/mat-dialog/service/ngx-md-dialog.service';
 
 @Component({
   standalone: true,
@@ -36,6 +40,7 @@ export class PortalAdminPage implements OnInit {
   activeMenu$: Observable<string> = this.dashboardUiService.activeMenu$;
   private subscription$ = new Subscription();
 
+  private ngxMdDialogService = inject(NgxMdDialogService);
   ngOnInit(): void {
     const accessToken = localStorage.getItem('accessToken');
 
@@ -82,6 +87,29 @@ export class PortalAdminPage implements OnInit {
     this.subscription$.unsubscribe();
     this.dashboardUiService.clearMenu();
     void this.router.navigate(['/admin-@-access']);
+  }
+  public presentLogoutAlert() {
+    const matYesNoDialogData: MatMultiActionsInterface = {
+      faIcon: ['fas', 'arrow-right-from-bracket'],
+      title: 'Logout?',
+      message:'Are you sure you want to logout?',
+      action: [
+        {
+          label: 'Yes',
+          color: ' #d40000',
+          handler: () => {
+            this.logout();
+          }
+        },
+        {
+          label: 'Cancel',
+          color: '#88a5db',
+          handler: () => {
+          }
+        }
+      ]
+    };
+    this.ngxMdDialogService.openMultiActionsDialog(matYesNoDialogData, { width: '400px' });
   }
 
   protected readonly ADMIN_DETAILS_KEY = ADMIN_DETAILS_KEY;
