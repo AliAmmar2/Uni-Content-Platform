@@ -15,6 +15,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 
 import { LoginService } from '../service/login.service';
+import { NgxMdDialogService } from '../../components/mat-dialog/service/ngx-md-dialog.service';
+import { StudentService } from '../../student/service/student.service';
 
 @Component({
   selector: 'app-student-login',
@@ -32,6 +34,9 @@ export class StudentLoginPage {
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
   private readonly toastrService = inject(ToastrService);
+
+  private readonly ngxMdDialogService = inject(NgxMdDialogService);
+  private readonly studentService = inject(StudentService);
 
   public hideInputPassword = true;
 
@@ -121,7 +126,87 @@ export class StudentLoginPage {
 
     }
   }
+  public navigateToForgotPassword(): void {
 
+    const dialogRef =
+      this.ngxMdDialogService.openFormActionsDialog(
+        {
+          title: 'Forgot Password',
+          faIcon: ['fas', 'circle-question'],
+          message:
+            'Enter your university email and we will send a password reset link.',
+
+          inputs: [
+            {
+              controlName: 'universityEmail',
+              label: 'University Email',
+              placeholder: 'Enter your university email',
+              type: 'email',
+              validators: [Validators.required],
+              errorMessages: {
+                required: 'University email is required'
+              }
+            }
+          ],
+
+          actions: [
+            {
+              label: 'Cancel',
+              color: '#64748b',
+              handler: () => {
+                dialogRef.close();
+              }
+            },
+            {
+              label: 'Send Email',
+              color: '#c4001a',
+              closeOnClick: false,
+              disabledWhenInvalid: true,
+              handler: (formValue) => {
+                this.studentService
+                  .forgotPassword(formValue.universityEmail)
+                  .subscribe({
+                    next: (response) => {
+                      this.toastrService.clear();
+
+                      this.toastrService.success(
+                        response?.message ||
+                        'Password reset email sent',
+                        'Success',
+                        {
+                          positionClass: 'toast-top-right',
+                          progressBar: true,
+                          closeButton: true,
+                          timeOut: 3000
+                        }
+                      );
+
+                      dialogRef.close();
+                    },
+
+                    error: (error) => {
+                      this.toastrService.clear();
+
+                      this.toastrService.error(
+                        error?.error?.message ||
+                        'Something went wrong',
+                        'Error',
+                        {
+                          positionClass: 'toast-top-right',
+                          progressBar: true,
+                          closeButton: true,
+                          timeOut: 4000
+                        }
+                      );
+                    }
+                  });
+              }
+            }
+          ]
+        },
+        { width: '430px' }
+      );
+  }
   public navigateToRegister(): void {
     void this.router.navigate(['/register']);
   }

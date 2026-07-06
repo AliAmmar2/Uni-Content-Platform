@@ -62,6 +62,10 @@ export const routes: Routes = [
     component: VerifyEmailPage
   },
   {
+    path: 'reset-password',
+    component: ResetPasswordPage
+  },
+  {
     path: 'students/:universityId',
     component: StudentsPageComponent,
     children: [
@@ -223,11 +227,7 @@ export const routes: Routes = [
       {
         path: ':majorId/details',
         component: MajorDetailsPage
-      },
-      {
-  path: 'reset-password',
-  component: ResetPasswordPage
-}
+      }
     ]
   }
 ];
