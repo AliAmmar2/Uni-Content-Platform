@@ -17,7 +17,7 @@ const courseAnnouncementRoutes = require("./routes/course-announcement.routes");
 const authMiddleware = require("./middleware/student-auth.middleware");
 
 const app = express();
-
+app.set("trust proxy", 1);
 // =========================
 // Middleware
 // =========================
