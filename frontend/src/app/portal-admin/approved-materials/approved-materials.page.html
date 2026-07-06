@@ -170,14 +170,11 @@
                   <div class="material-card__footer-actions">
 
                     <button
-                      type="button"
-                      title="View"
-                      (click)="openMaterial(material)"
-                    >
-
-                      <fa-icon [icon]="['far', 'eye']"></fa-icon>
-
-                    </button>
+  *ngIf="isViewable(material)"
+  (click)="openMaterial(material)"
+  class="material-action-btn">
+  <fa-icon [icon]="['fas', 'eye']"></fa-icon>
+</button>
 
                     <button
                       type="button"

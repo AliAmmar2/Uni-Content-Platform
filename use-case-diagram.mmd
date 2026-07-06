@@ -1,0 +1,80 @@
+%%{init: {"theme":"default"}}%%
+graph LR
+    classDef actor fill:#f4f7fb,stroke:#7a8fa6,stroke-width:1px,color:#1f2d3d;
+    classDef usecase fill:#ffffff,stroke:#8c9bb3,stroke-width:1px,color:#1f2d3d;
+    classDef group fill:#f9fbff,stroke:#d3d8e5,stroke-width:1px,color:#1f2d3d;
+
+    subgraph ActorsL[Actors]
+        direction TB
+        STUDENT([Student]):::actor
+        MODERATOR([Moderator]):::actor
+    end
+
+    subgraph ActorsR[Admins]
+        direction TB
+        ADMIN([Admin]):::actor
+        SUPERADMIN([Super Admin]):::actor
+    end
+
+    MODERATOR -->|extends| STUDENT
+    SUPERADMIN -->|extends| ADMIN
+
+    subgraph AuthGroup[Auth]
+        direction TB
+        UC_AUTH([Register / Login / Password Reset]):::usecase
+    end
+
+    subgraph StudentGroup[Student]
+        direction TB
+        UC_DASH([Dashboard]):::usecase
+        UC_ME([Profile]):::usecase
+        UC_CHANGE_PW([Change Password]):::usecase
+        UC_MY_MAJOR_COURSES([My Major Courses]):::usecase
+        UC_VIEW_APPROVED_MATERIALS([Approved Materials]):::usecase
+        UC_ANNOUNCEMENTS([Announcements]):::usecase
+        UC_ANNOUNCEMENT_IMAGE_SIG([Upload Signature]):::usecase
+    end
+
+    subgraph MaterialGroup[Material]
+        direction TB
+        UC_UPLOAD_MATERIAL([Upload]):::usecase
+        UC_ACCESS_MATERIAL([Access URL]):::usecase
+        UC_COURSE_MATERIALS([Course Materials]):::usecase
+    end
+
+    subgraph ModeratorGroup[Moderator]
+        direction TB
+        UC_MODERATE_MATERIALS([Review / Delete]):::usecase
+        UC_VIEW_PENDING_MATERIALS([View Pending]):::usecase
+        UC_MODERATE_ANNOUNCEMENTS([Manage Announcements]):::usecase
+    end
+
+    subgraph AdminGroup[Admin]
+        direction TB
+        UC_FACULTIES([Faculties]):::usecase
+        UC_MAJOR_VIEW([Majors]):::usecase
+        UC_ADMIN_COURSE_MANAGE([Manage Courses]):::usecase
+        UC_ADMIN_MAJOR_MANAGE([Manage Majors]):::usecase
+        UC_STUDENT_LIST([Students]):::usecase
+        UC_ADMIN_MANAGE([Admin Accounts]):::usecase
+        UC_ADMIN_SELF([Own Profile]):::usecase
+    end
+
+    subgraph SuperAdminGroup[Super Admin Only]
+        direction TB
+        UC_SUPERADMIN_ADMIN_ADD([Add Admin]):::usecase
+        UC_SUPERADMIN_ADMIN_DELETE([Delete Admin]):::usecase
+        UC_SUPERADMIN_PASSWORD([Reset Password]):::usecase
+    end
+
+    ActorsL --- ActorsR
+    ActorsL --> StudentGroup
+    ActorsR --> AdminGroup
+    SUPERADMIN --> UC_SUPERADMIN_ADMIN_ADD
+    SUPERADMIN --> UC_SUPERADMIN_ADMIN_DELETE
+    SUPERADMIN --> UC_SUPERADMIN_PASSWORD
+    StudentGroup -- supports --> MaterialGroup
+    StudentGroup -- supports --> ModeratorGroup
+    AdminGroup -- supports --> ModeratorGroup
+    AuthGroup --- ActorsL
+    AuthGroup --- ActorsR

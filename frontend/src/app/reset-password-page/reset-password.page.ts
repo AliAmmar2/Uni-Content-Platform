@@ -21,14 +21,22 @@ export class ResetPasswordPage {
 
   token = this.route.snapshot.queryParamMap.get('token');
 
-  form = this.fb.group({
+  // Use nonNullable so values are always strings, not string | null
+  form = this.fb.nonNullable.group({
     newPassword: ['', [Validators.required, Validators.minLength(8)]],
     confirmPassword: ['', [Validators.required]]
   });
 
   submit() {
 
-    if (this.form.value.newPassword !== this.form.value.confirmPassword) {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const { newPassword, confirmPassword } = this.form.getRawValue();
+
+    if (newPassword !== confirmPassword) {
       this.toastr.error('Passwords do not match');
       return;
     }
@@ -40,7 +48,7 @@ export class ResetPasswordPage {
 
     this.studentService.resetPassword({
       token: this.token,
-      newPassword: this.form.value.newPassword!
+      password: newPassword
     }).subscribe({
       next: () => {
         this.toastr.success('Password reset successful');

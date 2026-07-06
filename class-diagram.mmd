@@ -1,0 +1,101 @@
+%%{init: {"theme":"default"}}%%
+erDiagram
+    STUDENT {
+        string universityId PK
+        string universityEmail "PK, unique"
+        string name
+        ObjectId faculty FK
+        ObjectId major FK
+        number academicYear
+        number calendarYear
+        string role "ENUM[STUDENT, MODERATOR]"
+        string status "ENUM[PENDING_VERIFICATION, ACTIVE, SUSPENDED]"
+        boolean emailVerified
+        string passwordHash
+        string resetPasswordToken
+        date resetPasswordExpires
+        date lastLogin
+        number loginAttempts
+        date lockUntil
+    }
+    ADMIN {
+        string username PK
+        string email "unique"
+        string role "ENUM[admin, super_admin]"
+        string fullName
+        string passwordHash
+        date lastLogin
+        date lastPasswordUpdate
+        number loginAttempts
+    }
+    FACULTY {
+        string name "unique"
+        string code "unique"
+        string description
+    }
+    MAJOR {
+        string name "unique"
+        string code "unique"
+        ObjectId faculty FK
+        string description
+        number totalCredits
+        string duration
+    }
+    COURSE {
+        string name
+        string code "unique"
+        string description
+        number credits
+        ObjectId major FK
+        number academicYear
+        number calendarYear
+        string semester "ENUM[SEM1, SEM2]"
+    }
+    MATERIAL {
+        string title
+        string description
+        string storagePath
+        string originalFilename
+        string mimeType
+        ObjectId uploadedBy
+        string uploadedByModel "ENUM[Student, Admin]"
+        string uploadedByName
+        ObjectId course FK
+        string approvalStatus "ENUM[PENDING, APPROVED, REJECTED]"
+        string rejectionReason
+    }
+    ANNOUNCEMENT {
+        string title
+        string content
+        ObjectId course FK
+        ObjectId postedBy
+        string postedByModel "ENUM[Student, Admin]"
+        string postedByName
+        string imagePath
+        string imageMimeType
+        string imageOriginalFilename
+    }
+    OFFICIALSTUDENT {
+        string universityId "unique"
+        string universityEmail "unique"
+        string name
+        ObjectId faculty FK
+        ObjectId major FK
+        number academicYear
+        number calendarYear
+    }
+
+    FACULTY ||--o{ MAJOR : "has"
+    MAJOR ||--o{ COURSE : "has"
+    FACULTY ||--o{ STUDENT : "has"
+    MAJOR ||--o{ STUDENT : "has"
+    COURSE ||--o{ MATERIAL : "contains"
+    COURSE ||--o{ ANNOUNCEMENT : "contains"
+    FACULTY ||--o{ OFFICIALSTUDENT : "has"
+    MAJOR ||--o{ OFFICIALSTUDENT : "has"
+
+    %% Polymorphic author references
+    STUDENT }|..|| MATERIAL : "uploadedBy via uploadedByModel"
+    ADMIN }|..|| MATERIAL : "uploadedBy via uploadedByModel"
+    STUDENT }|..|| ANNOUNCEMENT : "postedBy via postedByModel"
+    ADMIN }|..|| ANNOUNCEMENT : "postedBy via postedByModel"

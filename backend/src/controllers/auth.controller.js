@@ -252,7 +252,7 @@ exports.login = async (req, res) => {
       await user.save();
 
       return res.status(401).json({
-        message: "Password is wrong"
+        message: "Wrong credentials"
       });
     }
 

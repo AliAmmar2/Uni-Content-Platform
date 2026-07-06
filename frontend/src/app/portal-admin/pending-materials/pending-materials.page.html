@@ -104,6 +104,7 @@
                 <div class="pending-card__actions">
 
                   <button
+                  *ngIf="isViewable(material)"
                     type="button"
                     class="pending-card__view"
                     (click)="openMaterial(material)"

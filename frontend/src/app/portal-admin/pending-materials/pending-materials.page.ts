@@ -174,16 +174,24 @@ export class PendingMaterialsPage implements OnInit, OnDestroy {
       })
     );
   }
+  public isViewable(material: MaterialItemBo): boolean {
+  const viewableTypes = ['PDF', 'IMAGE', 'VIDEO', 'AUDIO', 'MP4 VIDEO', 'MP3 AUDIO'];
+  return viewableTypes.includes(this.getFileType(material));
+}
 
   public openMaterial(material: MaterialItemBo): void {
-    this.materialService
-      .getMaterialAccessUrl(material.id, 'view')
-      .subscribe({
-        next: response => {
-          window.open(response.url, '_blank', 'noopener,noreferrer');
-        }
-      });
+  if (!this.isViewable(material)) {
+    return;
   }
+
+  this.materialService
+    .getMaterialAccessUrl(material.id, 'view')
+    .subscribe({
+      next: response => {
+        window.open(response.url, '_blank', 'noopener,noreferrer');
+      }
+    });
+}
 
   public downloadMaterial(material: MaterialItemBo): void {
 

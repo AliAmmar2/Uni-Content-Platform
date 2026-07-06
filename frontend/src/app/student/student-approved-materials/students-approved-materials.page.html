@@ -178,6 +178,7 @@
                   <div class="material-card__footer-actions">
 
                     <button
+                    *ngIf="isViewable(material)"
                       type="button"
                       title="View"
                       (click)="openMaterial(material)"
