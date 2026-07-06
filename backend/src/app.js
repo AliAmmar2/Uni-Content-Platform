@@ -18,6 +18,7 @@ const authMiddleware = require("./middleware/student-auth.middleware");
 
 const app = express();
 
+app.set("trust proxy", 1);
 // =========================
 // Middleware
 // =========================
