@@ -434,3 +434,52 @@ exports.changeOwnPassword = async (req, res) => {
         });
     }
 };
+exports.getEmailByUniversityId = async (req, res) => {
+    try {
+        const { universityId } = req.body;
+
+        if (!universityId) {
+            return res.status(400).json({
+                message: "University ID is required"
+            });
+        }
+
+        const student = await Student.findOne({
+            universityId: universityId.trim()
+        }).select("universityEmail");
+
+        if (!student) {
+            return res.status(404).json({
+                message: "Student not found"
+            });
+        }
+
+        const maskedEmail = maskEmail(student.universityEmail);
+
+        return res.status(200).json({
+            email: maskedEmail
+        });
+
+    } catch (error) {
+        console.error("GET EMAIL BY UNIVERSITY ID ERROR:", error);
+
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+};
+
+function maskEmail(email) {
+    const [username, domain] = email.split("@");
+
+    // Very short usernames
+    if (username.length <= 4) {
+        return `${username[0]}${"*".repeat(Math.max(username.length - 2, 0))}${username.slice(-1)}@${domain}`;
+    }
+
+    const firstTwo = username.slice(0, 2);
+    const lastTwo = username.slice(-2);
+    const stars = "*".repeat(username.length - 4);
+
+    return `${firstTwo}${stars}${lastTwo}@${domain}`;
+}

@@ -39,11 +39,16 @@ import {
 } from './student/course-announcement-details/students-course-announcement-details.page';
 import { StudentEditCourseAnnouncementsPage } from './student/edit-course-announcements/student-edit-course-announcements.page';
 import { ResetPasswordPage } from './reset-password-page/reset-password.page';
+import { ForgotEmailResultPage } from './student/forget-email-result/forgot-email-result.page';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'login',
     component: StudentLoginPage
+  },
+  {
+    path: 'forgot-email-result',
+    component: ForgotEmailResultPage
   },
   {
     path: 'admin-@-access',

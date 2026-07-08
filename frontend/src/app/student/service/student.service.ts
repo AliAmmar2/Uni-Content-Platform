@@ -113,15 +113,19 @@ export class StudentService {
     );
   }
 
-public forgotPassword(
-  universityEmail: string
-): Observable<any> {
-  return this.studentClient.forgotPassword(
-    universityEmail
-  );
-}
+  public forgotPassword(
+    universityEmail: string
+  ): Observable<any> {
+    return this.studentClient.forgotPassword(
+      universityEmail
+    );
+  }
 
-public resetPassword(payload: { token: string; password: string }) {
-  return this.studentClient.resetPassword(payload);
-}
+  public resetPassword(payload: { token: string; password: string }) {
+    return this.studentClient.resetPassword(payload);
+  }
+
+  public getEmailByUniversityId(universityId: string) {
+    return this.studentClient.getEmailByUniversityId(universityId);
+  }
 }

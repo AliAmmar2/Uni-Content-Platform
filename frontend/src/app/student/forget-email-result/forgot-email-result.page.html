@@ -1,0 +1,25 @@
+<section class="forgot-email-page">
+  <div class="forgot-email-card">
+
+    <div class="forgot-email-card__logo">
+      <img src="assets/imgs/logo.png" alt="Lebanese University" />
+      <h2>Lebanese University</h2>
+    </div>
+
+    <h1>Email Found</h1>
+
+    <p class="forgot-email-card__subtitle">
+      This is the university email linked to your ID.
+    </p>
+
+    <div class="email-result-box">
+      <fa-icon [icon]="['fas', 'envelope-circle-check']"></fa-icon>
+      <span>{{ email }}</span>
+    </div>
+
+    <button type="button" class="back-button" (click)="backToLogin()">
+      Back to Login
+    </button>
+
+  </div>
+</section>

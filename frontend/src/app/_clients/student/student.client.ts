@@ -140,4 +140,12 @@ public resetPassword(payload: { token: string; password: string }) {
     payload
   );
 }
+
+  public getEmailByUniversityId(universityId: string) {
+    return this.http.post<{ email: string }>(
+      `${environment.apiUrl}/students/email-by-university-id`,
+      { universityId }
+    );
+  }
 }
+
