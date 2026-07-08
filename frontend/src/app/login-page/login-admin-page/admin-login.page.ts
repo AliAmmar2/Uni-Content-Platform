@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { LoginAdminService } from '../service/login-admin.service';
+import { ToastrService } from 'ngx-toastr';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin-login',
@@ -29,6 +31,8 @@ export class AdminLoginPage {
 
   public loginAdminForm: FormGroup;
 
+  private readonly toastrService = inject(ToastrService);
+
   public togglePassword(): void {
     this.hideInputPassword = !this.hideInputPassword;
   }
@@ -50,7 +54,9 @@ export class AdminLoginPage {
 
       if (response?.token) {
         localStorage.setItem('accessToken', response.token);
-
+        this.toastrService.success(
+          'Login successful'
+        );
         await this.router.navigate([
           '/admin',
           response.admin.id,
@@ -60,6 +66,14 @@ export class AdminLoginPage {
 
     } catch (err) {
       console.error(err);
+      const error = err as HttpErrorResponse;
+
+      const errorMessage =
+        error?.error?.message ||
+        'Something went wrong. Please try again.';
+
+      this.toastrService.error(errorMessage);
+
     }
 
     this.loginAdminForm.enable();

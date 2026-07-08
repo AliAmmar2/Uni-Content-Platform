@@ -1,11 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
@@ -126,6 +121,7 @@ export class StudentLoginPage {
 
     }
   }
+
   public navigateToForgotPassword(): void {
 
     const dialogRef =
@@ -207,6 +203,83 @@ export class StudentLoginPage {
         { width: '430px' }
       );
   }
+
+
+  public navigateToForgotEmail(): void {
+    const dialogRef =
+      this.ngxMdDialogService.openFormActionsDialog(
+        {
+          title: 'Forgot Email',
+          faIcon: ['fas', 'envelope'],
+          message:
+            'Enter your university ID and we will show your masked university email.',
+
+          inputs: [
+            {
+              controlName: 'universityId',
+              label: 'University ID',
+              placeholder: 'Enter your university ID',
+              type: 'text',
+              validators: [Validators.required],
+              errorMessages: {
+                required: 'University ID is required'
+              }
+            }
+          ],
+
+          actions: [
+            {
+              label: 'Cancel',
+              color: '#64748b',
+              handler: () => {
+                dialogRef.close();
+              }
+            },
+            {
+              label: 'Find Email',
+              color: '#c4001a',
+              closeOnClick: false,
+              disabledWhenInvalid: true,
+              handler: (formValue) => {
+                this.studentService
+                  .getEmailByUniversityId(formValue.universityId)
+                  .subscribe({
+                    next: (response) => {
+                      dialogRef.close();
+
+                      this.router.navigate(
+                        ['/forgot-email-result'],
+                        {
+                          state: {
+                            email: response.email
+                          }
+                        }
+                      );
+                    },
+
+                    error: (error) => {
+                      this.toastrService.clear();
+
+                      this.toastrService.error(
+                        error?.error?.message || 'Something went wrong',
+                        'Error',
+                        {
+                          positionClass: 'toast-top-right',
+                          progressBar: true,
+                          closeButton: true,
+                          timeOut: 4000
+                        }
+                      );
+                    }
+                  });
+              }
+            }
+          ]
+        },
+        { width: '430px' }
+      );
+  }
+
   public navigateToRegister(): void {
     void this.router.navigate(['/register']);
   }

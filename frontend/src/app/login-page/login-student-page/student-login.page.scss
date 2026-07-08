@@ -126,10 +126,21 @@ h1 {
   }
 }
 
-.signup-text {
+.login-links {
   margin-top: 24px;
-  text-align: center;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+
+  flex-wrap: wrap;
+}
+
+.signup-text {
+  margin: 0;
   color: #6b7280;
+  font-size: 14px;
 
   button {
     border: none;
@@ -137,6 +148,31 @@ h1 {
     color: #b00013;
     font-weight: 700;
     cursor: pointer;
+    padding: 0;
+
+    transition: color .2s ease;
+
+    &:hover {
+      color: #920010;
+      text-decoration: underline;
+    }
+  }
+}
+
+.forgot-email-button {
+  border: none;
+  background: transparent;
+  color: #b00013;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+
+  transition: color .2s ease;
+
+  &:hover {
+    color: #920010;
+    text-decoration: underline;
   }
 }
 

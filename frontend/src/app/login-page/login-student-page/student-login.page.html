@@ -94,16 +94,28 @@
         Sign In
       </button>
 
-      <p class="signup-text">
-        Don’t have an account?
+      <div class="login-links">
+
+        <p class="signup-text">
+          Don’t have an account?
+
+          <button
+            type="button"
+            (click)="navigateToRegister()"
+          >
+            Sign Up
+          </button>
+        </p>
 
         <button
           type="button"
-          (click)="navigateToRegister()"
+          class="forgot-email-button"
+          (click)="navigateToForgotEmail()"
         >
-          Sign Up
+          Forgot Email?
         </button>
-      </p>
+
+      </div>
 
     </form>
 
